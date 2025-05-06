@@ -1,0 +1,207 @@
+
+<!-- Nhúng noUiSlider CSS & JS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.css" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.6.0/nouislider.min.js" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="/css/slider.css">
+<style>
+.search-heading {
+  padding: 20px 0;
+  background: linear-gradient(135deg, #e0f7fa, #f3e5f5, #fce4ec);
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+  color: #4a4a4a;
+  animation: fadeIn 0.6s ease;
+}
+
+.search-heading h2 {
+  font-size: 1.9rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.search-heading .search-keyword {
+  color: #ba68c8; /* tím pastel nổi bật */
+  font-weight: 700;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+</style>
+
+<div class="container-fluid mt-4 search-heading">
+  <h2>Kết quả tìm kiếm cho: "<span class="search-keyword">{{keyword}}</span>"</h2>
+</div>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- Sidebar Danh Mục -->
+    <div class="col-md-3">
+      <div class="category-sidebar p-3 rounded" style="background-color: #fdf0f6;">
+<div class="price-range mb-4">
+  <h4 class="fw-bold text-primary">Khoảng Giá Sách</h4>
+  
+  <!-- Container cho slider đôi -->
+  <div id="priceSlider" style="height:50px;"></div>
+  
+  <p class="mt-2">
+    Giá từ: <strong><span id="minPriceValue">
+      {{#if query.minPrice}}
+        {{formatNumber query.minPrice}}
+      {{else}}
+        0
+      {{/if}}
+    </span></strong> VND đến 
+    <strong><span id="maxPriceValue">
+      {{#if query.maxPrice}}
+        {{formatNumber query.maxPrice}}
+      {{else}}
+        {{formatNumber 500000}}
+      {{/if}}
+    </span></strong> VND
+  </p>
+  
+  <!-- Các input ẩn lưu giá trị slider -->
+  <input type="hidden" name="minPrice" id="minPrice" value="{{#if query.minPrice}}{{query.minPrice}}{{else}}0{{/if}}">
+  <input type="hidden" name="maxPrice" id="maxPrice" value="{{#if query.maxPrice}}{{query.maxPrice}}{{else}}500000{{/if}}">
+</div>
+
+        <!-- Danh mục -->
+        <div class="category-filter">
+          <h4 class="fw-bold text-primary">Danh mục</h4>
+          <input
+            type="text"
+            id="categorySearch"
+            placeholder="Tìm danh mục..."
+            class="form-control mb-3"
+            style="border-radius: 25px; padding-left: 15px;"
+          />
+
+          <ul id="categoryList" class="list-unstyled" style="max-height: 220px; overflow-y: auto;">
+            {{#each categories}}
+            <li class="category-item">
+              <label>
+                <input
+                  type="checkbox"
+                  value="{{this.TenDanhMuc}}"
+                  data-id="{{this.DanhMucID}}"
+                  {{#if (includes ../query.categories this.DanhMucID)}}checked{{/if}}
+                />
+                {{this.TenDanhMuc}}
+              </label>
+            </li>
+            {{/each}}
+          </ul>
+
+          <!-- Nút lọc -->
+          <div class="d-grid mt-3">
+            <input type="hidden" name="q" value="{{keyword}}" />
+            <button id="filterBtn" class="btn w-100 fw-bold d-flex justify-content-center align-items-center gap-2"
+              style="background-color: #f28ab2; border: none; border-radius: 30px; padding: 10px 16px;">
+              <i class="bi bi-funnel-fill"></i> Lọc sản phẩm
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nội dung danh mục -->
+    <div class="col-md-9">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="featured-title">{{categoryName}}</h4>
+        <select class="form-select w-auto">
+          <option selected>Sản phẩm nổi bật</option>
+          <option value="1">Giá tăng dần</option>
+          <option value="2">Giá giảm dần</option>
+        </select>
+      </div>
+
+      <!-- Hiển thị danh sách sản phẩm -->
+      <div class="row product-list">
+        {{#each listbook}}
+        <div class="col-md-3 m-0">
+          <div class="product-card-container">
+            <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
+              <div class="product-card">
+                <div class="product-image">
+                  <img src="{{this.Anh}}" alt="Sách" />
+                  <div class="product-icons">
+                    <span class="icon">🔍</span>
+                    <span class="icon">🛒</span>
+                  </div>
+                </div>
+                <div class="product-info">
+                  <h5 class="product-title">{{this.TenSanPham}}</h5>
+                  <div class="product-price">
+                    <span class="new-price">{{formatNumber this.Gia}}</span>
+                  </div>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+
+      <!-- Phân trang -->
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center mt-4">
+          <li class="page-item {{#if (eq currentPage 1)}}disabled{{/if}}">
+            <a class="page-link" href="{{paginationURL (subtract currentPage 1)}}" tabindex="-1">Previous</a>
+          </li>
+
+          {{#each (range 1 totalPages)}}
+          <li class="page-item {{#if (eq ../currentPage this)}}active{{/if}}">
+            <a class="page-link" href="{{paginationURL this}}">{{this}}</a>
+          </li>
+          {{/each}}
+
+          <li class="page-item {{#if (eq currentPage totalPages)}}disabled{{/if}}">
+            <a class="page-link" href="{{paginationURL (add currentPage 1)}}">Next</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var slider = document.getElementById('priceSlider');
+    if (slider) {
+      var minQuery = {{#if query.minPrice}}{{query.minPrice}}{{else}}0{{/if}};
+      var maxQuery = {{#if query.maxPrice}}{{query.maxPrice}}{{else}}500000{{/if}};
+      noUiSlider.create(slider, {
+        start: [minQuery, maxQuery],
+        connect: true,
+        range: {
+          min: 0,
+          max: 1000000
+        },
+        step: 10000,
+        format: {
+          to: value => Math.round(value),
+          from: value => Number(value)
+        }
+      });
+
+      const minPriceInput = document.getElementById('minPrice');
+      const maxPriceInput = document.getElementById('maxPrice');
+      const minPriceValue = document.getElementById('minPriceValue');
+      const maxPriceValue = document.getElementById('maxPriceValue');
+
+      slider.noUiSlider.on('update', function(values, handle) {
+        if (handle === 0) {
+          minPriceInput.value = values[0];
+          minPriceValue.innerText = Number(values[0]).toLocaleString('vi-VN');
+        } else {
+          maxPriceInput.value = values[1];
+          maxPriceValue.innerText = Number(values[1]).toLocaleString('vi-VN');
+        }
+      });
+    }
+  });
+</script>

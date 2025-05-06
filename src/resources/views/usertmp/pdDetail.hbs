@@ -1,0 +1,324 @@
+<style>
+  /* Ẩn spinner trong input number */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+  /* Xóa viền focus ở nút + - */
+  .custom-quantity-group .btn:focus {
+    box-shadow: none;
+    outline: none;
+  }
+</style>
+
+
+
+<div class="custom-container mt-5">
+  <div class="row container-fluid px-5 pd-detail-container">
+    <!-- Hình ảnh sản phẩm bên trái -->
+    <div class="col-lg-6">
+      <div class="custom-image-wrapper sticky-top" style="top: 100px;">
+        <div id="customProductCarousel" class="carousel slide" data-bs-ride="carousel">
+          <div class="carousel-inner">
+            {{#each images}}
+              <div class="carousel-item {{#if @first}}active{{/if}}">
+                <img src="{{this}}" class="d-block custom-product-image" alt="Hình ảnh sản phẩm">
+              </div>
+            {{/each}}
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#customProductCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#customProductCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+
+        <!-- Thumbnail -->
+        <div class="custom-thumbnails d-flex justify-content-start mt-3 gap-2">
+          {{#each images}}
+            <img src="{{this}}" class="custom-thumbnail" alt="Thumbnail" onclick="changeCustomImage('{{this}}')">
+          {{/each}}
+        </div>
+      </div>
+    </div>
+
+    <!-- Thông tin sản phẩm bên phải -->
+    <div class="col-lg-6 d-flex align-items-start">
+      <div class="custom-info-wrapper w-100">
+        <h2 class="custom-product-title mb-3">{{productDetail.TenSanPham}}</h2>
+
+        <!-- Dòng thông tin ngang -->
+        <div class="custom-info-grid mb-3">
+          <div class="row fw-bold text-muted text-center mb-1">
+            <div class="col">Danh mục</div>
+            <div class="col">Tác giả</div>
+            <div class="col">NXB</div>
+          </div>
+          <div class="row text-center fw-bold">
+            <div class="col">
+              {{#each productDetail.DanhMucs}}
+                <div>{{this.name}}</div>
+              {{/each}}
+            </div>
+            <div class="col">{{productDetail.TenTacGia}}</div>
+            <div class="col">{{productDetail.TenNXB}}</div>
+          </div>
+        </div>
+
+        <p class="custom-product-code text-muted">Mã sản phẩm: {{productDetail.SanPhamID}}</p>
+        <div class="custom-price-box mb-4">
+          <span class="custom-price h4 fw-bold">{{formatNumber productDetail.Gia}}</span>
+        </div>
+
+        <div class="custom-quantity-box mb-4">
+          <label for="customQuantity" class="form-label">Số lượng:</label>
+          <div class="input-group custom-quantity-group" style="width: 120px;">
+            <button class="btn btn-outline-secondary rounded-start" type="button" onclick="changeQuantity(-1)">-</button>
+            <input type="number" class="form-control text-center custom-quantity-input" id="customQuantity" value="1" min="1">
+            <button class="btn btn-outline-secondary rounded-end" type="button" onclick="changeQuantity(1)">+</button>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2 mb-5">
+          <button class="btn btn-danger btn-lg rounded-pill px-4">
+            <i class="bi bi-lightning-charge"></i> Mua ngay
+          </button>
+          <button class="btn btn-outline-primary btn-lg rounded-pill px-4">
+            <i class="bi bi-cart-plus"></i> Thêm vào giỏ hàng
+          </button>
+        </div>
+
+        <!-- Phần thông tin chung + mô tả sản phẩm -->
+        <div class="custom-tab-box p-4 border rounded">
+          <h5 class="fw-bold mb-3">Thông tin chung</h5>
+          <ul class="mb-4">
+            <li><strong>Tên sách:</strong> {{productDetail.TenSanPham}}</li>
+            <li><strong>Tác giả:</strong> {{productDetail.TenTacGia}}</li>
+            <li><strong>Nhà xuất bản:</strong> {{productDetail.TenNXB}}</li>
+            <li><strong>Danh mục:</strong>
+              {{#each productDetail.DanhMucs}}
+                <span class="badge bg-secondary me-1">{{this.name}}</span>
+              {{/each}}
+            </li>
+            <li><strong>Mã sản phẩm:</strong> {{productDetail.SanPhamID}}</li>
+          </ul>
+
+          <h5 class="fw-bold mb-2">Mô tả sản phẩm</h5>
+          <p class="text-muted">{{productDetail.MoTa}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sản phẩm cùng danh mục -->
+  <div class="mt-5">
+    <h4 class="fw-bold mb-4">Sản phẩm cùng danh mục</h4>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner carousel-inner-pd">
+        {{#each otherbook}}
+        <div class="carousel-item carousel-item-pd {{#if @first}}active{{/if}}">
+          <a href="/products?id={{this.SanPhamID}}" style="text-decoration: none;">
+            <div class="product-card">
+              <div class="product-image">
+                <img src="{{this.Anh}}" alt="Sách" />
+                <div class="product-icons">
+                  <span class="icon">🔍</span>
+                  <span class="icon">🛒</span>
+                </div>
+              </div>
+              <div class="product-info">
+                <h5 class="product-title">{{this.TenSanPham}}</h5>
+                <div class="product-price">
+                  <span class="new-price">{{formatNumber this.Gia}}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+        {{/each}}
+      </div>
+      <button class="carousel-control-prev carousel-control-prev-pd" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next carousel-control-next-pd" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .pd-detail-container{
+    width: 100%;
+    background-color: #FFFFFF;
+     border: 1px solid #E0E0E0; 
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+    padding: 80px;
+  }
+  .custom-image-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .custom-product-image {
+    border-radius: 12px;
+    width: calc(90px * 3 + 16px * 2);
+    height: auto;
+    object-fit: contain;
+  }
+  .custom-thumbnails {
+    flex-wrap: nowrap;
+  }
+  .custom-thumbnail {
+    border-radius: 8px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+    width: 90px;
+    height: auto;
+  }
+  .custom-thumbnail:hover {
+    border-color: #007bff;
+  }
+  .custom-product-title {
+    font-weight: bold;
+    font-size: 28px;
+  }
+  .custom-price {
+    color: #e60023;
+    font-size: 22px;
+  }
+  .custom-quantity-input {
+    width: 50px;
+  }
+  .custom-info-wrapper {
+    padding-left: 1rem;
+  }
+  .custom-info-grid {
+    font-size: 14px;
+  }
+  .custom-tab-box {
+    background-color: #f8f9fa;
+  }
+
+
+
+
+  @media (max-width: 991.98px) {
+  .pd-detail-container {
+    flex-direction: column;
+    padding: 40px 20px;
+  }
+
+  .custom-image-wrapper {
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .custom-product-image {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .custom-thumbnail {
+    width: 70px;
+  }
+
+  .custom-info-wrapper {
+    padding-left: 0;
+  }
+
+  .custom-product-title {
+    font-size: 22px;
+    text-align: center;
+  }
+
+  .custom-tab-box {
+    padding: 1rem;
+  }
+
+  .custom-info-grid .row {
+    font-size: 13px;
+  }
+
+  .custom-quantity-group {
+    width: 100%;
+  }
+
+  .custom-price-box {
+    text-align: center;
+  }
+
+  .d-flex.gap-2.mb-5 {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+    .custom-quantity-group {
+    width: 100%;
+    max-width: 150px;
+  }
+
+  .custom-quantity-group input {
+    width: 40px;
+    font-size: 15px;
+  }
+
+  .custom-quantity-group button {
+    width: 32px;
+    font-size: 16px;
+  }
+}
+
+</style>
+<script src="../public/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/home.js"></script>
+<script src=""></script>
+<script>
+  function changeCustomImage(imageSrc) {
+    const activeItem = document.querySelector('#customProductCarousel .carousel-item.active img');
+    if (activeItem) {
+      activeItem.src = imageSrc;
+    }
+  }
+
+const maxStock = {{productDetail.SoLuongTon}}; // Render từ server
+
+function changeQuantity(change) {
+  const input = document.getElementById('customQuantity');
+  let value = parseInt(input.value);
+  value = isNaN(value) ? 1 : value + change;
+
+  // Nếu tăng nhưng đã đạt max, thì không thay đổi
+  if (change > 0 && value > maxStock) {
+    value = maxStock;
+  }
+
+  // Nếu giảm nhưng nhỏ hơn 1 thì giữ là 1
+  if (change < 0 && value < 1) {
+    value = 1;
+  }
+
+  input.value = value;
+}
+
+
+</script>
+

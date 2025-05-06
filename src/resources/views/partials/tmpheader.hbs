@@ -1,0 +1,187 @@
+<style>.toast { z-index: 99999 !important; /* Đặt z-index cao hơn các phần tử
+  khác */ }
+</style>
+<div class="search-bar-wrapper">
+  <nav class="navbar navbar-expand-lg navbar-light hd-color">
+    <div class="container-fluid">
+      <div class="row align-items-center col-12 navbar-icon">
+        <div class="col-2">
+          <a class="navbar-brand" href="#"><img
+              src="/img/logo.jpg"
+              alt=""
+            /></a>
+        </div>
+        <div class="col-6">
+          <form class="search-form" action="/search" method="GET">
+            <input
+              class="form-control search-input"
+              name="q"
+              type="search"
+              placeholder="Tìm kiếm sản phẩm..."
+            />
+            <button class="btn search-button" type="submit">Tìm kiếm</button>
+          </form>
+        </div>
+        <div
+          class="col-4 d-flex justify-content-end align-items-center gap-3 pr-5 pr-md-4 pr-lg-5"
+        >
+          <div class="d-flex justify-content-end align-items-center gap-3">
+            <!-- Giỏ hàng -->
+            <a href="/cart" class="cart-icon-wrapper position-relative">
+              <img src="/img/check-out.png" alt="Giỏ hàng" class="cart-icon" />
+              <span
+                class="cart-badge position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+              >
+                0
+              </span>
+            </a>
+
+            <!-- Dropdown tài khoản -->
+            <div class="dropdown account-dropdown">
+              <button
+                class="btn btn-secondary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton1"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Tài khoản
+              </button>
+              <ul
+                class="dropdown-menu account-menu w-auto"
+                aria-labelledby="dropdownMenuButton1"
+                style="width: 100%"
+              >
+                {{#if session.user_id}}
+                  <li><a class="dropdown-item" href="/user/account">Thông tin
+                      của tôi</a></li>
+                  <li><a class="dropdown-item" href="/user/logout">Đăng xuất</a></li>
+                {{else}}
+                  <li><a class="dropdown-item" href="/user/account">Đăng ký</a></li>
+                  <li><a class="dropdown-item" href="/user/account">Đăng nhập</a></li>
+                {{/if}}
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </nav>
+</div>
+
+<div class="menu-bar-wrapper">
+  <nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" id="openMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 hd-color">
+          <li class="nav-item"><a class="nav-link active" href="#">Trang chủ</a></li>
+          <li class="nav-item dropdown hd-color d-none d-lg-block">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Danh mục sách
+            </a>
+            <ul
+              class="dropdown-menu custom-dropdown"
+              aria-labelledby="navbarDropdown"
+            >
+              {{#each categories}}
+                <li><a
+                    class="dropdown-item"
+                    href="/category/{{this.DanhMucID}}"
+                  >{{this.TenDanhMuc}}</a></li>
+              {{/each}}
+            </ul>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="/category/">Sản phẩm</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Giới thiệu</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- Sidebar menu chính -->
+<div id="sidebar" class="sidebar">
+  <button id="closeMenu" class="close-btn">✖</button>
+  <ul>
+    <li><a href="#">Giới thiệu</a></li>
+    <li><a href="#" id="openCategories">Danh mục sách</a></li>
+    <li><a href="/category">Sản phẩm</a></li>
+  </ul>
+</div>
+
+<!-- Danh mục con -->
+<div id="categorySidebar" class="sidebar">
+  <button id="closeCategoryMenu" class="close-btn">← Quay lại</button>
+  <h2>Danh Mục Sách</h2>
+  <ul>
+    {{#each categories}}
+      <li><a href="/category/{{this.DanhMucID}}">{{this.TenDanhMuc}}</a></li>
+    {{/each}}
+  </ul>
+</div>
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <div
+    id="toast-success"
+    class="toast align-items-center text-white bg-success border-0"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+  >
+    <div class="d-flex">
+      <div class="toast-body">
+        Sản phẩm đã được thêm vào giỏ hàng!
+      </div>
+      <button
+        type="button"
+        class="btn-close btn-close-white"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<!-- HTML -->
+<div
+  id="success-toast"
+  style="
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  z-index: 9999;
+  font-weight: 500;
+"
+>
+  🎉 Đặt hàng thành công!
+</div>
+
+<script>
+  function showSuccessToast() { const toast =
+  document.getElementById("success-toast"); toast.style.display = "block";
+  setTimeout(() => { toast.style.display = "none"; }, 3000); // Ẩn sau 3 giây }
+  // Gọi hàm này sau khi đặt hàng xong: showSuccessToast();
+</script>
+
+<script>
+  // Chèn giá trị từ Handlebars vào biến JavaScript const isLoggedIn =
+  {{isLoggedIn}};
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

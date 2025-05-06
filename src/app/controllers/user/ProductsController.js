@@ -7,11 +7,9 @@ class ProductsController {
     try {
       const productid = req.query.id;
 
-      // Destructure các hàm từ model
       const { getProductDetail, getListProducts, getProductImages } = bookModel;
       const { getAllCategories } = categoryModel;
 
-      // Lấy chi tiết sản phẩm
       const productDetail = await getProductDetail(productid);
       if (!productDetail) {
         return res.status(404).send("Sản phẩm không tồn tại");

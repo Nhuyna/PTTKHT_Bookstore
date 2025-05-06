@@ -11,7 +11,6 @@ import categoryController from "../app/controllers/user/CategoryController.js";
 import siteController from "../app/controllers/user/SiteController.js";
 const router = express.Router();
 
-// Các route cho các phần của website
 router.get("/products", pdController.index);
 router.get("/category/:id?", categoryController.index);
 router.use("/user", userRouter);
@@ -20,7 +19,6 @@ router.use("/order", orderRouter);
 router.use("/lichsudonhang", historyRouter);
 router.get("/search", siteController.search);
 
-// Đặt siteRouter cho trang chủ
 router.use("/", siteRouter);
 
 export default router;
