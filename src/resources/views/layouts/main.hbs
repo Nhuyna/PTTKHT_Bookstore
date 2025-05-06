@@ -25,8 +25,11 @@
     {{>footer}}
   </footer>
 
-  
 
+<script src="/js/jquery-3.7.1.min.js"></script>
+<script src="/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/site.js"></script>
+<script src="/js/layout.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const searchBar = document.querySelector('.search-bar-wrapper');
@@ -52,44 +55,28 @@
     });
   });
 </script>
-         <script
-            src="/js/jquery-3.7.1.min.js"
-          ></script>
-
-          <script src="/bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js"></script>
-
- <script>
+<script>
   document.querySelectorAll(".icon-add-cart").forEach((item) => {
-  item.addEventListener("click", function (event) {
-  
-    event.preventDefault();
+    item.addEventListener("click", function (event) {
+    
+      event.preventDefault();
 
-    const productId = this.getAttribute("data-id");
+      const productId = this.getAttribute("data-id");
 
-    const isLoggedIn = {{isLoggedIn}}; 
+      const isLoggedIn = {{isLoggedIn}}; 
 
-    if (isLoggedIn) {
-     
-      addToCart(productId);
+      if (isLoggedIn) {
+      
+        addToCart(productId);
 
-    } else {
-   
-      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-     
-      window.location.href = "/user/account";
-    }
+      } else {
+    
+        alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
+      
+        window.location.href = "/user/account";
+      }
+    });
   });
-});
-
-
-
 </script>
-<script src="/js/site.js"></script>
-
- <script src="/js/layout.js"></script>
-
 </body>
-
-
 </html>
-

@@ -1,3 +1,13 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/orderAnother.css" />
+{{/block}}
+
+{{#block "js"}}
+  <script src="/js/sales/index.js"></script>
+  <script src="/js/sales/orders.js"></script>
+{{/block}}
+
 <div class="main-content">
   <!-- nav bar -->
   <div class="navbar">
@@ -19,7 +29,7 @@
     <div class="order-header">
       <div class="order-title">
         <div class="title-with-back">
-          <a href="/orders/show" class="btn-back-round">
+          <a href="/admin/sales/orders/show" class="btn-back-round">
             <i class="fas fa-arrow-left"></i>
           </a>
           <h2>Chi tiết đơn hàng #{{orderDetails.order.IDHoaDonXuat}}</h2>
@@ -281,7 +291,9 @@
           Bỏ lưu trữ
         </button>
       {{/if}}
-      <form action="/orders/{{orderDetails.order.IDHoaDonXuat}}/exportPdf">
+      <form
+        action="/admin/sales/orders/{{orderDetails.order.IDHoaDonXuat}}/exportPdf"
+      >
         <button
           id="exportPdfBtn"
           class="btn btn-primary"

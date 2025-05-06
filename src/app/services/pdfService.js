@@ -48,7 +48,7 @@ const compile = async (templateName, data) => {
   const pathFile = path.join(
     process.cwd(),
     "src",
-    "resources/views",
+    "resources/views/sales",
     "orders",
     `${templateName}.hbs`
   );
@@ -56,7 +56,7 @@ const compile = async (templateName, data) => {
   return hbs.compile(html)(data);
 };
 
-async function generateOrderPdf(orderDetails) {
+async function generateOrderPdf(orderDetails, res = null) {
   try {
     const browser = await puppeteer.launch({
       headless: true,
@@ -66,6 +66,28 @@ async function generateOrderPdf(orderDetails) {
     const page = await browser.newPage();
     const content = await compile("orderDetail", { orderDetails });
     const order = orderDetails.order;
+
+    // Nếu có response, gửi PDF trực tiếp đến response
+    if (res) {
+      await page.setContent(content);
+      await page.emulateMediaType("screen");
+      const pdfBuffer = await page.pdf({
+        format: "A5",
+        printBackground: true,
+        margin: {
+          top: "10px",
+          right: "10px",
+          bottom: "10px",
+          left: "10px",
+        },
+      });
+
+      await browser.close();
+      res.send(pdfBuffer);
+      return;
+    }
+
+    // Nếu không có response, lưu file vào thư mục exports (hành vi cũ)
     const fileName = `order_${order.IDHoaDonXuat}_${Date.now()}.pdf`;
     const filePath = path.join(__dirname, "..", "public", "exports", fileName);
     console.log("filePath", filePath);
@@ -96,6 +118,15 @@ async function generateOrderPdf(orderDetails) {
     };
   } catch (error) {
     console.error("Error generating PDF:", error);
+    if (res) {
+      res.status(500).json({
+        success: false,
+        message: "Error generating PDF",
+        error: error.message,
+      });
+      return;
+    }
+
     return {
       success: false,
       message: "Error generating PDF",

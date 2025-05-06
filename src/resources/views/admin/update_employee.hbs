@@ -1,0 +1,93 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/admin/employee.css">
+{{/block}}
+
+<div class="employee-table">
+    <div class="inside-table">
+        <div class="employeeHeader">
+            <h2>Cập Nhật Nhân Viên</h2>
+            <a href="/admin/employee"><button class="cancel-btn">Quay lại</button></a>
+        </div>
+
+        <form method="post" action="/admin/employee/edit">
+            <div class="form-group">
+                <label for="id" class="form-label">ID Nhân Viên</label>
+                <input type="text" class="form-control" value="{{employee.IDNhanVien}}" id="id" name="id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">Tên Nhân Viên</label>
+                <input type="text" class="form-control" value="{{employee.TenNhanVien}}" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ngày Sinh</label>
+                <div class="dob-select">
+                    <select name="dob_day" required>
+                        <option value="">Ngày</option>
+                        {{#each (range 1 31)}}
+                            <option value="{{this}}" {{#if (eq this ../employee.dob_day)}}selected{{/if}}>{{this}}</option>
+                        {{/each}}
+                    </select>
+                    <select name="dob_month" required>
+                        <option value="">Tháng</option>
+                        {{#each (range 1 12)}}
+                            <option value="{{this}}" {{#if (eq this ../employee.dob_month)}}selected{{/if}}>{{this}}</option>
+                        {{/each}}
+                    </select>
+                    <input style="font-size:16px; width: 100px;" type="text" value="{{employee.dob_year}}" name="dob_year" placeholder="Năm" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="form-label">Số Điện Thoại</label>
+                <input type="text" class="form-control" value="{{employee.SDT}}" id="phone" name="phone" required>
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" value="{{employee.Mail}}" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="street" class="form-label">Số Nhà, Đường</label>
+                <input type="text" class="form-control" value="{{employee.SoNhaDuong}}" id="street" name="street" required>
+            </div>
+            <div class="form-group">
+                <label for="ward" class="form-label">Phường, Xã</label>
+                <input type="text" class="form-control" value="{{employee.PhuongXa}}" id="ward" name="ward" required>
+            </div>
+            <div class="form-group">
+                <label for="district" class="form-label">Quận, Huyện</label>
+                <input type="text" class="form-control" value="{{employee.QuanHuyen}}" id="district" name="district" required>
+            </div>
+            <div class="form-group">
+                <label for="city" class="form-label">Tỉnh, Thành Phố</label>
+                <input type="text" class="form-control" value="{{employee.TinhThanhPho}}" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="position" class="form-label">Vị trí</label>
+                <input type="text" class="form-control" value="{{employee.ViTri}}" id="position" name="position" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ngày Vào Làm</label>
+                <div class="dob-select">
+                    <select name="dow_day" required>
+                        <option value="">Ngày</option>
+                        {{#each (range 1 31)}}
+                            <option value="{{this}}" {{#if (eq this ../employee.dow_day)}}selected{{/if}}>{{this}}</option>
+                        {{/each}}
+                    </select>
+                    <select name="dow_month" required>
+                        <option value="">Tháng</option>
+                        {{#each (range 1 12)}}
+                            <option value="{{this}}" {{#if (eq this ../employee.dow_month)}}selected{{/if}}>{{this}}</option>
+                        {{/each}}
+                    </select>
+                    <input style="font-size:16px; width: 100px;" type="text" value="{{employee.dow_year}}" name="dow_year" placeholder="Năm" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="salary" class="form-label">Lương</label>
+                <input type="text" class="form-control" value="{{employee.Luong}}" id="salary" name="salary" required>
+            </div>
+            <button class="add-btn" type="submit">Sửa</button>
+        </form>
+
+    </div>
+</div>

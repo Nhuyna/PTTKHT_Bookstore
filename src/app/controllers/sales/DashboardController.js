@@ -43,11 +43,6 @@ class DashboardController {
       console.log("per   " + permissions);
       res.render("sales/dashboard", {
         title: "Dashboard",
-        cssFiles: [
-          "/css/sales/style.css",
-          "/css/sales/order.css",
-          "/css/sales/dashboard.css",
-        ],
         data,
         layout: "sales",
         currentPath: req.path,

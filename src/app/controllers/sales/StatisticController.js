@@ -10,7 +10,6 @@ class StatisticController {
   // Render trang thống kê
   show = async (req, res) => {
     try {
-      // Lấy thông tin về loại thống kê (type) từ query params
       const {
         type = "day",
         startDate,
@@ -21,7 +20,6 @@ class StatisticController {
         endYear,
       } = req.query;
 
-      // Lấy thông tin tháng và năm hiện tại
       const today = new Date();
       const currentMonth = month ? parseInt(month) : today.getMonth() + 1;
       const currentYear = year ? parseInt(year) : today.getFullYear();
@@ -109,10 +107,9 @@ class StatisticController {
 
       permissions = permissions.concat(allPermissions);
       console.log(permissions);
-      // Render trang thống kê với dữ liệu
+
       res.render("sales/statistic", {
         title: "Thống Kê Doanh Thu",
-        cssFiles: ["/css/sales/statistic.css", "/css/sales/style.css"],
         data: formattedData,
         totals,
         activeTab: type,
@@ -128,7 +125,6 @@ class StatisticController {
         layout: "sales",
         currentPath: req.path,
         permissions,
-        // pageTitle: title,
       });
     } catch (error) {
       console.error("Error in StatisticController.show:", error);
@@ -148,16 +144,13 @@ class StatisticController {
       // Lấy dữ liệu tương ứng với loại thống kê
       if (type === "custom" && startDate && endDate) {
         data = await this.statisticModel.getRevenueByDate(startDate, endDate);
-        // title = `Thống kê doanh thu từ ${startDate} đến ${endDate}`;
       } else if (type === "month" && year) {
         data = await this.statisticModel.getRevenueByMonth(year);
-        // title = `Thống kê doanh thu theo tháng trong năm ${year}`;
       } else if (type === "year" && startYear && endYear) {
         data = await this.statisticModel.getRevenueByYear(startYear, endYear);
-        // title = `Thống kê doanh thu từ năm ${startYear} đến năm ${endYear}`;
       } else if (type === "day" && month && year) {
         data = await this.statisticModel.getDailyRevenueInMonth(month, year);
-        // title = `Thống kê doanh thu tháng ${month}/${year}`;
+        ``;
       } else {
         return res.status(400).send("Tham số không hợp lệ");
       }

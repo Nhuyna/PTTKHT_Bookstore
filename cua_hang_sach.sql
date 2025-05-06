@@ -78,7 +78,7 @@ CREATE TABLE KhachHang (
 );
 
 CREATE TABLE DiaChi_KH (
-    ID_DCKH INT PRIMARY KEY,
+    ID_DCKH INT PRIMARY KEY AUTO_INCREMENT,
     ID_KH INT,
     SoDienThoai VARCHAR(15),
     TenNguoiNhan VARCHAR(255),
@@ -87,7 +87,6 @@ CREATE TABLE DiaChi_KH (
     QuanHuyen VARCHAR(255),
     TinhThanhPho VARCHAR(255),
     FOREIGN KEY (ID_KH) REFERENCES KhachHang(ID_KH)
-
 );
 
 CREATE TABLE GioHang (
@@ -109,33 +108,37 @@ CREATE TABLE GiamGia (
 );
 
 CREATE TABLE NhanVien (
-    IDNhanVien INT PRIMARY KEY,
+    IDNhanVien INT PRIMARY KEY AUTO_INCREMENT,
     TenNhanVien VARCHAR(255) NOT NULL,
     NgaySinh DATE,
     Mail VARCHAR(255),
     SDT VARCHAR(15),
     ViTri VARCHAR(255),
     SoNhaDuong VARCHAR(255),
+    PhuongXa VARCHAR(255),
     QuanHuyen VARCHAR(255),
     TinhThanhPho VARCHAR(255),
     NgayVaoLam DATE,
-    Luong DECIMAL(10,2)
+    Luong DECIMAL(10,2),
+    tinhTrang TINYINT DEFAULT 1
 );
 
 CREATE TABLE HoaDonXuat (
-    IDHoaDonXuat INT PRIMARY KEY,
+    IDHoaDonXuat INT PRIMARY KEY AUTO_INCREMENT,
     ID_KH INT,
     IDNhanVien INT,
     ID_GiamGia INT,
     PhuongThucThanhToan ENUM('Tiền mặt', 'Chuyển khoản', 'Credit card'),
+    TinhTrangThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán', 'Đã hoàn tiền', 'Chưa hoàn tiền') default 'Chưa thanh toán',
     NgayXuat TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    Thue DECIMAL(10,2),
     TongTien DECIMAL(10,2),
-    TinhTrangThanhToan ENUM('Đã thanh toán', 'Chưa thanh toán', 'Đã hoàn tiền', 'Chưa hoàn tiền'),
+    YeuCau ENUM('Hủy', 'Trả') NULL,
+    LuuTru TINYINT DEFAULT 0,
     FOREIGN KEY (ID_KH) REFERENCES KhachHang(ID_KH),
     FOREIGN KEY (IDNhanVien) REFERENCES NhanVien(IDNhanVien),
     FOREIGN KEY (ID_GiamGia) REFERENCES GiamGia(IDGiamGia)
 );
+
 
 CREATE TABLE GiaoHang (
     IDGiaoHang INT PRIMARY KEY,
@@ -144,6 +147,7 @@ CREATE TABLE GiaoHang (
     IDDiaChi INT,
     NgayGiaoHang DATE,
     TinhTrangDon ENUM('Chờ xác nhận', 'Chờ lấy hàng', 'Đang giao hàng', 'Đã giao', 'Trả hàng', 'Đã hủy'),
+    GiaShip DECIMAL(10,2) DEFAULT 30000.00,
     FOREIGN KEY (IDNhanVien) REFERENCES NhanVien(IDNhanVien),
     FOREIGN KEY (IDDiaChi) REFERENCES DiaChi_KH(ID_DCKH),
     FOREIGN KEY (ID_HDX) REFERENCES HoaDonXuat(IDHoaDonXuat)
@@ -239,6 +243,7 @@ INSERT INTO ChiTietQuyen (ID_NhomQuyen, ChucNang, HanhDong) VALUES
 -- Admin rights
 (1, 'admin', 'access'),
 (2, 'qlbanhang', 'access'),
+(2, 'qlbanhang', 'all'),
 (3,'qlkho','access'),
 (4,'qldoanhnghiep','access'),
 (5,'qlkho','access');
@@ -530,79 +535,108 @@ INSERT INTO GiamGia (IDGiamGia, TenGiamGia, GiaTri, MoTa, NgayBD, NgayKT) VALUES
 (20, 'Mua 2 tặng 1', 0.00, 'Mua 2 tặng 1 cho sản phẩm selected', '2024-09-01', '2024-09-30');
 
 -- NhanVien: 20 employees with varied roles
-INSERT INTO NhanVien (IDNhanVien, TenNhanVien, NgaySinh, Mail, SDT, ViTri, SoNhaDuong, QuanHuyen, TinhThanhPho, NgayVaoLam, Luong) VALUES
-(1, 'Trần Thị B', '1985-05-05', 'tranb@sach.com', '0987654321', 'Nhân viên bán hàng', '456 Nguyễn Thị Minh Khai', 'Quận 3', 'TP.HCM', '2020-01-01', 10000000.00),
-(2, 'Lê Văn C', '1990-06-06', 'levanc@sach.com', '0976543210', 'Quản lý kho', '789 Điện Biên Phủ', 'Quận Bình Thạnh', 'TP.HCM', '2019-02-01', 12000000.00),
-(3, 'Phạm Thị D', '1988-07-07', 'phamd@sach.com', '0965432109', 'Kế toán', '101 Hoàng Diệu', 'Quận 4', 'TP.HCM', '2018-03-01', 11000000.00),
-(4, 'Hoàng Văn E', '1992-08-08', 'hoange@sach.com', '0954321098', 'Nhân viên bán hàng', '202 Trần Hưng Đạo', 'Quận 5', 'TP.HCM', '2021-04-01', 9000000.00),
-(5, 'Đặng Thị F', '1995-09-09', 'dangf@sach.com', '0943210987', 'Nhân viên giao hàng', '303 Hậu Giang', 'Quận 6', 'TP.HCM', '2022-05-01', 8000000.00),
-(6, 'Vũ Văn G', '1987-10-10', 'vug@sach.com', '0932109876', 'Quản lý bán hàng', '404 Nguyễn Văn Linh', 'Quận 7', 'TP.HCM', '2017-06-01', 13000000.00),
-(7, 'Bùi Thị H', '1993-11-11', 'buih@sach.com', '0921098765', 'Nhân viên marketing', '505 Phạm Thế Hiển', 'Quận 8', 'TP.HCM', '2020-07-01', 9500000.00),
-(8, 'Ngô Văn I', '1989-12-12', 'ngoi@sach.com', '0910987654', 'Nhân viên IT', '606 Lê Văn Việt', 'Quận 9', 'TP.HCM', '2019-08-01', 10500000.00),
-(9, 'Đỗ Thị K', '1991-01-13', 'dok@sach.com', '0909876543', 'Nhân viên CSKH', '707 Đường 3/2', 'Quận 10', 'TP.HCM', '2021-09-01', 8500000.00),
-(10, 'Trịnh Văn L', '1994-02-14', 'trinhl@sach.com', '0998765432', 'Nhân viên bán hàng', '808 Lạc Long Quân', 'Quận 11', 'TP.HCM', '2022-10-01', 9000000.00),
-(11, 'Lý Thị M', '1986-03-15', 'lym@sach.com', '0987654321', 'Quản lý nhân sự', '909 Nguyễn Văn Quá', 'Quận 12', 'TP.HCM', '2016-11-01', 14000000.00),
-(12, 'Hồ Văn N', '1996-04-16', 'hon@sach.com', '0976543210', 'Nhân viên kho', '1010 Phan Văn Trị', 'Quận Gò Vấp', 'TP.HCM', '2023-12-01', 8000000.00),
-(13, 'Mai Thị O', '1997-05-17', 'maio@sach.com', '0965432109', 'Nhân viên bán hàng', '1111 Cộng Hòa', 'Quận Tân Bình', 'TP.HCM', '2024-01-01', 9000000.00),
-(14, 'Đinh Văn P', '1998-06-18', 'dinhp@sach.com', '0954321098', 'Nhân viên giao hàng', '1212 Nguyễn Văn Trỗi', 'Quận Phú Nhuận', 'TP.HCM', '2024-02-01', 8000000.00),
-(15, 'Nguyễn Thị Q', '1984-07-19', 'nguyenq@sach.com', '0943210987', 'Quản lý tài chính', '1313 Kinh Dương Vương', 'Quận Bình Tân', 'TP.HCM', '2015-03-01', 15000000.00),
-(16, 'Trần Văn R', '1999-08-20', 'tranr@sach.com', '0932109876', 'Nhân viên bán hàng', '1414 Lũy Bán Bích', 'Quận Tân Phú', 'TP.HCM', '2024-04-01', 9000000.00),
-(17, 'Lê Thị S', '2000-09-21', 'les@sach.com', '0921098765', 'Nhân viên marketing', '1515 Võ Văn Ngân', 'Quận Thủ Đức', 'TP.HCM', '2024-05-01', 9500000.00),
-(18, 'Phạm Văn T', '1983-10-22', 'phamt@sach.com', '0910987654', 'Quản lý kho', '1616 Tỉnh Lộ 8', 'Huyện Củ Chi', 'TP.HCM', '2014-06-01', 12000000.00),
-(19, 'Hoàng Thị U', '1990-11-23', 'hoangu@sach.com', '0909876543', 'Nhân viên CSKH', '1717 Nguyễn Huệ', 'Quận 1', 'TP.HCM', '2020-07-01', 8500000.00),
-(20, 'Đặng Văn V', '1991-12-24', 'dangv@sach.com', '0998765432', 'Nhân viên IT', '1818 Lê Lợi', 'Quận 1', 'TP.HCM', '2021-08-01', 10500000.00);
+INSERT INTO NhanVien (IDNhanVien, TenNhanVien, NgaySinh, Mail, SDT, ViTri, SoNhaDuong, PhuongXa, QuanHuyen, TinhThanhPho, NgayVaoLam, Luong) VALUES
+(1, 'Trần Thị B', '1985-05-05', 'tranb@sach.com', '0987654321', 'Nhân viên bán hàng', '456 Nguyễn Thị Minh Khai', 'Phường 5', 'Quận 3', 'TP.HCM', '2020-01-01', 10000000.00),
+(2, 'Lê Văn C', '1990-06-06', 'levanc@sach.com', '0976543210', 'Quản lý kho', '789 Điện Biên Phủ', 'Phường 25', 'Quận Bình Thạnh', 'TP.HCM', '2019-02-01', 12000000.00),
+(3, 'Phạm Thị D', '1988-07-07', 'phamd@sach.com', '0965432109', 'Kế toán', '101 Hoàng Diệu', 'Phường 12', 'Quận 4', 'TP.HCM', '2018-03-01', 11000000.00),
+(4, 'Hoàng Văn E', '1992-08-08', 'hoange@sach.com', '0954321098', 'Nhân viên bán hàng', '202 Trần Hưng Đạo', 'Phường 11', 'Quận 5', 'TP.HCM', '2021-04-01', 9000000.00),
+(5, 'Đặng Thị F', '1995-09-09', 'dangf@sach.com', '0943210987', 'Nhân viên giao hàng', '303 Hậu Giang', 'Phường 5', 'Quận 6', 'TP.HCM', '2022-05-01', 8000000.00),
+(6, 'Vũ Văn G', '1987-10-10', 'vug@sach.com', '0932109876', 'Quản lý bán hàng', '404 Nguyễn Văn Linh', 'Phường Tân Phong', 'Quận 7', 'TP.HCM', '2017-06-01', 13000000.00),
+(7, 'Bùi Thị H', '1993-11-11', 'buih@sach.com', '0921098765', 'Nhân viên marketing', '505 Phạm Thế Hiển', 'Phường 7', 'Quận 8', 'TP.HCM', '2020-07-01', 9500000.00),
+(8, 'Ngô Văn I', '1989-12-12', 'ngoi@sach.com', '0910987654', 'Nhân viên IT', '606 Lê Văn Việt', 'Phường Hiệp Phú', 'Quận 9', 'TP.HCM', '2019-08-01', 10500000.00),
+(9, 'Đỗ Thị K', '1991-01-13', 'dok@sach.com', '0909876543', 'Nhân viên CSKH', '707 Đường 3/2', 'Phường 7', 'Quận 10', 'TP.HCM', '2021-09-01', 8500000.00),
+(10, 'Trịnh Văn L', '1994-02-14', 'trinhl@sach.com', '0998765432', 'Nhân viên bán hàng', '808 Lạc Long Quân', 'Phường 5', 'Quận 11', 'TP.HCM', '2022-10-01', 9000000.00),
+(11, 'Lý Thị M', '1986-03-15', 'lym@sach.com', '0987654321', 'Quản lý nhân sự', '909 Nguyễn Văn Quá', 'Phường Đông Hưng Thuận', 'Quận 12', 'TP.HCM', '2016-11-01', 14000000.00),
+(12, 'Hồ Văn N', '1996-04-16', 'hon@sach.com', '0976543210', 'Nhân viên kho', '1010 Phan Văn Trị', 'Phường 7', 'Quận Gò Vấp', 'TP.HCM', '2023-12-01', 8000000.00),
+(13, 'Mai Thị O', '1997-05-17', 'maio@sach.com', '0965432109', 'Nhân viên bán hàng', '1111 Cộng Hòa', 'Phường 13', 'Quận Tân Bình', 'TP.HCM', '2024-01-01', 9000000.00),
+(14, 'Đinh Văn P', '1998-06-18', 'dinhp@sach.com', '0954321098', 'Nhân viên giao hàng', '1212 Nguyễn Văn Trỗi', 'Phường 15', 'Quận Phú Nhuận', 'TP.HCM', '2024-02-01', 8000000.00),
+(15, 'Nguyễn Thị Q', '1984-07-19', 'nguyenq@sach.com', '0943210987', 'Quản lý tài chính', '1313 Kinh Dương Vương', 'Phường An Lạc', 'Quận Bình Tân', 'TP.HCM', '2015-03-01', 15000000.00),
+(16, 'Trần Văn R', '1999-08-20', 'tranr@sach.com', '0932109876', 'Nhân viên bán hàng', '1414 Lũy Bán Bích', 'Phường Hòa Thạnh', 'Quận Tân Phú', 'TP.HCM', '2024-04-01', 9000000.00),
+(17, 'Lê Thị S', '2000-09-21', 'les@sach.com', '0921098765', 'Nhân viên marketing', '1515 Võ Văn Ngân', 'Phường Linh Chiểu', 'Quận Thủ Đức', 'TP.HCM', '2024-05-01', 9500000.00),
+(18, 'Phạm Văn T', '1983-10-22', 'phamt@sach.com', '0910987654', 'Quản lý kho', '1616 Tỉnh Lộ 8', 'Xã Tân Thạnh Đông', 'Huyện Củ Chi', 'TP.HCM', '2014-06-01', 12000000.00),
+(19, 'Hoàng Thị U', '1990-11-23', 'hoangu@sach.com', '0909876543', 'Nhân viên CSKH', '1717 Nguyễn Huệ', 'Phường Bến Nghé', 'Quận 1', 'TP.HCM', '2020-07-01', 8500000.00),
+(20, 'Đặng Văn V', '1991-12-24', 'dangv@sach.com', '0998765432', 'Nhân viên IT', '1818 Lê Lợi', 'Phường Bến Thành', 'Quận 1', 'TP.HCM', '2021-08-01', 10500000.00);
 
 -- HoaDonXuat: 20 sales invoices
-INSERT INTO HoaDonXuat (IDHoaDonXuat, ID_KH, IDNhanVien, ID_GiamGia, PhuongThucThanhToan, NgayXuat, Thue, TongTien) VALUES
-(1, 1, 1, 1, 'Tiền mặt', '2023-06-01', 10.00, 200000.00),
-(2, 2, 4, NULL, 'Chuyển khoản', '2023-06-02', 10.00, 270000.00),
-(3, 3, 10, 2, 'Credit card', '2023-06-03', 10.00, 200000.00),
-(4, 4, 13, NULL, 'Tiền mặt', '2023-06-04', 10.00, 250000.00),
-(5, 5, 16, 3, 'Chuyển khoản', '2023-06-05', 10.00, 180000.00),
-(6, 6, 1, 4, 'Credit card', '2023-06-06', 10.00, 180000.00),
-(7, 7, 4, NULL, 'Tiền mặt', '2023-06-07', 10.00, 300000.00),
-(8, 8, 10, 5, 'Chuyển khoản', '2023-06-08', 10.00, 320000.00),
-(9, 9, 13, NULL, 'Credit card', '2023-06-09', 10.00, 110000.00),
-(10, 10, 16, 6, 'Tiền mặt', '2023-06-10', 10.00, 390000.00),
-(11, 11, 1, 7, 'Chuyển khoản', '2023-06-11', 10.00, 240000.00),
-(12, 12, 4, NULL, 'Credit card', '2023-06-12', 10.00, 120000.00),
-(13, 13, 10, 8, 'Tiền mặt', '2023-06-13', 10.00, 360000.00),
-(14, 14, 13, 9, 'Chuyển khoản', '2023-06-14', 10.00, 180000.00),
-(15, 15, 16, NULL, 'Credit card', '2023-06-15', 10.00, 160000.00),
-(16, 16, 1, 10, 'Tiền mặt', '2023-06-16', 10.00, 160000.00),
-(17, 17, 4, 11, 'Chuyển khoản', '2023-06-17', 10.00, 180000.00),
-(18, 18, 10, NULL, 'Credit card', '2023-06-18', 10.00, 330000.00),
-(19, 19, 13, 12, 'Tiền mặt', '2023-06-19', 10.00, 400000.00),
-(20, 20, 16, 13, 'Chuyển khoản', '2023-06-20', 10.00, 200000.00);
+INSERT INTO HoaDonXuat (IDHoaDonXuat, ID_KH, IDNhanVien, ID_GiamGia, PhuongThucThanhToan, NgayXuat, TongTien) VALUES
+(1, 1, 1, 1, 'Tiền mặt', '2025-04-01',  1380000.00),
+(2, 2, 4, NULL, 'Chuyển khoản', '2025-04-02',  910000.00),
+(3, 3, 10, 2, 'Credit card', '2025-04-03',  190000.00),
+(4, 4, 13, NULL, 'Tiền mặt', '2025-04-04',  280000.00),
+(5, 5, 16, 3, 'Chuyển khoản', '2025-04-05',  210000.00),
+(6, 6, 1, 4, 'Credit card', '2025-04-06',  183000.00),
+(7, 7, 4, NULL, 'Tiền mặt', '2025-04-07',  330000.00),
+(8, 8, 10, 5, 'Chuyển khoản', '2025-04-08',  334000.00),
+(9, 9, 13, NULL, 'Credit card', '2025-04-09',  140000.00),
+(10, 10, 16, 6, 'Tiền mặt', '2025-04-10',  322500.00),
+(11, 11, 1, 7, 'Chuyển khoản', '2025-04-11',  226000.00),
+(12, 12, 4, NULL, 'Credit card', '2025-04-11',  150000.00),
+(13, 13, 10, 8, 'Tiền mặt', '2025-04-11',  470000.00),
+(14, 14, 13, 9, 'Chuyển khoản', '2025-04-14',  192000.00),
+(15, 15, 16, NULL, 'Credit card', '2025-04-15',  190000.00),
+(16, 16, 1, 10, 'Tiền mặt', '2025-04-16',  174000.00),
+(17, 17, 4, 11, 'Chuyển khoản', '2025-04-16',  217000.00),
+(18, 18, 10, NULL, 'Credit card', '2025-04-15',  330000.00),
+(19, 19, 13, 12, 'Tiền mặt', '2025-04-17',  530000.00),
+(20, 20, 16, 13, 'Chuyển khoản', '2025-04-16',  220000.00),
+(21, 5, 10, 14, 'Tiền mặt', '2025-04-08', 237000.00),
+(22, 8, 13, NULL, 'Chuyển khoản', '2025-04-10', 310000.00),
+(23, 12, 1, 15, 'Credit card', '2025-04-09', 190000.00),
+(24, 3, 16, NULL, 'Tiền mặt', '2025-04-10', 440000.00),
+(25, 15, 4, 16, 'Chuyển khoản', '2025-04-11', 200000.00),
+(26, 7, 10, NULL, 'Credit card', '2025-04-12', 290000.00),
+(27, 19, 13, 17, 'Tiền mặt', '2025-03-29', 251000.00),
+(28, 2, 1, NULL, 'Chuyển khoản', '2025-04-06', 370000.00),
+(29, 14, 4, 18, 'Credit card', '2025-04-03', 195000.00),
+(30, 10, 16, NULL, 'Tiền mặt', '2025-04-10', 360000.00);
 
 -- GiaoHang: 20 deliveries linked to sales invoices
 INSERT INTO GiaoHang (IDGiaoHang, ID_HDX, IDNhanVien, IDDiaChi, NgayGiaoHang, TinhTrangDon) VALUES
-(1, 1, 5, 1, '2023-06-02', 'Chờ xác nhận'),
-(2, 2, 5, 2, '2023-06-03', 'Chờ lấy hàng'),
-(3, 3, 5, 3, '2023-06-04', 'Đang giao hàng'),
-(4, 4, 5, 4, '2023-06-05', 'Đã giao'),
-(5, 5, 5, 5, '2023-06-06', 'Trả hàng'),
-(6, 6, 14, 6, '2023-06-07', 'Đã hủy'),
-(7, 7, 14, 7, '2023-06-08', 'Chờ xác nhận'),
-(8, 8, 14, 8, '2023-06-09', 'Chờ lấy hàng'),
-(9, 9, 14, 9, '2023-06-10', 'Đang giao hàng'),
-(10, 10, 14, 10, '2023-06-11', 'Đã giao'),
-(11, 11, 5, 11, '2023-06-12', 'Chờ xác nhận'),
-(12, 12, 5, 12, '2023-06-13', 'Chờ lấy hàng'),
-(13, 13, 5, 13, '2023-06-14', 'Đang giao hàng'),
-(14, 14, 5, 14, '2023-06-15', 'Đã giao'),
-(15, 15, 5, 15, '2023-06-16', 'Trả hàng'),
-(16, 16, 14, 16, '2023-06-17', 'Đã hủy'),
-(17, 17, 14, 17, '2023-06-18', 'Chờ xác nhận'),
-(18, 18, 14, 18, '2023-06-19', 'Chờ lấy hàng'),
-(19, 19, 14, 19, '2023-06-20', 'Đang giao hàng'),
-(20, 20, 14, 20, '2023-06-21', 'Đã giao');
+(1, 1, 5, 1, '2025-04-02', 'Chờ xác nhận'),
+(2, 2, 5, 2, '2025-04-03', 'Chờ lấy hàng'),
+(3, 3, 5, 3, '2025-04-04', 'Đang giao hàng'),
+(4, 4, 5, 4, '2025-04-05', 'Đã giao'),
+(5, 5, 5, 5, '2025-04-06', 'Trả hàng'),
+(6, 6, 14, 6, '2025-04-07', 'Đã hủy'),
+(7, 7, 14, 7, '2025-04-08', 'Chờ xác nhận'),
+(8, 8, 14, 8, '2025-04-09', 'Chờ lấy hàng'),
+(9, 9, 14, 9, '2025-04-10', 'Đang giao hàng'),
+(10, 10, 14, 10, '2025-04-11', 'Đã giao'),
+(11, 11, 5, 11, '2025-04-12', 'Chờ xác nhận'),
+(12, 12, 5, 12, '2025-04-13', 'Chờ lấy hàng'),
+(13, 13, 5, 13, '2025-04-14', 'Đang giao hàng'),
+(14, 14, 5, 14, '2025-04-15', 'Đã giao'),
+(15, 15, 5, 15, '2025-04-16', 'Trả hàng'),
+(16, 16, 14, 16, '2025-04-17', 'Đã hủy'),
+(17, 17, 14, 17, '2025-04-18', 'Chờ xác nhận'),
+(18, 18, 14, 18, '2025-04-18', 'Chờ lấy hàng'),
+(19, 19, 14, 19, '2025-04-18', 'Đang giao hàng'),
+(20, 20, 14, 20, '2025-04-18', 'Đã giao'),
+(21, 21, 5, 5, '2025-04-11', 'Chờ xác nhận'),
+(22, 22, 14, 8, '2025-04-12', 'Chờ lấy hàng'),
+(23, 23, 5, 12, '2025-04-11', 'Đang giao hàng'),
+(24, 24, 14, 3, '2025-04-12', 'Đã giao'),
+(25, 25, 5, 15, '2025-04-14', 'Đã giao'),
+(26, 26, 14, 7, '2025-04-13', 'Đã giao'),
+(27, 27, 5, 19, '2025-04-01', 'Đã giao'),
+(28, 28, 14, 2, '2025-04-10', 'Trả hàng'),
+(29, 29, 5, 14, '2025-04-06', 'Chờ lấy hàng'),
+(30, 30, 14, 10, '2025-04-13', 'Đã hủy');
 
 -- ChiTietHoaDonXuat: 20 sales invoice details
 INSERT INTO ChiTietHoaDonXuat (IDHoaDonXuat, IDSanPham, SoLuong, ThanhTien) VALUES
 (1, 1, 2, 200000.00),   -- 2 * 100,000
+(1, 13, 1, 120000.00), -- 1 * 120,000
+(1, 14, 2, 440000.00), -- 2 * 220,000 (adjusted)
+(1, 15, 1, 180000.00), -- 1 * 180,000
+(1, 16, 2, 160000.00), -- 2 * 80,000
+(1, 17, 2, 180000.00), -- 2 * 90,000 (adjusted)
+(1, 18, 2, 220000.00), 
 (2, 2, 1, 120000.00),   -- 1 * 120,000
 (2, 3, 1, 150000.00),   -- 1 * 150,000
+(2, 5, 1, 250000.00),   -- 1 * 250,000
+(2, 6, 2, 180000.00),   -- 2 * 90,000
+(2, 7, 1, 180000.00),
 (3, 4, 1, 200000.00),   -- 1 * 200,000
 (4, 5, 1, 250000.00),   -- 1 * 250,000
 (5, 6, 2, 180000.00),   -- 2 * 90,000
@@ -620,7 +654,37 @@ INSERT INTO ChiTietHoaDonXuat (IDHoaDonXuat, IDSanPham, SoLuong, ThanhTien) VALU
 (17, 18, 2, 220000.00), -- 2 * 110,000 (adjusted)
 (18, 19, 3, 300000.00), -- 3 * 100,000 (adjusted)
 (19, 20, 2, 500000.00), -- 2 * 250,000 (adjusted)
-(20, 1, 2, 200000.00);  -- 2 * 100,000
+(20, 1, 2, 200000.00),  -- 2 * 100,000
+(21, 2, 1, 120000.00),   -- 1 * 120,000
+(21, 10, 1, 110000.00),  -- 1 * 100,000 (adjusted)
+-- Invoice 22: Total 280000
+(22, 4, 1, 200000.00),   -- 1 * 200,000
+(22, 16, 1, 80000.00),   -- 1 * 80,000
+-- Invoice 23: Total 190000
+(23, 6, 1, 90000.00),    -- 1 * 90,000
+(23, 10, 1, 110000.00),  -- 1 * 100,000 (adjusted)
+-- Invoice 24: Total 350000
+(24, 8, 1, 300000.00),   -- 1 * 300,000
+(24, 18, 1, 110000.00),   -- 1 * 50,000 (adjusted)
+-- Invoice 25: Total 170000
+(25, 16, 1, 80000.00),   -- 1 * 80,000
+(25, 17, 1, 90000.00),   -- 1 * 90,000
+-- Invoice 26: Total 260000
+(26, 7, 1, 180000.00),   -- 1 * 180,000
+(26, 16, 1, 80000.00),   -- 1 * 80,000
+-- Invoice 27: Total 225000
+(27, 12, 1, 140000.00),  -- 1 * 105,000 (adjusted)
+(27, 13, 1, 120000.00),  -- 1 * 120,000
+-- Invoice 28: Total 310000
+(28, 9, 1, 160000.00),   -- 1 * 160,000
+(28, 15, 1, 180000.00),  -- 1 * 150,000 (adjusted)
+-- Invoice 29: Total 195000
+(29, 1, 1, 100000.00),    -- 1 * 75,000 (adjusted)
+(29, 13, 1, 120000.00),  -- 1 * 120,000
+-- Invoice 30: Total 275000
+(30, 6, 1, 90000.00),    -- 1 * 90,000
+(30, 11, 1, 130000.00),  -- 1 * 130,000
+(30, 18, 1, 110000.00);  -- 2 * 100,000
 
 DELIMITER $$
 
@@ -747,13 +811,6 @@ UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.`TinhTrangThanhToan` = "Chưa hoàn tiền"
 WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
-
-ALTER TABLE HoaDonXuat
-MODIFY COLUMN IDHoaDonXuat INT NOT NULL AUTO_INCREMENT;
-ALTER TABLE DiaChi_KH
-MODIFY COLUMN ID_DCKH INT NOT NULL AUTO_INCREMENT;
-
-
 ALTER TABLE NhomQuyen
 ADD TinhTrang TINYINT DEFAULT 1;
 
@@ -763,5 +820,3 @@ INSERT INTO DanhMucChucNang (ChucNang, TenQuyen,QuyenCha) VALUES
 ('nhanvien','Nhân viên','admin'),
 ('qlhdx','Hoá đơn xuất','qlbanhang'),
 ('qlthongkexuat','Thống kê','qlbanhang');
-
-

@@ -24,12 +24,22 @@ export function checkRole(...allowedRoles) {
   return (req, res, next) => {
     // allowedRoles = allowedRoles[0];
 
-    let tmp = allowedRoles[0];
-    allowedRoles = tmp;
+    // let tmp = allowedRoles[0];
+    // allowedRoles = tmp;
+
+    // console.log(allowedRoles);
+    // const accessList = req.session.user?.accessList || [];
+    // const hasAccess = allowedRoles.some((access) =>
+    //   accessList.includes(access)
+    // );
+
+    const roles = Array.isArray(allowedRoles[0])
+      ? allowedRoles[0]
+      : allowedRoles;
+
+    console.log(roles);
     const accessList = req.session.user?.accessList || [];
-    const hasAccess = allowedRoles.some((access) =>
-      accessList.includes(access)
-    );
+    const hasAccess = roles.some((access) => accessList.includes(access));
 
     if (hasAccess) return next();
 

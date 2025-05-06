@@ -1,4 +1,7 @@
-
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/statistic.css" />
+{{/block}}
 
   <div class="main-content">
     <!-- nav bar -->
@@ -23,12 +26,12 @@
 
       <div class="section-header">
         <div class="tab-navigation">
-          <a href="/statistic?type=year" class="tab-item {{#if (eq activeTab 'year')}}active{{/if}}" data-tab="year">Thống kê theo năm</a>
-          <a href="/statistic?type=month" class="tab-item {{#if (eq activeTab 'month')}}active{{/if}}" data-tab="month">Thống kê từng tháng trong năm</a>
-          <a href="/statistic?type=day" class="tab-item {{#if (eq activeTab 'day')}}active{{/if}}" data-tab="day">Thống kê từng ngày trong tháng</a>
-          <a href="/statistic?type=custom" class="tab-item {{#if (eq activeTab 'custom')}}active{{/if}}" data-tab="custom">Thống kê từ ngày đến ngày</a>
+          <a href="/admin/sales/statistic?type=year" class="tab-item {{#if (eq activeTab 'year')}}active{{/if}}" data-tab="year">Thống kê theo năm</a>
+          <a href="/admin/sales/statistic?type=month" class="tab-item {{#if (eq activeTab 'month')}}active{{/if}}" data-tab="month">Thống kê từng tháng trong năm</a>
+          <a href="/admin/sales/statistic?type=day" class="tab-item {{#if (eq activeTab 'day')}}active{{/if}}" data-tab="day">Thống kê từng ngày trong tháng</a>
+          <a href="/admin/sales/statistic?type=custom" class="tab-item {{#if (eq activeTab 'custom')}}active{{/if}}" data-tab="custom">Thống kê từ ngày đến ngày</a>
         </div>
-        <form action="/statistic/api/export" method="GET">
+        <form action="/admin/sales/statistic/api/export" method="GET">
           <!-- Thêm các tham số hiện tại của URL -->
           <input type="hidden" name="type" value="{{activeTab}}">
           {{#if (eq activeTab 'custom')}}
@@ -59,7 +62,7 @@
         class="date-range-selector"
         style="display: {{#if (eq activeTab 'custom')}}block{{else}}none{{/if}};"
       >
-        <form action="/statistic" method="GET">
+        <form action="/admin/sales/statistic" method="GET">
           <input type="hidden" name="type" value="custom">
           <div class="date-range-inputs">
             <div class="date-input-group">
@@ -77,7 +80,7 @@
 
       <!-- Year selector - Hidden by default -->
       <div id="year-selector" class="year-selector" style="display: {{#if (eq activeTab 'year')}}block{{else}}none{{/if}};">
-        <form action="/statistic" method="GET">
+        <form action="/admin/sales/statistic" method="GET">
           <input type="hidden" name="type" value="year">
           <div class="year-selector-inputs">
             <label for="select-year">Chọn từ năm:</label>
@@ -103,7 +106,7 @@
         class="month-in-year-selector"
         style="display: {{#if (eq activeTab 'month')}}block{{else}}none{{/if}};"
       >
-        <form action="/statistic" method="GET">
+        <form action="/admin/sales/statistic" method="GET">
           <input type="hidden" name="type" value="month">
           <div class="month-in-year-inputs">
             <label for="select-year-for-months">Chọn năm:</label>
@@ -119,7 +122,7 @@
 
       <!-- Day in month selector - Hidden by default -->
       <div id="day-in-month-selector" class="day-in-month-selector" style="display: {{#if (eq activeTab 'day')}}block{{else}}none{{/if}};">
-        <form action="/statistic" method="GET">
+        <form action="/admin/sales/statistic" method="GET">
           <input type="hidden" name="type" value="day">
           <div class="day-in-month-inputs">
             <label for="select-month">Chọn tháng:</label>

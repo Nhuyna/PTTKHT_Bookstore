@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         modalConfirmBtn.onclick = () => {
           try {
-            fetch(`/orders/${orderId}/${endpoint}`, {
+            fetch(`/admin/sales/orders/${orderId}/${endpoint}`, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
@@ -54,7 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 console.log(`Đơn hàng đã ${endpoint} thành công`);
                 closeModal(modal);
-                window.location.href = `/orders/${orderId}`;
+                window.location.href = `/admin/sales/orders/${orderId}`;
                 return res.json();
               })
               .catch((error) => {

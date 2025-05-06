@@ -1,0 +1,91 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/admin/employee.css">
+{{/block}}
+
+{{#block "js"}}
+    <script src="/js/admin/employee.js"></script>
+{{/block}}
+
+<!-- Employee table -->
+<div class="employee-table">
+    <div class="inside-table">
+        <div class="employeeHeader">
+            <h2>Nhân viên</h2>
+            <div>
+                <a href="/admin/employee"><button class="reset-btn">Làm Mới</button></a>
+                <a href="/admin/employee/create_excel"><button class="excel-btn">Xuất Excel</button></a>
+                <a href="/admin/employee/create"><button class="add-employee">Thêm Nhân Viên</button></a>
+            </div>
+        </div>
+        <table id="employee_table">
+            <thead>
+                <tr id="header-row">
+                    <td class="sortable">ID<span class="arrow">▲</span></td>
+                    <td class="sortable">Tên nhân viên<span class="arrow">▲</span></td>
+                    <td class="sortable">Ngày sinh<span class="arrow">▲</span></td>
+                    <td class="sortable">Email<span class="arrow">▲</span></td>
+                    <td class="sortable">Số điện thoại<span class="arrow">▲</span></td>
+                    <td class="sortable">Vị trí<span class="arrow">▲</span></td>
+                    <td class="sortable">Ngày vào làm<span class="arrow">▲</span></td>
+                    <td class="sortable">Lương<span class="arrow">▲</span></td>
+                    <td>Chức năng</td>
+                </tr>
+            </thead>
+            <tbody class="employee-list">
+                {{#each employee}}
+                    <tr>
+                        <td>{{this.IDNhanVien}}</td>
+                        <td>{{this.TenNhanVien}}</td>
+                        <td data-value="{{formatDate this.NgaySinh 'YYYY-MM-DD HH:mm:ss'}}">
+                            {{formatDate this.NgaySinh "DD/MM/YYYY"}}
+                        </td>
+                        <td>{{this.Mail}}</td>
+                        <td>{{this.SDT}}</td>
+                        <td>{{this.ViTri}}</td>
+                        <td data-value="{{formatDate this.NgayVaoLam 'YYYY-MM-DD HH:mm:ss'}}">
+                            {{formatDate this.NgayVaoLam "DD/MM/YYYY"}}
+                        </td>
+                        <td data-value="{{this.Luong}}">{{formatCurrency this.Luong}}</td>
+                        <td>
+                            <div class="button-container">
+                                <a href="/admin/employee/view/{{this.IDNhanVien}}">
+                                    <button class="icon-btn view-btn">
+                                        <i class="fas fa-eye"></i>
+                                        <span class="tooltip">Chi tiết</span>
+                                    </button>
+                                </a>
+                                <a href="/admin/employee/update/{{this.IDNhanVien}}">
+                                    <button class="icon-btn edit-btn">
+                                        <i class="fas fa-edit"></i>
+                                        <span class="tooltip">Chỉnh sửa</span>
+                                    </button>
+                                </a>
+                                <button class="icon-btn delete-btn" data-id="{{this.IDNhanVien}}">
+                                    <i class="fas fa-trash-alt"></i>
+                                    <span class="tooltip">Xóa</span>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Delete product -->
+<div class="delete-popup">
+    <div class="popup">
+        <div class="popup-head">
+            <p>Bạn có chắc chắn muốn xóa nhân viên?</p>
+            <button class="popup-close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="popup-body">
+            <p>Nếu đã xóa, bạn sẽ không thể tiếp tục sử dụng thông tin nhân viên.</p>
+        </div>
+        <div class="popup-foot">
+            <button class="popup-btn popup-cancel-btn">Hủy</button>
+            <button class="popup-btn popup-confirm-btn">Xác nhận</button>
+        </div>
+    </div>
+</div>

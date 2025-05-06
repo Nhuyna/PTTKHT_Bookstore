@@ -143,12 +143,6 @@ class OrderController {
       permissions = permissions.concat(allPermissions);
       res.render("sales/orders/show", {
         title: "Order",
-        cssFiles: [
-          "/css/sales/order.css",
-          "/css/sales/style.css",
-          "css/sales/order.css",
-        ],
-        jsFiles: ["/js/sales/index.js", "/js/sales/orders.js"],
         orders,
         returnCancelRequests,
         archivedOrders,
@@ -186,8 +180,6 @@ class OrderController {
       permissions = permissions.concat(allPermissions);
       res.render("sales/orders/detail", {
         title: "Order Details",
-        cssFiles: ["/css/sales/orderAnother.css", "/css/sales/style.css"],
-        jsFiles: ["/js/sales/index.js", "/js/sales/orders.js"],
         orderDetails,
         layout: "sales",
         permissions,
@@ -215,7 +207,7 @@ class OrderController {
       orderModel
         ._updateStatus(orderId, status, request)
         .then((result) => {
-          console.log(result);
+          // console.log(result);
           res.json({
             success: true,
             message: `Đơn hàng đã được cập nhật thành "${status}" thành công`,
@@ -237,7 +229,7 @@ class OrderController {
     try {
       const orderId = req.params.id;
       const status = req.body.status || req.query.status;
-      console.log("status", status);
+      // console.log("status", status);
       if (status === undefined || status === null) {
         return res.status(400).json({
           success: false,
@@ -295,6 +287,7 @@ class OrderController {
             message: "Đơn hàng không tồn tại",
           });
         });
+      // await orderModel._updatePaymentStatus(orderId, status);
     } catch (error) {
       console.error("Error updating order status:", error);
       next(error);
@@ -317,39 +310,17 @@ class OrderController {
 
       console.log("orderDetails", orderDetails);
 
-      const result = await generateOrderPdf(orderDetails);
-      if (!result.success) {
-        return res.status(500).json({
-          success: false,
-          message: "Lỗi khi tạo PDF",
-        });
-      }
+      // Tạo tên file với thời gian hiện tại
+      const currentDate = new Date();
+      const timestamp = currentDate.toISOString().replace(/[:.]/g, "-");
+      const fileName = `order-${orderId}-${timestamp}.pdf`;
 
-      if (!result.fileName) {
-        return res.status(500).json({
-          success: false,
-          message: "File name is undefined",
-        });
-      }
-
-      const filePath = path.join(
-        __dirname,
-        "..",
-        "public",
-        "exports",
-        result.fileName
-      );
-
-      // Set headers for file download
+      // Cài đặt header trước khi tạo PDF
       res.setHeader("Content-Type", "application/pdf");
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename=${result.fileName}`
-      );
+      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
 
-      // Send the file as a stream and don't try to send JSON response afterward
-      const fileStream = fs.createReadStream(filePath);
-      fileStream.pipe(res);
+      // Tạo PDF và gửi trực tiếp đến response
+      await generateOrderPdf(orderDetails, res);
     } catch (error) {
       console.error("Error exporting PDF:", error);
       res.status(500).json({
@@ -371,34 +342,20 @@ class OrderController {
         });
       }
 
-      const result = await generateOrdersExcel(orders);
-
-      if (!result.success || !result.fileName) {
-        return res.status(500).json({
-          success: false,
-          message: "Lỗi khi tạo Excel",
-        });
-      }
-
+      // Cài đặt header cho file Excel
       res.setHeader(
         "Content-Type",
         "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
       );
 
-      res.setHeader(
-        "Content-Disposition",
-        `attachment; filename=${result.fileName}`
-      );
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const fileName = `orders_${timestamp}.xlsx`;
 
-      const filePath = path.join(
-        __dirname,
-        "..",
-        "public",
-        "exports",
-        result.fileName
-      );
-      const fileStream = fs.createReadStream(filePath);
-      fileStream.pipe(res);
+      res.setHeader("Content-Disposition", `attachment; filename=${fileName}`);
+
+      // Tạo Excel và gửi trực tiếp đến response
+      const buffer = await generateOrdersExcel(orders, res);
+      res.send(buffer);
     } catch (error) {
       console.error("Error exporting Excel:", error);
       res.status(500).json({
