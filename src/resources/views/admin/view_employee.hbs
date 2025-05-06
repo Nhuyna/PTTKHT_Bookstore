@@ -1,0 +1,63 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/admin/employee.css">
+{{/block}}
+
+<div class="employee-table">
+    <div class="inside-table">
+        <div class="employeeHeader">
+            <h2>Chi Tiết Thông Tin Nhân Viên</h2>
+            <a href="/admin/employee"><button class="cancel-btn">Quay lại</button></a>
+        </div>
+
+        <form>
+            <div class="form-group">
+                <label for="id" class="form-label">ID Nhân Viên</label>
+                <input type="text" class="form-control" value="{{employee.IDNhanVien}}" id="id" name="id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">Tên Nhân Viên</label>
+                <input type="text" class="form-control" value="{{employee.TenNhanVien}}" id="name" name="name" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ngày Sinh</label>
+                <input type="text" class="form-control" value="{{formatDate employee.NgaySinh "DD/MM/YYYY"}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="phone" class="form-label">Số Điện Thoại</label>
+                <input type="text" class="form-control" value="{{employee.SDT}}" id="phone" name="phone" readonly>
+            </div>
+            <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" value="{{employee.Mail}}" id="email" name="email" readonly>
+            </div>
+            <div class="form-group">
+                <label for="street" class="form-label">Số Nhà, Đường</label>
+                <input type="text" class="form-control" value="{{employee.SoNhaDuong}}" id="street" name="street" readonly>
+            </div>
+            <div class="form-group">
+                <label for="ward" class="form-label">Phường, Xã</label>
+                <input type="text" class="form-control" value="{{employee.PhuongXa}}" id="ward" name="ward" readonly>
+            </div>
+            <div class="form-group">
+                <label for="district" class="form-label">Quận, Huyện</label>
+                <input type="text" class="form-control" value="{{employee.QuanHuyen}}" id="district" name="district" readonly>
+            </div>
+            <div class="form-group">
+                <label for="city" class="form-label">Tỉnh, Thành Phố</label>
+                <input type="text" class="form-control" value="{{employee.TinhThanhPho}}" id="city" name="city" readonly>
+            </div>
+            <div class="form-group">
+                <label for="position" class="form-label">Vị trí</label>
+                <input type="text" class="form-control" value="{{employee.ViTri}}" id="position" name="position" readonly>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Ngày Vào Làm</label>
+                <input type="text" class="form-control" value="{{formatDate employee.NgayVaoLam "DD/MM/YYYY"}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="salary" class="form-label">Lương</label>
+                <input type="text" class="form-control" value="{{formatCurrency employee.Luong}}" id="salary" name="salary" readonly>
+            </div>
+        </form>
+    </div>
+</div>
