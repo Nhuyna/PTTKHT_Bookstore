@@ -9,7 +9,7 @@
       <a href="/admin/permissions"><button class="cancel-btn">Quay lại</button></a>
     </div>
 
-    <form action="/admin/permissions/update" method="post">
+    <form action="/admin/permissions/create" method="post">
       <div class="form-group">
         <label for="name" class="form-label">Tên nhóm quyền</label>
         <input
@@ -26,10 +26,11 @@
   
     <div class="role-item">
       <input 
-        type="checkbox" 
+        type="radio" 
         class="role-toggle" 
         data-role="{{this.id}}" 
         id="role-{{this.id}}"
+        name="role"
       />
       <label for="role-{{this.id}}">{{this.name}}</label>
 

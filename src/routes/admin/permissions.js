@@ -8,9 +8,10 @@ import {
 } from "../../app/middlewares/admin/auth.js";
 import Permission from "../../app/controllers/admin/Permissions.js";
 router.get("/create", Permission.create);
-router.get("/update/:id", Permission.editForm); // hiển thị form sửa
+router.post("/create", Permission.createpost);
+router.get("/update/:id", Permission.editForm);
 
-router.post("/update", Permission.update);
+router.post("/update/:id", Permission.update);
 router.get("/delete/:id", Permission.delete);
 router.get("/", Permission.show);
 

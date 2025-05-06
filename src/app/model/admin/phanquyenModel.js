@@ -26,12 +26,41 @@ async function findQuyenChaFromPermissions(permissions) {
   // Bước 1: lấy các chức năng không trùng
   const dsChucNang = Array.from(new Set(permissions.map((p) => p.ChucNang)));
   console.log("danh sách chức năng nè,", dsChucNang);
-  // Bước 2: query quyền cha từ bảng danhsachchucnang
-  const placeholders = dsChucNang.map(() => "?").join(",");
-  const sql = `SELECT DISTINCT quyencha FROM danhmucchucnang WHERE ChucNang IN (${placeholders})`;
-  const [rows] = await db.query(sql, dsChucNang);
 
-  return rows.length === 1 ? rows[0].quyencha : "qldoanhnghiep";
+  // Bước 2: lấy danh sách quyền cha có thể có
+  const dsquyencha = await findPermissionbyQuyenCha();
+  console.log("dsqc", dsquyencha);
+
+  // Bước 3: truy vấn các quyền cha từ bảng
+  const placeholders = dsChucNang.map(() => "?").join(",");
+  const sql = `
+    SELECT DISTINCT quyencha 
+    FROM danhmucchucnang 
+    WHERE ChucNang IN (${placeholders}) 
+      AND quyencha IS NOT NULL
+  `;
+  const [rows] = await db.query(sql, dsChucNang);
+  console.log("rows".rows);
+  // Nếu chỉ có 1 quyền cha → trả về nó
+  if (rows.length === 1) {
+    return rows[0].quyencha;
+  }
+
+  // Nếu KHÔNG có dòng nào được trả về
+  if (rows.length === 0) {
+    // Kiểm tra nếu tất cả chức
+    // vonăng giống nhau
+    console.log("Khong có nè");
+    if (dsChucNang.length === 1) {
+      const chucnang = dsChucNang[0];
+      console.log(chucnang);
+      const found = dsquyencha.some((item) => item.ChucNang === chucnang);
+      if (found) return chucnang;
+    }
+  }
+
+  // Mặc định trả về
+  return "qldoanhnghiep";
 }
 
 async function findPAccessIdNhomQuyen(id, action) {
@@ -135,6 +164,29 @@ async function addPermissionsToTable(ID_NhomQuyen, ChucNang, HanhDong) {
     throw err;
   }
 }
+async function insertPermissionsForRole(roleId, quyen) {
+  const values = [];
+
+  const quyenCha = Object.keys(quyen)[0];
+  const nhomChucNang = quyen[quyenCha];
+
+  values.push([roleId, quyenCha, "access"]);
+
+  for (const chucnang in nhomChucNang) {
+    const actions = nhomChucNang[chucnang];
+    actions.forEach((action) => {
+      values.push([roleId, chucnang, action]);
+    });
+  }
+
+  if (values.length > 0) {
+    const sqlInsert = `
+      INSERT INTO chitietquyen (ID_NhomQuyen, ChucNang, HanhDong)
+      VALUES ?
+    `;
+    await db.query(sqlInsert, [values]);
+  }
+}
 
 export default {
   findPermissionbyQuyenCha,
@@ -145,4 +197,5 @@ export default {
   deletePermissionsByRoleId,
   deleteRoleById,
   findQuyenChaFromPermissions,
+  insertPermissionsForRole,
 };

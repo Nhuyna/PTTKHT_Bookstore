@@ -26,8 +26,6 @@ export function checkRole(...allowedRoles) {
 
     let tmp = allowedRoles[0];
     allowedRoles = tmp;
-
-    console.log(allowedRoles);
     const accessList = req.session.user?.accessList || [];
     const hasAccess = allowedRoles.some((access) =>
       accessList.includes(access)
