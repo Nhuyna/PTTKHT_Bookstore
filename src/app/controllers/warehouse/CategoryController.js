@@ -15,13 +15,15 @@ class CategoryController {
     ).map((p) => p.ChucNang);
 
     permissions = permissions.concat(allPermissions);
-    console.log(permissions);
+    let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
+    console.log(action);
     try {
       const category = await categoryConfig.getAll();
       res.render("warehouse/category", {
         layout: "warehouse",
         category,
         permissions,
+        action,
       });
     } catch (err) {
       console.log(err);
@@ -42,7 +44,9 @@ class CategoryController {
 
       permissions = permissions.concat(allPermissions);
       const { id } = req.params;
-      res.render("warehouse/category", { layout: "warehouse" }, permissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
+      res.render("warehouse/category", { layout: "warehouse" }, permissions),
+        action;
     } catch (err) {
       console.log(err);
     }
@@ -70,11 +74,13 @@ class CategoryController {
 
       permissions = permissions.concat(allPermissions);
       console.log(permissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/view_category", {
         detail_header,
         category_detail,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -95,9 +101,11 @@ class CategoryController {
 
       permissions = permissions.concat(allPermissions);
       console.log(permissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/create_category", {
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -131,10 +139,12 @@ class CategoryController {
 
       permissions = permissions.concat(allPermissions);
       console.log(permissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/update_category", {
         edit_category,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);

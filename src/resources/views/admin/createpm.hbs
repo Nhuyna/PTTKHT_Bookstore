@@ -1,0 +1,81 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/admin/permission.css" />
+{{/block}}
+
+<div class="permission-table">
+  <div class="inside-table">
+    <div class="permissionHeader">
+      <h2>Thêm nhóm quyền mới</h2>
+      <a href="/admin/permissions"><button class="cancel-btn">Quay lại</button></a>
+    </div>
+
+    <form action="/admin/permissions/update" method="post">
+      <div class="form-group">
+        <label for="name" class="form-label">Tên nhóm quyền</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          required
+        />
+      </div>
+
+      <div class="role-list">
+  {{#each roles}}
+  
+    <div class="role-item">
+      <input 
+        type="checkbox" 
+        class="role-toggle" 
+        data-role="{{this.id}}" 
+        id="role-{{this.id}}"
+      />
+      <label for="role-{{this.id}}">{{this.name}}</label>
+
+      <div class="permission-panel" id="permission-{{this.id}}" style="display: none;">
+        <table class="permission-table">
+          <thead>
+            <tr>
+              <th>Chức năng</th>
+              <th>Xem</th>
+              <th>Thêm</th>
+              <th>Sửa</th>
+              <th>Xóa</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each this.permissions}}
+              <tr>
+                <td>{{this.name}}</td>
+                <td><input type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="view" /></td>
+                <td><input type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="create" /></td>
+                <td><input type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="edit" /></td>
+                <td><input type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="delete" /></td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  {{/each}}
+</div>
+
+      <button class="add-btn" type="submit">Thêm</button>
+    </form>
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const roleToggles = document.querySelectorAll(".role-toggle");
+
+    roleToggles.forEach((toggle) => {
+      toggle.addEventListener("change", function () {
+        const panel = document.getElementById("permission-" + this.dataset.role);
+        panel.style.display = this.checked ? "block" : "none";
+      });
+    });
+  });
+</script>

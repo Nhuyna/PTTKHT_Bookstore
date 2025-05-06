@@ -13,10 +13,14 @@
       <h2>Sản Phẩm</h2>
       <div>
         <a href="/admin/warehouse/product"><button class="reset-btn">Làm Mới</button></a>
-        <a href="/admin/warehouse/product/create_excel"><button class="excel-btn">Xuất
-            Excel</button></a>
-        <a href="/admin/warehouse/product/create"><button class="add-product">Thêm Sản
-            Phẩm</button></a>
+        <a href="/admin/warehouse/product/create_excel"><button
+            class="excel-btn"
+          >Xuất Excel</button></a>
+        {{#if (or (includes action "create") (includes action "all"))}}
+          <a href="/admin/warehouse/product/create"><button
+              class="add-product"
+            >Thêm Sản Phẩm</button></a>
+        {{/if}}
       </div>
     </div>
     <div style="display: flex">
@@ -25,7 +29,11 @@
         <option value="/admin/warehouse/product/on_sale">Sản phẩm đang bán</option>
         <option value="/admin/warehouse/product/delete_opt">Sản phẩm đã xóa</option>
       </select>
-      <form action="/admin/warehouse/product/search" method="get" id="search-form">
+      <form
+        action="/admin/warehouse/product/search"
+        method="get"
+        id="search-form"
+      >
         <div class="search-container">
           <input
             type="text"
@@ -56,9 +64,11 @@
         </tr>
       </thead>
       <tbody class="products-list">
+
         {{#if product.length}}
           {{#each product}}
             <tr>
+
               <td>{{this.SanPhamID}}</td>
               <td>{{this.TenSanPham}}</td>
               <td>{{this.TenTacGia}}</td>
@@ -85,19 +95,32 @@
                       <span class="tooltip">Chi tiết</span>
                     </button>
                   </a>
-                  <a href="/admin/warehouse/product/update/{{this.SanPhamID}}">
-                    <button class="icon-btn edit-btn">
-                      <i class="fas fa-edit"></i>
-                      <span class="tooltip">Chỉnh sửa</span>
+
+                  {{#if
+                    (or (includes ../action "edit") (includes ../action "all"))
+                  }}
+
+                    <a
+                      href="/admin/warehouse/product/update/{{this.SanPhamID}}"
+                    >
+                      <button class="icon-btn edit-btn">
+                        <i class="fas fa-edit"></i>
+                        <span class="tooltip">Chỉnh sửa</span>
+                      </button>
+                    </a>
+                  {{/if}}
+
+                  {{#if
+                    (or (includes ../action "delete") (includes ../action "all"))
+                  }}
+                    <button
+                      class="icon-btn delete-btn"
+                      data-id="{{this.SanPhamID}}"
+                    >
+                      <i class="fas fa-trash-alt"></i>
+                      <span class="tooltip">Xóa</span>
                     </button>
-                  </a>
-                  <button
-                    class="icon-btn delete-btn"
-                    data-id="{{this.SanPhamID}}"
-                  >
-                    <i class="fas fa-trash-alt"></i>
-                    <span class="tooltip">Xóa</span>
-                  </button>
+                  {{/if}}
                 </div>
               </td>
             </tr>

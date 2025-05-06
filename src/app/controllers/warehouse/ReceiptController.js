@@ -34,10 +34,13 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
+
       res.render("warehouse/receipt", {
         receipt,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -59,10 +62,13 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
+      console.log(action);
       res.render("warehouse/receipt", {
         receipt,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -85,6 +91,8 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
+      console.log(action);
 
       res.render("warehouse/view_receipt", {
         id,
@@ -92,6 +100,7 @@ class ReceiptController {
         product_detail,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -111,9 +120,12 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
+      console.log(action);
       res.render("warehouse/create_receipt", {
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -193,12 +205,15 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
+      console.log(action);
       res.render("warehouse/update_receipt", {
         receipt_info,
         receipt_detail,
         product_detail,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -236,6 +251,8 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
+      console.log(action);
       const html = await hbsInstance.render(
         path.join(
           __dirname,
@@ -247,6 +264,7 @@ class ReceiptController {
           product_detail,
           layout: "warehouse",
           permissions,
+          action,
         }
       );
       const browser = await puppeteer.launch();

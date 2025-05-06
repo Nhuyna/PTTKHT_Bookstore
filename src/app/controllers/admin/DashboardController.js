@@ -14,7 +14,7 @@ class DashboardController {
     try {
       res.render("admin/dashboard", {
         title: "Dashboard",
-        cssFiles: ["admin/style"],
+        // cssFiles: ["admin/style"],
         layout: "admin",
         permissions,
       });

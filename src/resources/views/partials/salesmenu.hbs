@@ -8,7 +8,7 @@
       </a>
     </li>
     <li class="active">
-      <a href="./">
+      <a href="/admin/sales/">
         <!-- Trang Dashboard -->
         <span><i class="fas fa-home"></i></span>
         <span>Tổng Quan</span>
@@ -17,10 +17,10 @@
     <!-- Đơn Hàng -->
 
     {{#if
-      (or (includes accessList "qlhdx") (includes permissions "qlbanhang"))
+      (or (includes permissions "qlhdx") (includes permissions "qlbanhang"))
     }}
       <li>
-        <a href="orders/show">
+        <a href="/admin/sales/orders/show">
           <!-- Liên kết đến orders/show -->
           <span><i class="fas fa-shopping-cart"></i></span>
           <span>Đơn Hàng</span>
@@ -35,7 +35,7 @@
       )
     }}
       <li>
-        <a href="statistic">
+        <a href="/admin/sales/statistic">
           <!-- Liên kết đến statistic -->
           <span><i class="fas fa-chart-bar"></i></span>
           <span>Thống Kê</span>

@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Tạo URL với query params
     // @ts-ignore
     const queryString = new URLSearchParams(params).toString();
-    const exportUrl = `/statistic/api/export?${queryString}`;
+    const exportUrl = `/admin/sales/statistic/api/export?${queryString}`;
     // Gửi yêu cầu tải xuống
     fetch(exportUrl)
       .then((response) => response.json())
@@ -314,7 +314,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // API functions
   function fetchRevenueByDateRange(startDate, endDate) {
-    fetch(`/statistic/api/date-range?startDate=${startDate}&endDate=${endDate}`)
+    fetch(
+      `/admin/sales/statistic/api/date-range?startDate=${startDate}&endDate=${endDate}`
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -330,7 +332,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fetchRevenueByMonth(year) {
-    fetch(`/statistic/api/monthly?year=${year}`)
+    fetch(`/admin/sales/statistic/api/monthly?year=${year}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -346,7 +348,9 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fetchRevenueByYear(startYear, endYear) {
-    fetch(`/statistic/api/yearly?startYear=${startYear}&endYear=${endYear}`)
+    fetch(
+      `/admin/sales/statistic/api/yearly?startYear=${startYear}&endYear=${endYear}`
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
@@ -362,7 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fetchRevenueByDay(month, year) {
-    fetch(`/statistic/api/daily?month=${month}&year=${year}`)
+    fetch(`/admin/sales/statistic/api/daily?month=${month}&year=${year}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {

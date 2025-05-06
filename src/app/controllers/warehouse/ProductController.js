@@ -10,6 +10,7 @@ class ProductController {
   async index(req, res) {
     try {
       const product = await productConfig.getAll();
+
       let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
@@ -19,10 +20,13 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
+      console.log(action);
       res.render("warehouse/product", {
         product,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (err) {
       console.error(err);
@@ -44,10 +48,12 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/product", {
         product,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (err) {
       console.error(err);
@@ -65,18 +71,22 @@ class ProductController {
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
-      // Thêm quyền "all" vào danh sách permissions
       const allPermissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
+      console.log("action" + action);
+
       res.render("warehouse/view_product", {
         product,
         category,
         image,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.error(err);
@@ -97,10 +107,12 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/create_product", {
         category,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (err) {
       console.error(err);
@@ -214,6 +226,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/update_product", {
         edit_product,
         list_category,
@@ -222,6 +235,7 @@ class ProductController {
         images,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -256,9 +270,10 @@ class ProductController {
         description,
         images
       );
-      res.redirect("/admin/warehouse/product");
+      return res.redirect("/admin/warehouse/product");
     } catch (error) {
       console.log(error);
+      return res.status(500).send("Lỗi khi cập nhật sản phẩm.");
     }
   }
 
@@ -285,10 +300,12 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/product", {
         product,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);

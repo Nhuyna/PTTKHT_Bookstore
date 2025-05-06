@@ -6,7 +6,7 @@ import BookModel from "../../model/user/bookModel.js";
 const renderCartPage = async (req, res, next) => {
   try {
     const cartItems = await CartModel.getCartByUserId(req.session.user_id);
-    res.render("cart", { cart: cartItems, session: req.session });
+    res.render("user/cart", { cart: cartItems, session: req.session });
   } catch (error) {
     res.redirect(
       "/user/errorPage?error=" + encodeURIComponent("Lỗi khi tải giỏ hàng")
@@ -25,7 +25,7 @@ const thanhtoan1 = async (req, res) => {
       );
     }
 
-    res.render("thanhtoan", { session: req.session });
+    res.render("user/thanhtoan", { session: req.session });
   } catch (error) {
     console.error("Lỗi xử lý giỏ hàng:", error);
     res.redirect(
@@ -56,7 +56,11 @@ const thanhtoan = async (req, res) => {
     req.session.cartCheckout = cart;
     req.session.cartTotal = tongTien;
 
-    res.render("thanhtoan", { cart, total: tongTien, session: req.session });
+    res.render("user/thanhtoan", {
+      cart,
+      total: tongTien,
+      session: req.session,
+    });
   } catch (error) {
     console.error("Lỗi xử lý giỏ hàng:", error);
     res.redirect(

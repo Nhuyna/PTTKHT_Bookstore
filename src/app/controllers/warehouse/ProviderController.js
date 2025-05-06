@@ -18,11 +18,13 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
-
+      let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
+      console.log(action);
       res.render("warehouse/provider", {
         provider,
         layout: "warehouse",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);

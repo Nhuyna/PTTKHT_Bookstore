@@ -7,7 +7,7 @@ import fs from "fs-extra";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-export async function generateOrdersExcel(orders) {
+export async function generateOrdersExcel(orders, res = null) {
   try {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Orders");
@@ -54,7 +54,14 @@ export async function generateOrdersExcel(orders) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
     const fileName = `orders_${timestamp}.xlsx`;
 
-    const exportsDir = path.join(__dirname, "..", "public", "exports");
+    // Nếu có response, gửi Excel trực tiếp đến response
+    if (res) {
+      const buffer = await workbook.xlsx.writeBuffer();
+      return buffer;
+    }
+
+    // Nếu không có response, lưu file vào thư mục exports (hành vi cũ)
+    const exportsDir = path.join(__dirname, "../..", "public", "exports");
     if (!fs.existsSync(exportsDir)) {
       fs.mkdirSync(exportsDir, { recursive: true });
     }

@@ -4,7 +4,6 @@ import phanquyen from "../../model/admin/phanquyenModel.js";
 class DashboardController {
   async show(req, res) {
     try {
-      // console.log("Vào được đây ròi nha");
       const dashboardModel = new Dashboard();
       const orderModel = new Order();
 
@@ -35,20 +34,15 @@ class DashboardController {
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
 
-      // Thêm quyền "all" vào danh sách permissions
       const allPermissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      console.log(permissions);
       console.log("per   " + permissions);
       res.render("sales/dashboard", {
         title: "Dashboard",
-        cssFiles: [
-          "/css/sales/style.css",
-          "/css/sales/order.css",
-          "/css/sales/dashboard.css",
-        ],
         data,
         layout: "sales",
         currentPath: req.path,

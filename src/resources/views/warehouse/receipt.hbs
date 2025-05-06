@@ -5,15 +5,22 @@
 {{#block "js"}}
   <script src="/js/warehouse/receipt.js"></script>
 {{/block}}
-
+<p>ac{{action}}</p>
 <!-- Receipt table -->
 <div class="receipt-table">
   <div class="inside-table">
     <div class="receiptHeader">
       <h2>Hóa Đơn Nhập Hàng</h2>
       <div>
-        <a href="/admin/warehouse/receipt/create_excel"><button class="excel-receipt">Xuất Excel</button></a>
-        <a href="/admin/warehouse/receipt/create"><button class="add-receipt">Thêm Hóa Đơn</button></a>
+        <a href="/admin/warehouse/receipt/create_excel"><button
+            class="excel-receipt"
+          >Xuất Excel</button></a>
+
+        {{#if (or (includes action "create") (includes action "all"))}}
+          <a href="/admin/warehouse/receipt/create"><button
+              class="add-receipt"
+            >Thêm Hóa Đơn</button></a>
+        {{/if}}
       </div>
     </div>
     <table class="receipt-table-list" id="receipt_table">

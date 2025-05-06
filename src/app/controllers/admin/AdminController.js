@@ -39,7 +39,7 @@ class AdminController {
       }
 
       const accessRedirectMap = {
-        admin: "/",
+        admin: "/admin/",
         qlkho: "/admin/warehouse",
         qlbanhang: "/admin/sales",
         qldoanhnghiep: "/admin/dashboard",

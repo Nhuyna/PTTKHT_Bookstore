@@ -1,7 +1,10 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/order.css" />
+  <link rel="stylesheet" href="/css/sales/dashboard.css" />
+{{/block}}
 
-  {{!-- <!-- side bar -->
-   {{>salesmenu}} --}}
-
+{{#block "js"}}{{/block}}
 
   <div class="main-content">
     <!-- nav bar -->
@@ -132,7 +135,7 @@
       <div class="recent-orders">
         <div class="section-header">
           <h3>Đơn hàng gần đây</h3>
-          <a href="/orders/show" class="view-all">Xem tất cả</a>
+          <a href="/admin/sales/orders/show" class="view-all">Xem tất cả</a>
         </div>
         <div class="table-container">
           <table class="data-table">
@@ -187,4 +190,4 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
 
 <!-- Custom dashboard JavaScript -->
-<script src="/js/dashboard.js"></script>
+<script src="/js/sales/dashboard.js"></script>

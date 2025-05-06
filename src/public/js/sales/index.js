@@ -228,7 +228,7 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
 
       const queryParams = new URLSearchParams(window.location.search);
-      window.location.href = `/orders/export-excel?${queryParams.toString()}`;
+      window.location.href = `/admin/sales/orders/export-excel?${queryParams.toString()}`;
     });
   }
 });
