@@ -1,0 +1,45 @@
+@charset "UTF-8";
+body {
+  font-family: "Montserrat", sans-serif;
+  color: var(--text-dark);
+  background-color: #a3d8f4;
+}
+
+h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+button,
+.navbar {
+  font-family: "Poppins", sans-serif;
+}
+
+:root {
+  /* 🌟 Màu chính (Dùng cho header, tiêu đề quan trọng) */
+  --primary-color: #a3d8f4; /* Xanh dương pastel - Nhẹ nhàng, dịu mắt */
+  /* 🎨 Màu phụ (Dùng cho nút bấm, điểm nhấn) */
+  --secondary-color: #f9c5d1; /* Hồng pastel - Ngọt ngào, nữ tính */
+  /* 💙 Màu xanh dương (Dùng cho đường link, hover, chi tiết nhỏ) */
+  --blue-color: #b5d6f2; /* Xanh baby pastel - Hiện đại, thư giãn */
+  /* 💖 Màu hồng (Dùng cho các phần nổi bật như khuyến mãi) */
+  --pink-color: #f8afa6; /* Hồng nhẹ nhàng - Tạo cảm giác ấm áp */
+  /* 🍊 Màu cam (Dùng cho CTA, khuyến mãi) */
+  --orange-color: #fbc6a4; /* Cam pastel - Trẻ trung, năng động */
+  /* 🌿 Màu xanh lá (Dùng cho danh mục, background nhẹ) */
+  --green-color: #c8e6c9; /* Xanh lá pastel - Mềm mại, tự nhiên */
+  /* 🎨 Màu nền chính */
+  --bg-light: #f7e4cf; /* Be kem nhạt - Nhẹ nhàng nhưng không trắng */
+  --bg-dark: #2e2e2e; /* Xám đậm - Giữ sang trọng cho dark mode */
+  /* 🎨 Màu chữ */
+  --text-dark: #4d4d4d; /* Xám trung tính - Không quá gắt */
+  --text-light: #f5d7db; /* Hồng pastel nhạt - Phù hợp với nền tối */
+  /* 🎨 Màu card sản phẩm */
+  --card-bg: #f6d6d6; /* Hồng pastel siêu nhẹ - Thay vì trắng */
+  /* 🎨 Màu border & shadow */
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+/*# sourceMappingURL=root.css.map */

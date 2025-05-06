@@ -105,26 +105,25 @@ const getProductDetail = async (id = null) => {
   if (id == null) return null;
 
   const query = `
-      SELECT 
-        sanpham.SanPhamID, 
-        MoTa, 
-        TenSanPham, 
-        sp_tg.IDTacGia, 
-        TenTacGia, 
-        Gia, 
-        TenNXB,
-        SoLuongTon,
-        SoTrang,
-        GROUP_CONCAT(DISTINCT CONCAT(danhmuc.DanhMucID, ':', danhmuc.TenDanhMuc)) AS DanhMucInfo
-      FROM sanpham
-      JOIN sp_tg ON sanpham.SanPhamID = sp_tg.SanPhamID
-      JOIN tacgia ON tacgia.IDTacGia = sp_tg.IDTacGia
-      JOIN nxb ON sanpham.ID_NXB = nxb.ID_NXB
-      JOIN sp_dm ON sanpham.SanPhamID = sp_dm.SanPhamID
-      JOIN danhmuc ON sp_dm.DanhMucID = danhmuc.DanhMucID
-      WHERE sanpham.SanPhamID = ?
-      GROUP BY sanpham.SanPhamID
-    `;
+  SELECT 
+    sanpham.SanPhamID, 
+    MoTa, 
+    TenSanPham,
+    GROUP_CONCAT(DISTINCT tacgia.TenTacGia SEPARATOR ', ') AS TacGia,
+    GROUP_CONCAT(DISTINCT  sp_tg.IDTacGia SEPARATOR ', ') AS IDTacGiaList,
+    TenNXB,
+    SoLuongTon,
+    SoTrang,
+    GROUP_CONCAT(DISTINCT CONCAT(danhmuc.DanhMucID, ':', danhmuc.TenDanhMuc)) AS DanhMucInfo
+  FROM sanpham
+  JOIN sp_tg ON sanpham.SanPhamID = sp_tg.SanPhamID
+  JOIN tacgia ON tacgia.IDTacGia = sp_tg.IDTacGia
+  JOIN nxb ON sanpham.ID_NXB = nxb.ID_NXB
+  JOIN sp_dm ON sanpham.SanPhamID = sp_dm.SanPhamID
+  JOIN danhmuc ON sp_dm.DanhMucID = danhmuc.DanhMucID
+  WHERE sanpham.SanPhamID = ?
+  GROUP BY sanpham.SanPhamID, MoTa, TenSanPham, TenNXB, SoLuongTon, SoTrang
+`;
 
   try {
     const [rows] = await db.execute(query, [id]);
@@ -306,6 +305,60 @@ const filterBooks = async ({ maxPrice, categoryIDs }) => {
   const [rows] = await db.execute(query, params);
   return rows;
 };
+const getProductById = async (SanPhamID) => {
+  const query = `
+    SELECT 
+      sanpham.SanPhamID, MoTa, TenSanPham, sp_tg.IDTacGia, TenTacGia, Gia, TenNXB,
+      danhmuc.DanhMucID, danhmuc.TenDanhMuc,
+      a.Anh AS Anh
+    FROM sanpham
+    JOIN sp_tg ON sanpham.SanPhamID = sp_tg.SanPhamID
+    JOIN tacgia ON tacgia.IDTacGia = sp_tg.IDTacGia
+    JOIN nxb ON sanpham.ID_NXB = nxb.ID_NXB
+    JOIN sp_dm ON sanpham.SanPhamID = sp_dm.SanPhamID
+    JOIN danhmuc ON sp_dm.DanhMucID = danhmuc.DanhMucID
+    LEFT JOIN anhsp a ON sanpham.SanPhamID = a.ID_SP AND a.STT = 1
+    WHERE sanpham.SanPhamID = ?
+  `;
+
+  try {
+    const [rows] = await db.execute(query, [SanPhamID]);
+
+    if (rows.length === 0) {
+      return null;
+    }
+
+    const product = {
+      SanPhamID: rows[0].SanPhamID,
+      TenSanPham: rows[0].TenSanPham,
+      MoTa: rows[0].MoTa,
+      Gia: rows[0].Gia,
+      TenNXB: rows[0].TenNXB,
+      IDTacGia: rows[0].IDTacGia,
+      TenTacGia: rows[0].TenTacGia,
+      DanhMucs: [],
+      Anh: rows[0].Anh || null,
+    };
+
+    // Thêm các danh mục vào product
+    for (const row of rows) {
+      const exists = product.DanhMucs.find(
+        (dm) => dm.DanhMucID === row.DanhMucID
+      );
+      if (!exists) {
+        product.DanhMucs.push({
+          DanhMucID: row.DanhMucID,
+          TenDanhMuc: row.TenDanhMuc,
+        });
+      }
+    }
+
+    return product;
+  } catch (err) {
+    console.error("Lỗi khi truy vấn sản phẩm theo ID:", err);
+    throw err;
+  }
+};
 
 export default {
   getAllBooks,
@@ -317,4 +370,5 @@ export default {
   searchBooksByKeyword,
   getBooksByIds,
   filterBooks,
+  getProductById,
 };

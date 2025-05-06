@@ -17,7 +17,6 @@ const renderHistoryPage = async (req, res) => {
         "/user/account?error=" + encodeURIComponent("Chưa đăng nhập")
       );
     }
-    console.log(status);
     let history = await getHoaDonByUserIdAndStatus(userId, status);
 
     // Xử lý text và màu hiển thị trạng thái

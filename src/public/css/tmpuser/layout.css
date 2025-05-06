@@ -1,0 +1,279 @@
+@charset "UTF-8";
+
+:root {
+  /* 🌟 Màu chính (Dùng cho header, tiêu đề quan trọng) */
+  --primary-color: #a3d8f4; /* Xanh dương pastel - Nhẹ nhàng, dịu mắt */
+  /* 🎨 Màu phụ (Dùng cho nút bấm, điểm nhấn) */
+  --secondary-color: #f9c5d1; /* Hồng pastel - Ngọt ngào, nữ tính */
+  /* 💙 Màu xanh dương (Dùng cho đường link, hover, chi tiết nhỏ) */
+  --blue-color: #b5d6f2; /* Xanh baby pastel - Hiện đại, thư giãn */
+  /* 💖 Màu hồng (Dùng cho các phần nổi bật như khuyến mãi) */
+  --pink-color: #f8afa6; /* Hồng nhẹ nhàng - Tạo cảm giác ấm áp */
+  /* 🍊 Màu cam (Dùng cho CTA, khuyến mãi) */
+  --orange-color: #fbc6a4; /* Cam pastel - Trẻ trung, năng động */
+  /* 🌿 Màu xanh lá (Dùng cho danh mục, background nhẹ) */
+  --green-color: #c8e6c9; /* Xanh lá pastel - Mềm mại, tự nhiên */
+  /* 🎨 Màu nền chính */
+  --bg-light: #f7e4cf; /* Be kem nhạt - Nhẹ nhàng nhưng không trắng */
+  --bg-dark: #2e2e2e; /* Xám đậm - Giữ sang trọng cho dark mode */
+  /* 🎨 Màu chữ */
+  --text-dark: #4d4d4d; /* Xám trung tính - Không quá gắt */
+  --text-light: #f5d7db; /* Hồng pastel nhạt - Phù hợp với nền tối */
+  /* 🎨 Màu card sản phẩm */
+  --card-bg: #f6d6d6; /* Hồng pastel siêu nhẹ - Thay vì trắng */
+  /* 🎨 Màu border & shadow */
+  --border-color: #e0e0e0;
+  --shadow-color: rgba(0, 0, 0, 0.05);
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f9f9f9; /* Tím pastel nhạt */
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* ==== TIÊU ĐỀ ==== */
+h1 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+  color: #333;
+}
+
+button,
+.navbar {
+  font-family: "Poppins", sans-serif;
+}
+
+/* ==== HEADER ==== */
+header {
+  background: linear-gradient(to right, #f9c5d1, #a3d8f4);
+  text-align: center;
+  color: white;
+  font-weight: bold;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* ==== LOGO NAVBAR ==== */
+.navbar-icon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  color: white !important;
+}
+
+.navbar-brand img {
+  width: 100px;
+  height: auto;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease-in-out;
+}
+
+.navbar-brand img:hover {
+  transform: scale(1.1);
+}
+
+/* ==== TÌM KIẾM ==== */
+.navbar-collapse form {
+  background-color: #ffffff !important;
+  padding: 5px 10% 3px 5%;
+}
+
+.search-form {
+  height: 45px;
+  display: flex;
+  align-items: center;
+  border: 2px solid #f48fb1;
+  border-radius: 25px;
+  overflow: hidden;
+  padding: 5px;
+  background-color: white;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  border-radius: 25px 0 0 25px;
+  color: #333;
+}
+
+.search-button {
+  background-color: #f48fb1;
+  color: white;
+  border: none;
+  padding-left: 15px;
+  padding-right: 20px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+  background-color: #a3d8f4;
+}
+
+/* ==== MENU DROPDOWN DANH MỤC ==== */
+.custom-dropdown {
+  column-count: 3;
+  column-gap: 20px;
+  width: 600px;
+  background-color: #fff0f6;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item.dropdown:hover .custom-dropdown {
+  display: block;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+.custom-dropdown li a {
+  padding: 8px 12px;
+  transition: background-color 0.2s ease;
+  border-radius: 6px;
+  color: #333;
+}
+
+.custom-dropdown li a:hover {
+  background-color: #a3d8f4;
+  color: #fff;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ==== MENU MOBILE SIDEBAR ==== */
+.sidebar {
+  position: fixed;
+  top: 120px;
+  left: -250px;
+  width: 250px;
+  height: 100%;
+  background: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: left 0.4s ease-in-out;
+  padding: 20px;
+  z-index: 900;
+  border-right: 5px solid #f8bbd0;
+}
+
+.sidebar.open {
+  left: 0;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  color: #d81b60;
+}
+
+#categorySidebar {
+  left: -250px;
+}
+
+#categorySidebar.open {
+  left: 0;
+}
+
+/* ==== STICKY HEADER SEARCH + MENU ==== */
+.search-bar-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1040;
+  background-image: linear-gradient(to right, #f9c5d1, #a3d8f4);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.menu-bar-wrapper {
+  top: 116px;
+  position: sticky;
+  z-index: 1030;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.menu-bar-wrapper.hide-on-scroll {
+  transform: translateY(-100%);
+}
+
+/* ==== ICON GIỎ HÀNG ==== */
+.cart-icon-wrapper {
+  position: relative;
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.cart-icon-wrapper .cart-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.cart-icon-wrapper .cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: #ff0000;
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 5px 8px;
+  border-radius: 50%;
+  min-width: 20px;
+  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ==== RESPONSIVE ==== */
+@media screen and (max-width: 500px) {
+  .menu-bar-wrapper {
+    top: 80px !important;
+  }
+}
+@media screen and (max-width: 768px) {
+  .navbar .dropdown-toggle span {
+    display: none;
+  }
+
+  .search-form {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .search-input {
+    border-radius: 25px;
+  }
+
+  .search-button {
+    width: 100%;
+    border-radius: 25px;
+  }
+
+  .custom-dropdown {
+    column-count: 1;
+    width: 100%;
+  }
+}

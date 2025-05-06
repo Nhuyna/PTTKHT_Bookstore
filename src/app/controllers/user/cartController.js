@@ -64,7 +64,7 @@ const thanhtoan = async (req, res) => {
   } catch (error) {
     console.error("Lỗi xử lý giỏ hàng:", error);
     res.redirect(
-      "user/errorPage?error=" + encodeURIComponent("Lỗi xử lý giỏ hàng")
+      "/errorPage?error=" + encodeURIComponent("Lỗi xử lý giỏ hàng")
     );
   }
 };
@@ -95,13 +95,6 @@ const afterpayment = async (req, res) => {
     if (payment === "Chuyen khoan" || payment === "Credit card") {
       tinhtrangthanhtoan = "Da thanh toan";
     }
-
-    const hoaDonId = await OrderModel.createHoaDonXuat({
-      ID_KH: userId,
-      PhuongThucThanhToan: payment,
-      TongTien: total,
-      TinhTrangThanhToan: tinhtrangthanhtoan,
-    });
 
     for (const item of cart) {
       await CartModel.xoaSanPhamTrongGio(userId, item.SanPhamID);
@@ -143,7 +136,7 @@ const addToCart = async (req, res) => {
       return res.json({
         success: false,
         message: "Vui lòng đăng nhập để thêm vào giỏ hàng!",
-        redirect: "/user/account",
+        redirect: "/user/account", // cho frontend redirect nếu muốn
       });
     }
 
@@ -161,7 +154,7 @@ const addToCart = async (req, res) => {
       message: "Đã thêm vào giỏ hàng!",
     });
   } catch (error) {
-    console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+    console.error(" Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
     return res.status(500).json({
       success: false,
       message: "Lỗi server khi thêm vào giỏ hàng!",
