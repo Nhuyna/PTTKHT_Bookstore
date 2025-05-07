@@ -2,7 +2,7 @@ import bookModel from "../../model/user/bookModel.js";
 import categoryModel from "../../model/user/categoryModel.js";
 
 class SiteController {
-  // Hiển thị trang chủ
+  // Hiển thị trang chủ 
   async index(req, res) {
     try {
       const { getAllBooks, getBooksinPopularCategory } = bookModel;
@@ -15,8 +15,8 @@ class SiteController {
       const popularProducts = await getBooksinPopularCategory();
       // console.log(popularProducts);
 
-      const isLoggedIn = !!req.session.user_id;
-      console.log(popularProducts);
+      const isLoggedIn = !!req.session.user_id; 
+      // console.log(popularProducts);
 
       res.render("user/home", {
         books,

@@ -7,9 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch("/data/data.json");
     data = await res.json();
 
-    console.log("Dữ liệu tỉnh/thành:", data); // ✅ Thêm dòng này để xem kết quả trên console
-
-    // Load province
+    console.log("Dữ liệu tỉnh/thành:", data); 
     data.forEach((item) => {
       const opt = document.createElement("option");
       opt.value = item.name;

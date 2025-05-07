@@ -53,4 +53,4 @@ const getHoaDonByUserIdAndStatus = async (userId, status) => {
   return groupedByHoaDonXuat(rows);
 };
 
-export default { getHoaDonByUserIdAndStatus };
+export default getHoaDonByUserIdAndStatus;

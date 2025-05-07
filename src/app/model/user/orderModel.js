@@ -26,6 +26,16 @@ const createHoaDonXuat = async ({
   return result.insertId; // trả về ID của hoá đơn mới
 };
 
+const createChiTietHoaDonXuat = async ({ ID_HoaDonXuat, ID_SP, SoLuong, DonGia }) => {
+  const query = `
+    INSERT INTO ChiTietHoaDonXuat (IDHoaDonXuat, IDSanPham, SoLuong, ThanhTien)
+    VALUES (?, ?, ?, ?)
+  `;
+  await database.query(query, [ID_HoaDonXuat, ID_SP, SoLuong, DonGia]);
+};
+
+
+
 const capNhatDiaChi = async ({
   ID_KH,
   TenNguoiNhan,
@@ -69,11 +79,11 @@ const cancelOrder = async (ID_HDX) => {
 
   try {
     const [result] = await database.query(query, [ID_HDX]);
-    console.log("✅ Update result:", result);
+    // console.log("✅ Update result:", result);
   } catch (err) {
     console.error("❌ Lỗi trong cancelOrder:", err.message);
     throw err; // để controller bắt lỗi tiếp
   }
 };
 
-export default { createHoaDonXuat, capNhatDiaChi, cancelOrder };
+export default { createHoaDonXuat, capNhatDiaChi, cancelOrder ,createChiTietHoaDonXuat };

@@ -1,22 +1,57 @@
 import database from "../../../config/db.js";
 
-const getCartByUserId = async (userId) => {
+const getCartByUserId = async (userId) => {  
   const query = `
-        SELECT * 
-        FROM KhachHang
-        JOIN GioHang ON KhachHang.ID_KH = GioHang.ID_KH
-        JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
-        JOIN AnhSP ON AnhSP.ID_SP = SanPham.SanPhamID
-        WHERE KhachHang.ID_KH = ?
-                GROUP BY khachhang.ID_KH,giohang.ID_SP
+SELECT 
+    KhachHang.*, 
+    GioHang.*, 
+    SanPham.*, 
+    AnhSP.*
+
+FROM KhachHang
+JOIN GioHang ON KhachHang.ID_KH = GioHang.ID_KH
+JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
+JOIN (
+    SELECT ID_SP, MIN(STT) AS MIN_STT
+    FROM AnhSP
+    GROUP BY ID_SP
+) AS FirstAnhSP ON FirstAnhSP.ID_SP = SanPham.SanPhamID
+JOIN AnhSP ON AnhSP.ID_SP = FirstAnhSP.ID_SP AND AnhSP.STT = FirstAnhSP.MIN_STT
+WHERE KhachHang.ID_KH = ?;
+
     `;
   const [rows] = await database.query(query, [userId]);
   return rows;
 };
 
+const taoHoaDon= async (idKH, tongTien,PhuongThucThanhToan) => {
+  const [result] = await database.query(
+    "INSERT INTO HoaDonXuat (ID_KH, TongTien, PhuongThucThanhToan) VALUES (?, ?, ?)",
+    [idKH, tongTien, PhuongThucThanhToan]
+  );
+  return result.insertId;
+}
+
+// const getCartByUserId = async (userId) => {  
+//   const query = `
+// SELECT 
+//     KhachHang.*, 
+//     GioHang.*, 
+//     SanPham.*
+
+// FROM KhachHang
+// JOIN GioHang ON KhachHang.ID_KH = GioHang.ID_KH
+// JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
+// WHERE KhachHang.ID_KH = ?;
+
+//     `; 
+//   const [rows] = await database.query(query, [userId]);
+//   return rows;
+// };
+
 const themVaoGio = async (ID_KH, ID_SP) => {
-  console.log("ID_KH:", ID_KH);
-  console.log("ID_SP:", ID_SP);
+  // console.log("ID_KH:", ID_KH);
+  // console.log("ID_SP:", ID_SP);
   try {
     const [rows] = await database.query(
       `SELECT * FROM GioHang WHERE ID_KH = ? AND ID_SP = ?`,
@@ -56,4 +91,5 @@ const xoaSanPhamTrongGio = async (ID_KH, ID_SP) => {
   }
 };
 
-export default { getCartByUserId, themVaoGio, xoaSanPhamTrongGio };
+export default { getCartByUserId, themVaoGio, xoaSanPhamTrongGio,
+  taoHoaDon };
