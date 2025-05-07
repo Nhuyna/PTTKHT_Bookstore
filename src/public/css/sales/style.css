@@ -4,7 +4,7 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 body {
@@ -76,7 +76,7 @@ body {
 
 /* Main Content */
 .main-content {
-  margin-left: 220px;
+  /* margin-left: 220px; */
   flex: 1;
 }
 

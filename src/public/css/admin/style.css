@@ -12,6 +12,12 @@ body {
   position: relative;
   width: 100%;
 }
+
+.title h2 {
+  font-weight: bold;
+  font-size: larger;
+}
+
 .navigation {
   position: fixed;
   width: 230px;
