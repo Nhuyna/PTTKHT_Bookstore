@@ -22,7 +22,7 @@ class ProviderController {
       console.log(action);
       res.render("warehouse/provider", {
         provider,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -48,7 +48,7 @@ class ProviderController {
       permissions = permissions.concat(allPermissions);
       res.render("warehouse/provider", {
         provider,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {
@@ -70,7 +70,7 @@ class ProviderController {
 
       permissions = permissions.concat(allPermissions);
       res.render("warehouse/create_provider", {
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {
@@ -156,7 +156,7 @@ class ProviderController {
       permissions = permissions.concat(allPermissions);
       res.render("warehouse/update_provider", {
         edit_provider,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {
@@ -209,7 +209,7 @@ class ProviderController {
       permissions = permissions.concat(allPermissions);
       res.render("warehouse/provider", {
         provider,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {
@@ -232,7 +232,7 @@ class ProviderController {
       permissions = permissions.concat(allPermissions);
       res.render("warehouse/provider", {
         provider,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {

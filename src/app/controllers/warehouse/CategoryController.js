@@ -20,7 +20,7 @@ class CategoryController {
     try {
       const category = await categoryConfig.getAll();
       res.render("warehouse/category", {
-        layout: "warehouse",
+        layout: "admin",
         category,
         permissions,
         action,
@@ -45,7 +45,7 @@ class CategoryController {
       permissions = permissions.concat(allPermissions);
       const { id } = req.params;
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
-      res.render("warehouse/category", { layout: "warehouse" }, permissions),
+      res.render("warehouse/category", { layout: "admin" }, permissions),
         action;
     } catch (err) {
       console.log(err);
@@ -78,7 +78,7 @@ class CategoryController {
       res.render("warehouse/view_category", {
         detail_header,
         category_detail,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -103,7 +103,7 @@ class CategoryController {
       console.log(permissions);
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/create_category", {
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -142,7 +142,7 @@ class CategoryController {
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/update_category", {
         edit_category,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });

@@ -30,7 +30,7 @@ class DashboardController {
         receipt_recently,
         provider_recently,
         accessList: req.session.user.accessList,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {
