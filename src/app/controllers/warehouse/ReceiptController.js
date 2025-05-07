@@ -38,7 +38,7 @@ class ReceiptController {
 
       res.render("warehouse/receipt", {
         receipt,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -66,7 +66,7 @@ class ReceiptController {
       console.log(action);
       res.render("warehouse/receipt", {
         receipt,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -98,7 +98,7 @@ class ReceiptController {
         id,
         receipt_info,
         product_detail,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -123,7 +123,7 @@ class ReceiptController {
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
       console.log(action);
       res.render("warehouse/create_receipt", {
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -211,7 +211,7 @@ class ReceiptController {
         receipt_info,
         receipt_detail,
         product_detail,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -262,7 +262,7 @@ class ReceiptController {
           id,
           receipt_info,
           product_detail,
-          layout: "warehouse",
+          layout: "admin",
           permissions,
           action,
         }

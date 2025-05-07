@@ -1,0 +1,93 @@
+@charset "UTF-8";
+.product-card {
+  width: 250px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+.product-image {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px; /* Bo góc cho hình ảnh */
+  width: 100%; /* Đảm bảo chiều rộng đầy đủ */
+  aspect-ratio: 3/4; /* Tỷ lệ 3:4 (chiều rộng:chiều cao) */
+  background-color: #ffffff; /* Thêm nền trắng cho hình ảnh nhỏ */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* Giữ tỷ lệ hình ảnh, thêm khoảng trắng nếu cần */
+  transition: transform 0.3s ease;
+}
+
+.product-icons {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-icons .icon {
+  background: white;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.discount-badge {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: red;
+  color: white;
+  padding: 5px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+.product-title {
+  font-size: 18px; /* Tăng kích thước chữ để dễ đọc hơn */
+  font-weight: bold; /* Làm cho tiêu đề đậm đà */
+  margin-top: 10px; /* Tăng khoảng cách phía trên */
+  margin-bottom: 5px; /* Thêm khoảng cách phía dưới */
+  color: #333; /* Màu chữ tối cho độ tương phản tốt */
+  line-height: 1.4; /* Tăng độ cao dòng để tiêu đề không bị sát nhau */
+  text-transform: capitalize; /* Viết hoa chữ cái đầu tiên của mỗi từ */
+}
+
+.product-price {
+  margin-top: 5px;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 14px;
+}
+
+.new-price {
+  color: green;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Hiệu ứng hover */
+.product-image:hover img {
+  transform: scale(1.1); /* Phóng to hình ảnh khi hover */
+}
+
+.product-image:hover .product-icons {
+  opacity: 1;
+}
+
+/*# sourceMappingURL=product.css.map */

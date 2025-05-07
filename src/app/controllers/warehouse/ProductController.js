@@ -24,7 +24,7 @@ class ProductController {
       console.log(action);
       res.render("warehouse/product", {
         product,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -51,7 +51,7 @@ class ProductController {
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/product", {
         product,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -84,7 +84,7 @@ class ProductController {
         product,
         category,
         image,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -110,7 +110,7 @@ class ProductController {
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/create_product", {
         category,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -233,7 +233,7 @@ class ProductController {
         checked_category,
         json_image,
         images,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -303,7 +303,7 @@ class ProductController {
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/product", {
         product,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
         action,
       });
@@ -327,7 +327,7 @@ class ProductController {
       permissions = permissions.concat(allPermissions);
       res.render("warehouse/product", {
         product,
-        layout: "warehouse",
+        layout: "admin",
         permissions,
       });
     } catch (error) {

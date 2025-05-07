@@ -1,0 +1,45 @@
+/* Container của slider */
+#priceSlider {
+  margin: 20px auto;
+  width: 90%;
+  height: 10px;
+  background: #e0e0e0;
+  border-radius: 5px;
+  position: relative;
+}
+
+/* Giảm độ dày của track */
+.noUi-target,
+.noUi-base {
+  height: 4px !important;
+}
+
+/* Điều chỉnh phần nối (connect) cho phù hợp */
+.noUi-connect {
+  height: 4px !important;
+  border-radius: 2px;
+}
+
+/* Giảm kích thước tuyến trượt (handle) */
+.noUi-handle {
+  width: 16px !important;
+  height: 16px !important;
+  border: 2px solid #ff6f61;
+  border-radius: 50%;
+  top: -6px !important; /* điều chỉnh vị trí cho phù hợp */
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Tuỳ chỉnh hover handle nếu cần */
+.noUi-handle:hover {
+  border-color: #ff8a65;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* .title-category {
+  font-size: 40px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #333;
+} */

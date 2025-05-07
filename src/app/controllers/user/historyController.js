@@ -10,40 +10,37 @@ function formatCurrencyVND(amount) {
 const renderHistoryPage = async (req, res) => {
   try {
     const userId = req.session.user_id;
-    const status = req.query.status; // lấy status từ URL
+    const status = req.query.status;
 
     if (!userId) {
       return res.redirect(
         "/user/account?error=" + encodeURIComponent("Chưa đăng nhập")
       );
     }
-    console.log(status);
     let history = await getHoaDonByUserIdAndStatus(userId, status);
-
-    // Xử lý text và màu hiển thị trạng thái
     history.forEach((hd) => {
       switch (hd.TinhTrangDon) {
-        case "Cho xac nhan":
+        case "Chờ xác nhận":
           hd.TrangThaiText = "🚚 Chờ xác nhận";
           hd.TrangThaiColor = "text-yellow-600 text-base";
           break;
-        case "Cho lay hang":
+        case "Chờ lấy hàng":
           hd.TrangThaiText = "🚚 Chờ lấy hàng";
           hd.TrangThaiColor = "text-blue-600 text-base";
           break;
-        case "Dang giao hang":
+        case "Đang giao hàng":
           hd.TrangThaiText = "🚚 Đang giao hàng";
           hd.TrangThaiColor = "text-orange-600 text-base";
           break;
-        case "Da giao":
+        case "Đã giao":
           hd.TrangThaiText = "🚚 Đã giao";
           hd.TrangThaiColor = "text-green-600 text-base";
           break;
-        case "Tra hang":
+        case "Trả hàng":
           hd.TrangThaiText = "🚚 Trả hàng";
           hd.TrangThaiColor = "text-purple-600 text-base";
           break;
-        case "Da huy":
+        case "Đã hủy":
           hd.TrangThaiText = "🚚 Đã hủy";
           hd.TrangThaiColor = "text-red-600 text-base";
           break;
@@ -52,16 +49,15 @@ const renderHistoryPage = async (req, res) => {
           hd.TrangThaiColor = "text-gray-500 text-base";
       }
     });
-
     history.forEach((hoaDons) => {
-      hoaDons.DaHuy = hoaDons.TinhTrangDon === "Da huy";
+      hoaDons.DaHuy = hoaDons.TinhTrangDon === "Đã hủy";
       hoaDons.TongTien = formatCurrencyVND(hoaDons.TongTien);
       hoaDons.ChiTietHoaDonXuat.forEach((hd) => {
         hd.Gia = formatCurrencyVND(hd.Gia);
         hd.ThanhTien = formatCurrencyVND(hd.ThanhTien);
       });
     });
-
+    console.log("history", history);
     res.render("user/lichsudonhang", {
       history,
       status: req.query.status || null,
