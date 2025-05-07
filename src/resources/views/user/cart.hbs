@@ -1,5 +1,6 @@
-<form action="/cart/thanhtoan" method="post" id="cartForm">
-  <div class="max-w-6xl mx-auto mt-10 flex gap-6">
+{{session.user_id}}
+<form action="/cart/thanhtoan" method="post" id="cartForm" class="min-h-screen" >
+  <div class="max-w-6xl mx-auto mt-10 flex gap-6 min-h-screen">
     <!-- Thanh toán -->
     <div class="w-full max-w-sm bg-white p-6 rounded-2xl shadow-xl">
       <div class="flex justify-between text-gray-700 mb-2">
@@ -27,7 +28,7 @@
       {{#each cart}}
         <div class="flex items-start space-x-4 border-b pb-6 mb-6">
           <img
-            src="{{this.Anh}}"
+            {{!-- src="{{this.Anh}}" --}}
             class="w-20 h-28 object-cover rounded"
             alt=""
           />
@@ -104,3 +105,4 @@
   updateTotal(); } }); }); // Gọi khi load trang để hiển thị đúng tổng ban đầu
   updateTotal();
 </script>
+

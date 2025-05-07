@@ -2,34 +2,18 @@ import CartModel from "../../model/user/cartModel.js";
 import ProductModel from "../../model/user/productModel.js";
 import OrderModel from "../../model/user/orderModel.js";
 import BookModel from "../../model/user/bookModel.js";
+import session from "express-session";
 
 const renderCartPage = async (req, res, next) => {
   try {
     const cartItems = await CartModel.getCartByUserId(req.session.user_id);
+    console.log("id user : ",req.session.user_id);
+    console.log("Giỏ hàng:", cartItems);
     res.render("user/cart", { cart: cartItems, session: req.session });
   } catch (error) {
+    console.log(req.session.user_id);
     res.redirect(
       "/user/errorPage?error=" + encodeURIComponent("Lỗi khi tải giỏ hàng")
-    );
-  }
-};
-
-const thanhtoan1 = async (req, res) => {
-  try {
-    const { idSanPham, soluong, tongTien } = req.body;
-    const userId = req.session.user_id;
-
-    if (!userId) {
-      return res.redirect(
-        "user/account?error=" + encodeURIComponent("Chưa đăng nhập")
-      );
-    }
-
-    res.render("user/thanhtoan", { session: req.session });
-  } catch (error) {
-    console.error("Lỗi xử lý giỏ hàng:", error);
-    res.redirect(
-      "user/errorPage?error=" + encodeURIComponent("Lỗi xử lý giỏ hàng")
     );
   }
 };
@@ -69,11 +53,65 @@ const thanhtoan = async (req, res) => {
   }
 };
 
+// const afterpayment = async (req, res) => {
+//   try {
+//     const cart = req.session.cartCheckout;
+//     const total = parseFloat(req.session.cartTotal);
+//     const userId = req.session.user_id;
+//     console.log("cart : ",cart)
+
+//     if (!cart || cart.length === 0) {
+//       return res.redirect("/cart");
+//     }
+
+//     const { TenKH, SDT, address, phuong, quan, thanhpho, payment } = req.body;
+
+//     await OrderModel.capNhatDiaChi({
+//       ID_KH: userId,
+//       TenNguoiNhan: TenKH,
+//       SoDienThoai: SDT,
+//       DiaChiNhanHang: address,
+//       PhuongXa: phuong,
+//       QuanHuyen: quan,
+//       TinhThanhPho: thanhpho,
+//     });
+//     console.log("phuong thuc thanh toan : ",payment)
+
+//     let tinhtrangthanhtoan = "Chưa thanh toán";
+//     if (payment === "Chuyển khoản" || payment === "Credit card") {
+//       tinhtrangthanhtoan = "Đã thanh toán";
+//     }
+//     await OrderModel.createHoaDonXuat({
+//   ID_KH: userId,
+//   TongTien: total,
+//   PhuongThucThanhToan: payment,
+//   TinhTrangThanhToan: tinhtrangthanhtoan
+// });
+
+
+
+//     for (const item of cart) {
+//       await CartModel.xoaSanPhamTrongGio(userId, item.SanPhamID);
+//     }
+    
+//     req.session.cartCheckout = null;
+//     req.session.cartTotal = 0;
+
+//     res.redirect("/cart/confirm");
+//   } catch (error) {
+//     console.error("Lỗi khi lưu hoá đơn:", error);
+//     res.redirect(
+//       "/user/errorPage?error=" + encodeURIComponent("Lỗi khi lưu hoá đơn")
+//     );
+//   }
+// };
+
 const afterpayment = async (req, res) => {
   try {
     const cart = req.session.cartCheckout;
     const total = parseFloat(req.session.cartTotal);
     const userId = req.session.user_id;
+    console.log("cart : ", cart);
 
     if (!cart || cart.length === 0) {
       return res.redirect("/cart");
@@ -91,23 +129,37 @@ const afterpayment = async (req, res) => {
       TinhThanhPho: thanhpho,
     });
 
-    let tinhtrangthanhtoan = "Chua thanh toan";
-    if (payment === "Chuyen khoan" || payment === "Credit card") {
-      tinhtrangthanhtoan = "Da thanh toan";
+    let tinhtrangthanhtoan = "Chưa thanh toán";
+    if (payment === "Chuyển khoản" || payment === "Credit card") {
+      tinhtrangthanhtoan = "Đã thanh toán";
     }
 
+    const ID_HoaDonXuat = await OrderModel.createHoaDonXuat({
+      ID_KH: userId,
+      TongTien: total,
+      PhuongThucThanhToan: payment,
+      TinhTrangThanhToan: tinhtrangthanhtoan
+    });
+    console.log("ID_HoaDonXuat : ", ID_HoaDonXuat);
+    
     for (const item of cart) {
+      await OrderModel.createChiTietHoaDonXuat({
+        ID_HoaDonXuat,
+        ID_SP: item.SanPhamID,
+        SoLuong: item.SoLuong,
+        DonGia: item.Gia
+      });
+
       await CartModel.xoaSanPhamTrongGio(userId, item.SanPhamID);
     }
+
     req.session.cartCheckout = null;
     req.session.cartTotal = 0;
 
     res.redirect("/cart/confirm");
   } catch (error) {
     console.error("Lỗi khi lưu hoá đơn:", error);
-    res.redirect(
-      "/user/errorPage?error=" + encodeURIComponent("Lỗi khi lưu hoá đơn")
-    );
+    res.redirect("/user/errorPage?error=" + encodeURIComponent("Lỗi khi lưu hoá đơn"));
   }
 };
 
@@ -119,6 +171,7 @@ const renderThankYouPage = (req, res) => {
       layout: "main",
       cart,
       total,
+      session: req.session,
     });
   } catch (error) {
     console.error("Lỗi xử lý giỏ hàng:", error);
@@ -136,7 +189,7 @@ const addToCart = async (req, res) => {
       return res.json({
         success: false,
         message: "Vui lòng đăng nhập để thêm vào giỏ hàng!",
-        redirect: "/user/account", // cho frontend redirect nếu muốn
+        redirect: "/user/account", 
       });
     }
 

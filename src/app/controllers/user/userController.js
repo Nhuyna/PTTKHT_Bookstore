@@ -84,7 +84,7 @@ const changeUserInfo = async (req, res, next) => {
   }
 
   try {
-    console.log(req.session.user_id);
+    // console.log(req.session.user_id);
     const user = await UserModel.getUserById(req.session.user_id);
     if (!user) {
       return res.redirect(
@@ -115,7 +115,7 @@ const changeUserInfo = async (req, res, next) => {
 
 const errorPage = async (req, res) => {
   const errorMessage = req.query.error;
-  res.render("errorPage", { errorMessage: errorMessage });
+  res.render("user/errorPage", { errorMessage: errorMessage });
 };
 
 const login = async (req, res, next) => {
