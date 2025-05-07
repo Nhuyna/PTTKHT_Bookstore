@@ -27,6 +27,22 @@
         </a>
       </li>
     {{/if}}
+
+    <!-- Khách Hàng -->
+    {{#if
+      (or
+        (includes permissions "qlkhachhang") (includes permissions "qlbanhang")
+      )
+    }}
+      <li>
+        <a href="/admin/sales/khachhang">
+          <!-- Liên kết đến customer management -->
+          <span><i class="fas fa-users"></i></span>
+          <span>Khách Hàng</span>
+        </a>
+      </li>
+    {{/if}}
+
     <!-- Thống Kê -->
     {{#if
       (or

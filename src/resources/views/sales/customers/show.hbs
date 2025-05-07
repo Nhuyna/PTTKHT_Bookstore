@@ -1,0 +1,209 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/customers.css" />
+{{/block}}
+{{#block "js"}}
+  <script src="/js/sales/customers.js"></script>
+{{/block}}
+
+<div class="main-content">
+  <!-- nav bar -->
+  <div class="navbar">
+    <div class="navbar-toggle">
+      {{! <i class="fas fa-bars"></i> }}
+    </div>
+    <div class="search-box">
+      <label>
+        <input type="text" placeholder="Tìm Kiếm" />
+        <i class="fas fa-search"></i>
+      </label>
+    </div>
+    <div class="user-profile">
+      <a href="#"><img src="/img/user.jpg" /></a>
+    </div>
+  </div>
+
+  <div class="customer-content">
+    <div class="customer-header">
+      <h2 class="customer-title">Quản Lý Khách Hàng</h2>
+      
+      <!-- Bộ lọc -->
+      <div class="customer-filters">
+        <form class="filter-form" action="/admin/sales/khachhang" method="get">
+          <div class="filter-group">
+            <select name="filterType" id="filterType" class="filter-select">
+              <option value="" disabled {{#unless query.filterType}}selected{{/unless}}>Chọn loại tìm kiếm</option>
+              <option value="id" {{#if (eq query.filterType "id")}}selected{{/if}}>Mã khách hàng</option>
+              <option value="name" {{#if (eq query.filterType "name")}}selected{{/if}}>Tên khách hàng</option>
+              <option value="phone" {{#if (eq query.filterType "phone")}}selected{{/if}}>Số điện thoại</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <input 
+              type="text" 
+              name="filterValue" 
+              placeholder="Nhập thông tin tìm kiếm" 
+              value="{{query.filterValue}}" 
+              class="filter-input"
+            >
+          </div>
+          
+          <!-- Buttons -->
+          <div class="action-buttons">
+              <button class="filter-button" type="submit">
+                <i class="fas fa-filter"></i>
+                Lọc
+              </button>
+              <button class="reset-button" type="button">
+                <i class="fas fa-sync-alt"></i>
+                Làm mới
+              </button>
+              <button class="export-button" type="button">
+                <i class="fas fa-file-export"></i>
+                Xuất Excel 
+              </button>
+              <button class="addCustomer-button" type="button">
+                  <a href="/admin/sales/khachhang/create">
+                       <i class="fas fa-user-plus"></i> Thêm khách hàng
+                  </a>
+              </button>
+          </div>
+        </form>
+      </div>
+      
+      <!-- Hiển thị các filter đang áp dụng -->
+      {{#if hasActiveFilters}}
+        <div class="active-filters">
+          <span class="active-filters-title">Bộ lọc đang áp dụng:</span>
+          {{#each activeFilters}}
+            <div class="filter-tag">
+              <span class="filter-name">{{this.name}}:</span>
+              <span class="filter-value">{{this.value}}</span>
+              <a href="/admin/sales/khachhang?{{removeFilter @root.query this.param}}" class="filter-remove">×</a>
+            </div>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+    
+    <!-- Bảng danh sách khách hàng -->
+    <div class="customer-table-container">
+      <table class="customer-table">
+        <thead>
+          <tr>
+            <th class="checkbox-column">
+              <input type="checkbox" class="select-all-checkbox">
+            </th>
+            <th class="customer-id">
+              ID
+              <a href="/admin/sales/khachhang?{{sortUrl @root.query 'ID_KH' 'asc'}}">
+                <span class="sort-icon {{#ifCond sortField '===' 'ID_KH'}}{{#ifCond sortDir '===' 'asc'}}sort-asc{{else}}sort-desc{{/ifCond}}{{/ifCond}}">
+                  <i class="fas fa-sort"></i>
+                </span>
+              </a>
+            </th>
+            <th>
+              Tên khách hàng
+              <a href="/admin/sales/khachhang?{{sortUrl @root.query 'TenKH' 'asc'}}">
+                <span class="sort-icon {{#ifCond sortField '===' 'TenKH'}}{{#ifCond sortDir '===' 'asc'}}sort-asc{{else}}sort-desc{{/ifCond}}{{/ifCond}}">
+                  <i class="fas fa-sort"></i>
+                </span>
+              </a>
+            </th>
+            <th>
+              Số điện thoại
+              <a href="/admin/sales/khachhang?{{sortUrl @root.query 'SDT' 'asc'}}">
+                <span class="sort-icon {{#ifCond sortField '===' 'SDT'}}{{#ifCond sortDir '===' 'asc'}}sort-asc{{else}}sort-desc{{/ifCond}}{{/ifCond}}">
+                  <i class="fas fa-sort"></i>
+                </span>
+              </a>
+            </th>
+            <th>
+              Tên tài khoản
+              <a href="/admin/sales/khachhang?{{sortUrl @root.query 'TenTK' 'asc'}}">
+                <span class="sort-icon {{#ifCond sortField '===' 'TenTK'}}{{#ifCond sortDir '===' 'asc'}}sort-asc{{else}}sort-desc{{/ifCond}}{{/ifCond}}">
+                  <i class="fas fa-sort"></i>
+                </span>
+              </a>
+            </th>
+            <th>
+              Trạng thái
+              <a href="/admin/sales/khachhang?{{sortUrl @root.query 'Active' 'asc'}}">
+                <span class="sort-icon {{#ifCond sortField '===' 'Active'}}{{#ifCond sortDir '===' 'asc'}}sort-asc{{else}}sort-desc{{/ifCond}}{{/ifCond}}">
+                  <i class="fas fa-sort"></i>
+                </span>
+              </a>
+            </th>
+            <th>Thao tác</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#if customers.length}}
+            {{#each customers}}
+              {{#if this.TinhTrang }}
+                <tr>
+                  <td class="checkbox-column">
+                    <input type="checkbox" class="row-checkbox" data-id="{{this.ID_KH}}">
+                  </td>
+                  <td class="customer-id">KH-{{this.ID_KH}}</td>
+                  <td>{{this.TenKH}}</td>
+                  <td>{{this.SDT}}</td>
+                  <td>{{this.TenTK}}</td>
+                  <td>
+                    {{#if this.Active}}
+                      <span class="status-active">Hoạt động</span>
+                    {{else}}
+                      <span class="status-inactive">Khóa</span>
+                    {{/if}}
+                  </td>
+                  <td class="action-cell">
+                    <div class="action-buttons-cell">
+                      <a href="/admin/sales/khachhang/detail/{{this.ID_KH}}" class="view-button" title="Xem chi tiết">
+                        <i class="fas fa-eye"></i>
+                      </a>
+                      <a href="/admin/sales/khachhang/edit/{{this.ID_KH}}" class="edit-button" title="Chỉnh sửa">
+                        <i class="fas fa-edit"></i>
+                      </a>
+                      <button type="button" class="delete-button" data-id="{{this.ID_KH}}" title="Xóa" data-name="{{this.TenKH}}">
+                        <i class="fas fa-trash-alt"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              {{/if}}
+            {{/each}}
+          {{else}}
+            <tr>
+              <td colspan="7" class="no-data">Không tìm thấy khách hàng nào</td>
+            </tr>
+          {{/if}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      {{!-- <div class="modal-header">
+        <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn muốn xóa khách hàng <span id="customerName"></span>?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <form id="deleteForm" action="/admin/sales/khachhang/delete" method="POST">
+          <input type="hidden" name="customerId" id="customerId" value="">
+          <button type="submit" class="btn btn-danger">Xóa</button>
+        </form>
+      </div> --}}
+    </div>
+  </div>
+</div>
+

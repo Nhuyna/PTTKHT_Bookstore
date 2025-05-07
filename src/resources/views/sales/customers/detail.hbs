@@ -1,0 +1,168 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/customers.css" />
+{{/block}}
+{{#block "js"}}
+  <script src="/js/sales/detailCustomer.js"></script>
+{{/block}}
+
+<div class="main-content">
+  <!-- nav bar -->
+  <div class="navbar">
+    <div class="navbar-toggle">
+      {{! <i class="fas fa-bars"></i> }}
+    </div>
+    <div class="search-box">
+      <label>
+        <input type="text" placeholder="Tìm Kiếm" />
+        <i class="fas fa-search"></i>
+      </label>
+    </div>
+    <div class="user-profile">
+      <a href="#"><img src="/img/user.jpg" /></a>
+    </div>
+  </div>
+
+  <div class="customer-content">
+    <div class="customer-header">
+      <div class="back-button" style="display: flex;">
+        <a href="/admin/sales/khachhang" class="btn-back-round">
+          <i class="fas fa-arrow-left"></i>
+
+        </a>
+        <h2 class="customer-title">Chi Tiết Khách Hàng</h2>
+      </div>
+    </div>
+
+    <div class="customer-detail-grid">
+      <!-- Thông tin khách hàng -->
+      <div class="card customer-info-card">
+        <div class="card-header">
+          <h3><i class="fas fa-user"></i> Thông tin khách hàng</h3>
+        </div>
+        <div class="card-body">
+          <div class="info-row">
+            <div class="info-label">Mã khách hàng:</div>
+            <div class="info-value">KH-{{customerDetails.ID_KH}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Tên khách hàng:</div>
+            <div class="info-value">{{customerDetails.TenKH}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Tên tài khoản:</div>
+            <div class="info-value">{{customerDetails.TenTK}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Số điện thoại:</div>
+            <div class="info-value">{{customerDetails.SDT}}</div>
+          </div>
+          <div class="info-row">
+            <div class="info-label">Ngày sinh:</div>
+            <div class="info-value">{{formatDateSimple
+                customerDetails.NgaySinh
+              }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Thống kê mua hàng -->
+      <div class="card customer-stats-card">
+        <div class="card-header">
+          <h3><i class="fas fa-chart-line"></i> Thống kê mua hàng</h3>
+        </div>
+        <div class="card-body">
+          <div class="stats-grid">
+            <div class="stat-item">
+              <div class="stat-icon orders-icon">
+                <i class="fas fa-shopping-bag"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value">{{customerDetails.SoDonHang}}</div>
+                <div class="stat-label">Đơn hàng</div>
+              </div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-icon spending-icon">
+                <i class="fas fa-coins"></i>
+              </div>
+              <div class="stat-info">
+                <div class="stat-value">{{formatCurrency
+                    customerDetails.TongChiTieu
+                  }}</div>
+                <div class="stat-label">Tổng chi tiêu</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lịch sử đơn hàng -->
+      <div class="card order-history-card">
+        <div class="card-header">
+          <h3><i class="fas fa-history"></i> Lịch sử đơn hàng</h3>
+        </div>
+        <div class="card-body">
+          <div class="table-container">
+            <table class="order-table">
+              <thead>
+                <tr>
+                  <th>Mã đơn hàng</th>
+                  <th>Ngày mua</th>
+                  <th>Phương thức thanh toán</th>
+                  <th>Tổng tiền</th>
+                  <th>Trạng thái thanh toán</th>
+                  <th>Trạng thái đơn hàng</th>
+                  <th>Thao tác</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#if customerOrders.length}}
+                  {{#each customerOrders}}
+                    <tr>
+                      <td class="order-id">#{{this.IDHoaDonXuat}}</td>
+                      <td>{{formatDateSimple this.NgayXuat}}</td>
+                      <td>{{this.PhuongThucThanhToan}}</td>
+                      <td>{{formatCurrency this.TongTien}}đ</td>
+                      <td>
+                        <span
+                          class="status-badge
+                            {{getPaymentStatusClass this.TinhTrangThanhToan}}"
+                        >
+                          {{formatPaymentStatus this.TinhTrangThanhToan}}
+                        </span>
+                      </td>
+                      <td>
+                        <span
+                          class="status-badge
+                            {{getOrderStatusClass this.TinhTrangDon}}"
+                        >
+                          {{formatOrderStatus this.TinhTrangDon}}
+                        </span>
+                      </td>
+                      <td>
+                        <a
+                          href="/admin/sales/orders/{{this.IDHoaDonXuat}}"
+                          class="view-button"
+                        >
+                          <i class="fas fa-eye"></i>
+
+                        </a>
+                      </td>
+                    </tr>
+                  {{/each}}
+                {{else}}
+                  <tr>
+                    <td colspan="7" class="no-data">Khách hàng chưa có đơn hàng
+                      nào</td>
+                  </tr>
+                {{/if}}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

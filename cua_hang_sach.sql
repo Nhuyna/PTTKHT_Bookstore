@@ -69,12 +69,14 @@ CREATE TABLE SP_TG (
 );
 
 CREATE TABLE KhachHang (
-    ID_KH INT PRIMARY KEY,
+    ID_KH INT PRIMARY KEY AUTO_INCREMENT,
     TenTK VARCHAR(255) NOT NULL,
     TenKH VARCHAR(255) NOT NULL,
     SDT VARCHAR(15),
     NgaySinh DATE,
-    MatKhau VARCHAR(255) NOT NULL
+    MatKhau VARCHAR(255) NOT NULL,
+    tinhtrang TINYINT default 1,
+    active TINYINT default 1
 );
 
 CREATE TABLE DiaChi_KH (
@@ -798,14 +800,14 @@ INSERT INTO TaiKhoan (ID_TK, ID_NhanVien, ID_NhomQuyen, MatKhau) VALUES
 (19, 19, 2, 'hashpass19'),
 (20, 20, 2, 'hashpass20');
 
-UPDATE hoadonxuat hdx
-SET hdx.`TinhTrangThanhToan` = "Chưa thanh toán";
+-- UPDATE hoadonxuat hdx
+-- SET hdx.`TinhTrangThanhToan` = "Chưa thanh toán";
 
 UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.TinhTrangThanhToan = 'Đã thanh toán'
 WHERE gh.`TinhTrangDon` = 'Đã giao'
-AND hdx.`PhuongThucThanhToan` = 'Credit card' OR hdx.`PhuongThucThanhToan` = 'Chuyển khoản' ; 
+AND (hdx.`PhuongThucThanhToan` = 'Credit card' OR hdx.`PhuongThucThanhToan` = 'Chuyển khoản'); 
 
 UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
@@ -819,4 +821,5 @@ INSERT INTO DanhMucChucNang (ChucNang, TenQuyen,QuyenCha) VALUES
 ('nhomquyen','Nhóm quyền','admin'),
 ('nhanvien','Nhân viên','admin'),
 ('qlhdx','Hoá đơn xuất','qlbanhang'),
-('qlthongkexuat','Thống kê','qlbanhang');
+('qlthongkexuat','Thống kê','qlbanhang'),
+('qlkhachhang', 'khachhang','qlbanhang');
