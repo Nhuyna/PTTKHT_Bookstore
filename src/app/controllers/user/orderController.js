@@ -1,15 +1,15 @@
-import cancelOrder from "../../model/user/orderModel.js";
+import OrderModel from "../../model/user/orderModel.js";
 
 const huyDonHang = async (req, res) => {
   const { IDHoaDonXuat } = req.body;
   const ID_KH = req.session.user_id;
   try {
-    // console.log("👉 Đã vào controller huyDonHang");
-    // console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
-    // console.log("👉 ID_KH:", ID_KH);
+    console.log("👉 Đã vào controller huyDonHang");
+    console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
+    console.log("👉 ID_KH:", ID_KH);
 
-    await cancelOrder(IDHoaDonXuat);
-    res.redirect("/lichsudonhang"); // hoặc trang bạn muốn
+    await OrderModel.cancelOrder(IDHoaDonXuat); // ✅ gọi từ object
+    res.redirect("/lichsudonhang");
   } catch (error) {
     console.error("Lỗi khi hủy đơn hàng:", error);
     res.redirect(

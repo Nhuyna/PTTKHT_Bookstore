@@ -14,7 +14,7 @@ const router = express.Router();
 router.get("/products", pdController.index);
 router.get("/category/:id?", categoryController.index);
 router.use("/user", userRouter);
-router.use("/cart", cartRouter);
+router.use("/cart", cartRouter); 
 router.use("/order", orderRouter);
 router.use("/lichsudonhang", historyRouter);
 router.get("/search", siteController.search);

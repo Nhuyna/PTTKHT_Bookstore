@@ -42,18 +42,19 @@ const getHoaDonByUserIdAndStatus = async (userId, status) => {
   `;
 
   const params = [userId];
+  console.log("status ", status);
 
   if (status) {
-    if (status === "Cho xac nhan") {
+    if (status === "Chờ xác nhận") {
       query += ` AND (TinhTrangDon = ? OR TinhTrangDon = ? OR TinhTrangDon = ?)`;
-      params.push("Chờ nhận hàng", "Chờ lấy hàng", "Đang giao hàng");
+      params.push("Chờ xác nhận", "Chờ lấy hàng", "Đang giao hàng");
     } else {
       query += ` AND TinhTrangDon = ?`;
       params.push(status);
     }
   }
+  console.log("query", query);
 
-  // ✅ Luôn thực hiện query
   const [rows] = await database.query(query, params);
   return groupedByHoaDonXuat(rows);
 };

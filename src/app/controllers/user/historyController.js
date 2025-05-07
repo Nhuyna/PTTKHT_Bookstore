@@ -19,6 +19,7 @@ const renderHistoryPage = async (req, res) => {
     }
     let history = await getHoaDonByUserIdAndStatus(userId, status);
     history.forEach((hd) => {
+      console.log("hd", hd.TinhTrangDon);
       switch (hd.TinhTrangDon) {
         case "Chờ xác nhận":
           hd.TrangThaiText = "🚚 Chờ xác nhận";
@@ -45,8 +46,8 @@ const renderHistoryPage = async (req, res) => {
           hd.TrangThaiColor = "text-red-600 text-base";
           break;
         default:
-          hd.TrangThaiText = "🚚 Không rõ trạng thái";
-          hd.TrangThaiColor = "text-gray-500 text-base";
+          hd.TrangThaiText = "";
+          hd.TrangThaiColor = "";
       }
     });
     history.forEach((hoaDons) => {
