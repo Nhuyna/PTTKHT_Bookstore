@@ -141,4 +141,85 @@ export default {
   contains: function (array, value) {
     return array.indexOf(value) !== -1;
   },
+
+  // Thêm helper cho trang khách hàng
+  sortUrl: function (query, field, defaultDir) {
+    const newQuery = { ...query };
+
+    // Nếu đang sort theo field này, đảo chiều sort
+    if (newQuery.sortField === field) {
+      newQuery.sortDir = newQuery.sortDir === "asc" ? "desc" : "asc";
+    } else {
+      // Nếu sort theo field mới, dùng chiều sort mặc định
+      newQuery.sortField = field;
+      newQuery.sortDir = defaultDir;
+    }
+
+    return new URLSearchParams(newQuery).toString();
+  },
+
+  removeFilter: function (query, paramName) {
+    const newQuery = { ...query };
+    delete newQuery[paramName];
+    return new URLSearchParams(newQuery).toString();
+  },
+
+  formatDateSimple: function (dateString) {
+    if (!dateString) return "";
+    return moment(dateString).format("DD/MM/YYYY");
+  },
+
+  getPaymentStatusClass: function (status) {
+    const statusMap = {
+      "Da thanh toan": "status-paid",
+      "Chua thanh toan": "status-unpaid",
+      "Da hoan tien": "payment-refunded",
+      "Chua hoan tien": "payment-not-refunded",
+    };
+    return statusMap[status] || "";
+  },
+
+  formatPaymentStatus: function (status) {
+    const statusMap = {
+      "Da thanh toan": "Đã thanh toán",
+      "Chua thanh toan": "Chưa thanh toán",
+      "Da hoan tien": "Đã hoàn tiền",
+      "Chua hoan tien": "Chưa hoàn tiền",
+    };
+    return statusMap[status] || status;
+  },
+
+  getOrderStatusClass: function (status) {
+    const statusMap = {
+      "Cho xac nhan": "status-pending",
+      "Cho lay hang": "status-processing",
+      "Dang giao hang": "status-shipping",
+      "Da giao": "status-completed",
+      "Da huy": "status-cancelled",
+      "Tra hang": "status-returned",
+    };
+    return statusMap[status] || "";
+  },
+
+  formatOrderStatus: function (status) {
+    const statusMap = {
+      "Cho xac nhan": "Chờ xác nhận",
+      "Cho lay hang": "Chờ lấy hàng",
+      "Dang giao hang": "Đang giao hàng",
+      "Da giao": "Đã giao",
+      "Da huy": "Đã hủy",
+      "Tra hang": "Trả hàng",
+    };
+    return statusMap[status] || status;
+  },
+
+  // Helper để tạo query string cho nút xuất Excel
+  exportQueryString: function (query) {
+    if (!query || Object.keys(query).length === 0) {
+      return "";
+    }
+
+    const newQuery = { ...query };
+    return "?" + new URLSearchParams(newQuery).toString();
+  },
 };

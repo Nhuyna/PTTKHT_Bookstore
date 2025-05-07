@@ -9,7 +9,7 @@ class DashboardController {
     const allPermissions = (
       await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
     ).map((p) => p.ChucNang);
-
+    console.log("per admin: ", permissions);
     permissions = permissions.concat(allPermissions);
     try {
       res.render("admin/dashboard", {
