@@ -122,7 +122,7 @@ class StatisticController {
         startYear: startYear || years[0],
         endYear: endYear || years[0],
         selectedYear: year || years[0],
-        layout: "sales",
+        layout: "admin",
         currentPath: req.path,
         permissions,
       });

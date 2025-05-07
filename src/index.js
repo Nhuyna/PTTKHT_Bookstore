@@ -6,7 +6,7 @@ import configViewEngine from "./config/viewEngine.js";
 import configSession from "./config/session.js";
 
 const app = express();
-const port = 5003;
+const port = 5000;
 
 // Body parser
 // Thêm dòng này để tăng giới hạn upload body

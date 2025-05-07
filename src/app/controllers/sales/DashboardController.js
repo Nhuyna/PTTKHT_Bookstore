@@ -44,7 +44,7 @@ class DashboardController {
       res.render("sales/dashboard", {
         title: "Dashboard",
         data,
-        layout: "sales",
+        layout: "admin",
         currentPath: req.path,
         permissions,
       });

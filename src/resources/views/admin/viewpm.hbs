@@ -1,0 +1,67 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/admin/permission.css" />
+{{/block}}
+
+<div class="permission-table">
+  <div class="inside-table">
+    <div class="permissionHeader">
+      <h2>Chi tiết nhóm quyền</h2>
+      <a href="/admin/permissions"><button class="cancel-btn">Quay lại</button></a>
+    </div>
+
+  
+      <div class="form-group">
+        <label for="name" class="form-label">Tên nhóm quyền</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          name="name"
+          value="{{role.TenNhomQuyen}}"
+          required
+        />
+        <input type="hidden" name="id" value="{{role.ID_NhomQuyen}}" />
+
+      </div>
+   
+      <label for="role-{{matchedRole.id}}">{{matchedRole.name}}</label>
+        <input type="hidden" name="matchedRoleId" value="{{matchedRole.id}}" />
+
+      <div class="permission-panel" id="permission-{{matchedRole.id}}">
+        <table class="permission-table">
+          <thead>
+            <tr>
+              <th>Chức năng</th>
+              <th>Xem</th>
+              <th>Thêm</th>
+              <th>Sửa</th>
+              <th>Xóa</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each matchedRole.permissions}}
+              <tr>
+                <td>{{this.name}}</td> <!-- Dùng {{this.name}} để lấy tên permission -->
+                <td><input onclick="return false;" type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="view"       {{#if
+                    (or (includes this.pm "view") (includes this.pm "all"))
+                  }} checked  {{/if}}
+ /></td> 
+                <td><input onclick="return false;" type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="create"   {{#if
+                    (or (includes this.pm "create") (includes this.pm "all"))
+                  }} checked  {{/if}} /></td>
+                <td><input onclick="return false;" type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="edit"   {{#if
+                    (or (includes this.pm "edit") (includes this.pm "all"))
+                  }} checked  {{/if}}/></td>
+                <td><input onclick="return false;" type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="delete"  {{#if
+                    (or (includes this.pm "delete") (includes this.pm "all"))
+                  }} checked  {{/if}} /></td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    
+
+
+  </div>
+</div>
