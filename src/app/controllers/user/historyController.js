@@ -49,7 +49,6 @@ const renderHistoryPage = async (req, res) => {
           hd.TrangThaiColor = "text-gray-500 text-base";
       }
     });
-
     history.forEach((hoaDons) => {
       hoaDons.DaHuy = hoaDons.TinhTrangDon === "Đã hủy";
       hoaDons.TongTien = formatCurrencyVND(hoaDons.TongTien);
@@ -58,7 +57,7 @@ const renderHistoryPage = async (req, res) => {
         hd.ThanhTien = formatCurrencyVND(hd.ThanhTien);
       });
     });
-
+    console.log("history", history);
     res.render("user/lichsudonhang", {
       history,
       status: req.query.status || null,

@@ -23,7 +23,7 @@ const createHoaDonXuat = async ({
     TinhTrangThanhToan,
   ]);
 
-  return result.insertId; // trả về ID của hoá đơn mới
+  return result.insertId;
 };
 
 const createChiTietHoaDonXuat = async ({ ID_HoaDonXuat, ID_SP, SoLuong, DonGia }) => {

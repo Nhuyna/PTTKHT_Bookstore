@@ -2,6 +2,7 @@ import CartModel from "../../model/user/cartModel.js";
 import ProductModel from "../../model/user/productModel.js";
 import OrderModel from "../../model/user/orderModel.js";
 import BookModel from "../../model/user/bookModel.js";
+import session from "express-session";
 
 const renderCartPage = async (req, res, next) => {
   try {
@@ -139,7 +140,8 @@ const afterpayment = async (req, res) => {
       PhuongThucThanhToan: payment,
       TinhTrangThanhToan: tinhtrangthanhtoan
     });
-
+    console.log("ID_HoaDonXuat : ", ID_HoaDonXuat);
+    
     for (const item of cart) {
       await OrderModel.createChiTietHoaDonXuat({
         ID_HoaDonXuat,
@@ -169,6 +171,7 @@ const renderThankYouPage = (req, res) => {
       layout: "main",
       cart,
       total,
+      session: req.session,
     });
   } catch (error) {
     console.error("Lỗi xử lý giỏ hàng:", error);
