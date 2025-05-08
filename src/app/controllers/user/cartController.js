@@ -2,6 +2,7 @@ import CartModel from "../../model/user/cartModel.js";
 import ProductModel from "../../model/user/productModel.js";
 import OrderModel from "../../model/user/orderModel.js";
 import BookModel from "../../model/user/bookModel.js";
+import session from "express-session";
 
 const renderCartPage = async (req, res, next) => {
   try {
@@ -105,7 +106,7 @@ const thanhtoan = async (req, res) => {
 //   }
 // };
 
-const afterpayment = async (req, res) => {
+const afterpayment = async (req, res) => { 
   try {
     const cart = req.session.cartCheckout;
     const total = parseFloat(req.session.cartTotal);
@@ -118,7 +119,7 @@ const afterpayment = async (req, res) => {
 
     const { TenKH, SDT, address, phuong, quan, thanhpho, payment } = req.body;
 
-    await OrderModel.capNhatDiaChi({
+    const IDDiaChi =await OrderModel.capNhatDiaChi({
       ID_KH: userId,
       TenNguoiNhan: TenKH,
       SoDienThoai: SDT,
@@ -139,6 +140,7 @@ const afterpayment = async (req, res) => {
       PhuongThucThanhToan: payment,
       TinhTrangThanhToan: tinhtrangthanhtoan
     });
+    console.log("ID_HoaDonXuat : ", ID_HoaDonXuat);
 
     for (const item of cart) {
       await OrderModel.createChiTietHoaDonXuat({
@@ -150,6 +152,14 @@ const afterpayment = async (req, res) => {
 
       await CartModel.xoaSanPhamTrongGio(userId, item.SanPhamID);
     }
+
+    await OrderModel.createGiaoHang({
+      ID_HDX: ID_HoaDonXuat,
+      IDNhanVien: null,
+      IDDiaChi: IDDiaChi,
+      NgayGiaoHang: null,
+      TinhTrangDon: "Chờ xác nhận"
+    });
 
     req.session.cartCheckout = null;
     req.session.cartTotal = 0;
@@ -169,6 +179,7 @@ const renderThankYouPage = (req, res) => {
       layout: "main",
       cart,
       total,
+      session: req.session,
     });
   } catch (error) {
     console.error("Lỗi xử lý giỏ hàng:", error);

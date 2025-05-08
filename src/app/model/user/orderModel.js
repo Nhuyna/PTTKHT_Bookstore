@@ -23,7 +23,7 @@ const createHoaDonXuat = async ({
     TinhTrangThanhToan,
   ]);
 
-  return result.insertId; // trả về ID của hoá đơn mới
+  return result.insertId;
 };
 
 const createChiTietHoaDonXuat = async ({ ID_HoaDonXuat, ID_SP, SoLuong, DonGia }) => {
@@ -73,7 +73,7 @@ const capNhatDiaChi = async ({
 const cancelOrder = async (ID_HDX) => {
   const query = `
       UPDATE GiaoHang
-      SET TinhTrangDon = 'Da huy'
+      SET TinhTrangDon = 'Đã hủy'
       WHERE ID_HDX = ?
     `;
 
@@ -85,5 +85,21 @@ const cancelOrder = async (ID_HDX) => {
     throw err; // để controller bắt lỗi tiếp
   }
 };
+const createGiaoHang = async (data) => {
+  const query = `
+    INSERT INTO GiaoHang (ID_HDX, IDNhanVien, IDDiaChi, NgayGiaoHang, TinhTrangDon)
+    VALUES (?, ?, ?, ?, ?)
+  `;
+  const [rows] = await database.query(query, [
+    data.ID_HDX,
+    data.IDNhanVien,
+    data.IDDiaChi,
+    data.NgayGiaoHang,
+    data.TinhTrangDon,
+  ]);
+  return rows.insertId;
+};
 
-export default { createHoaDonXuat, capNhatDiaChi, cancelOrder ,createChiTietHoaDonXuat };
+
+
+export default { createHoaDonXuat, capNhatDiaChi, cancelOrder ,createChiTietHoaDonXuat,createGiaoHang };

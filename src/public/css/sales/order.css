@@ -12,6 +12,8 @@
 /* Order Management */
 .order-content {
   padding: 1.25rem;
+  margin-top: 20px;
+  background-color: white;
 }
 
 .order-header {
@@ -24,8 +26,11 @@
 
 .order-title {
   font-size: 1.5rem;
-  font-weight: 700;
+  font-weight: 600;
+  color: #003147;
   margin-bottom: 1rem;
+  border-left: 4px solid #003147;
+  padding-left: 10px;
 }
 
 .order-filters {

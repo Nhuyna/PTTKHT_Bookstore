@@ -4,15 +4,15 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const pool = mysql.createPool({
-  host: 'localhost',
-  port: '3306',
-  password: 'mysql1009',
-  user:'root',
-  database: 'cua_hang_sach',
+  host: process.env.DB_HOST || "localhost",
+  port: "3306",
+  password: process.env.DB_PASS || "",
+  user: "root",
+  database: "cua_hang_sach",
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  charset: 'utf8mb4'
+  charset: "utf8mb4",
 });
 
 // pool.getConnection((err, connection) => {

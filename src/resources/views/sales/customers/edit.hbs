@@ -1,0 +1,139 @@
+{{#block "css"}}
+  <link rel="stylesheet" href="/css/sales/style.css" />
+  <link rel="stylesheet" href="/css/sales/createEditCustomer.css" />
+{{/block}}
+{{#block "js"}}
+  <script src="/js/sales/customers.js"></script>
+{{/block}}
+
+<div class="main-content">
+  <!-- nav bar -->
+  {{!-- <div class="navbar">
+    <div class="navbar-toggle">
+      {{! <i class="fas fa-bars"></i> }}
+    </div>
+    <div class="search-box">
+      <label>
+        <input type="text" placeholder="Tìm Kiếm" />
+        <i class="fas fa-search"></i>
+      </label>
+    </div>
+    <div class="user-profile">
+      <a href="#"><img src="/img/user.jpg" /></a>
+    </div>
+  </div> --}}
+
+  <div class="customer-content">
+    <div class="customer-header">
+      <h2 class="customer-title">Sửa Thông Tin Khách Hàng</h2>
+      
+      <!-- Breadcrumb -->
+      <div class="breadcrumb">
+        <a href="/admin/sales/khachhang">Danh sách khách hàng</a> / 
+        <span>Sửa thông tin khách hàng</span>
+      </div>
+    </div>
+    
+    <!-- Form chỉnh sửa khách hàng -->
+    <div class="customer-form-container">
+      <form id="editCustomerForm" class="customer-form" action="/admin/sales/khachhang/update/{{customerDetails.ID_KH}}" method="POST">
+        <input type="hidden" name="ID_KH" value="{{customerDetails.ID_KH}}">
+        
+        <div class="form-group">
+          <label for="TenKH">Tên khách hàng <span class="required">*</span></label>
+          <input type="text" id="TenKH" name="TenKH" value="{{customerDetails.TenKH}}" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="TenTK">Tên tài khoản</label>
+          <input type="text" id="TenTK" name="TenTK" value="{{customerDetails.TenTK}}">
+        </div>
+        
+        <div class="form-group">
+          <label for="MatKhau">Mật khẩu</label>
+          <input type="password" id="MatKhau" name="MatKhau" placeholder="Để trống nếu không thay đổi mật khẩu">
+          <small class="form-hint">Để trống nếu không muốn thay đổi mật khẩu</small>
+        </div>
+        
+        <div class="form-group">
+          <label for="SDT">Số điện thoại</label>
+          <input type="text" id="SDT" name="SDT" value="{{customerDetails.SDT}}">
+        </div>
+        
+        <div class="form-group">
+          <label for="NgaySinh">Ngày sinh</label>
+          <input type="date" id="NgaySinh" name="NgaySinh" value="{{formatDate customerDetails.NgaySinh 'YYYY-MM-DD'}}">
+        </div>
+        
+        <div class="form-group">
+          <label for="Active">Trạng thái</label>
+          <select id="Active" name="Active">
+            <option value="1" {{#if customerDetails.Active}}selected{{/if}}>Hoạt động</option>
+            <option value="0" {{#unless customerDetails.Active}}selected{{/unless}}>Không hoạt động</option>
+          </select>
+        </div>
+        
+        <div class="form-actions">
+          <button type="submit" class="btn-save">Lưu thay đổi</button>
+          <a href="/admin/sales/khachhang" class="btn-cancel">Hủy</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Save Modal -->
+{{!-- <div class="modal fade" id="confirmSaveModal" tabindex="-1" role="dialog" aria-labelledby="confirmSaveModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmSaveModalLabel">Xác nhận lưu thay đổi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn muốn lưu các thay đổi này?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+        <button type="button" class="btn btn-primary" id="confirmSaveBtn">Lưu thay đổi</button>
+      </div>
+    </div>
+  </div>
+</div> --}}
+{{!-- 
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Xử lý submit form
+    const editForm = document.getElementById("editCustomerForm");
+    
+    if (editForm) {
+      editForm.addEventListener("submit", function(e) {
+        e.preventDefault();
+        
+        // Validate form
+        const tenKH = document.getElementById("TenKH").value.trim();
+        if (!tenKH) {
+          alert("Vui lòng nhập tên khách hàng");
+          return;
+        }
+        
+        // Validate password if it's provided
+        const matKhau = document.getElementById("MatKhau").value;
+        if (matKhau && matKhau.length < 6) {
+          alert("Mật khẩu cần có ít nhất 6 ký tự");
+          return;
+        }
+        
+        // Hiển thị modal xác nhận
+        $('#confirmSaveModal').modal('show');
+        
+        // Khi nhấn nút xác nhận trong modal
+        document.getElementById("confirmSaveBtn").onclick = function() {
+          editForm.submit();
+        };
+      });
+    }
+  });
+</script> --}}

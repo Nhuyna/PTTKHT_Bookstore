@@ -153,7 +153,7 @@ class OrderController {
         sortDir,
         activeFilters,
         hasActiveFilters: activeFilters.length > 0,
-        layout: "sales",
+        layout: "admin",
         currentPath: req.path,
         permissions,
       });
@@ -181,7 +181,7 @@ class OrderController {
       res.render("sales/orders/detail", {
         title: "Order Details",
         orderDetails,
-        layout: "sales",
+        layout: "admin",
         permissions,
       });
     } catch (error) {

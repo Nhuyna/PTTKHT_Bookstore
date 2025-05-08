@@ -11,12 +11,12 @@ SELECT
 FROM KhachHang
 JOIN GioHang ON KhachHang.ID_KH = GioHang.ID_KH
 JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
-JOIN (
+LEFT JOIN (
     SELECT ID_SP, MIN(STT) AS MIN_STT
     FROM AnhSP
     GROUP BY ID_SP
 ) AS FirstAnhSP ON FirstAnhSP.ID_SP = SanPham.SanPhamID
-JOIN AnhSP ON AnhSP.ID_SP = FirstAnhSP.ID_SP AND AnhSP.STT = FirstAnhSP.MIN_STT
+LEFT JOIN AnhSP ON AnhSP.ID_SP = FirstAnhSP.ID_SP AND AnhSP.STT = FirstAnhSP.MIN_STT
 WHERE KhachHang.ID_KH = ?;
 
     `;

@@ -14,7 +14,6 @@ class Permissions {
     permissions = permissions.concat(allPermissions);
 
     let action = await phanquyen.action(req.session.user.idNQ, "nhomquyen");
-    console.log("NÈ", action);
     try {
       console.log("Vào per nè");
       const listper = await perModel.getAll();
@@ -106,7 +105,52 @@ class Permissions {
       res.status(500).send("Có lỗi xảy ra");
     }
   }
+  async view(req, res) {
+    const id = req.params.id;
+    let permissions = (
+      await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+    ).map((p) => p.ChucNang);
+    const allPermissions = (
+      await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+    ).map((p) => p.ChucNang);
+    permissions = permissions.concat(allPermissions);
+    const role = await perModel.getRoleById(id);
 
+    const roles = await perModel.getRolesWithPermissions();
+
+    const existingPermissions = await perModel.getPermissionsOfRole(id);
+
+    const quyenCha = await phanquyen.findQuyenChaFromPermissions(
+      existingPermissions
+    );
+
+    const matchedRole = roles.find((role) => role.id === quyenCha);
+
+    matchedRole.permissions.forEach((p) => {
+      p.pm = [];
+
+      existingPermissions.forEach((e) => {
+        if (e.HanhDong === "access") return;
+        if (e.ChucNang === matchedRole.id) {
+          if (!p.pm.includes(e.HanhDong)) {
+            p.pm.push(e.HanhDong);
+          }
+        } else if (e.ChucNang === p.code) {
+          if (!p.pm.includes(e.HanhDong)) {
+            p.pm.push(e.HanhDong);
+          }
+        }
+      });
+    });
+    res.render("admin/viewpm", {
+      title: "Cập nhật Nhóm quyền",
+      cssFiles: ["admin/style"],
+      layout: "admin",
+      role,
+      permissions,
+      matchedRole,
+    });
+  }
   async delete(req, res) {
     try {
       const roleId = req.params.id;
@@ -126,7 +170,6 @@ class Permissions {
   async update(req, res) {
     const id = req.params.id;
     const ds = req.body;
-    console.log("danh sách trong update: ", ds);
     const { name, quyen } = req.body;
 
     try {

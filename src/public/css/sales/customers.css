@@ -1,0 +1,1075 @@
+/* CSS cho trang quản lý khách hàng */
+.customer-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.order-history-card {
+  grid-column: span 2;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f7fafc;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.1rem;
+  color: #2d3748;
+  display: flex;
+  align-items: center;
+}
+
+.card-header h3 i {
+  margin-right: 0.5rem;
+  color: #003147;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+.info-row {
+  display: flex;
+  margin-bottom: 0.75rem;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.info-label {
+  flex: 0 0 40%;
+  font-weight: 500;
+  color: #4a5568;
+}
+
+.info-value {
+  flex: 0 0 60%;
+  color: #2d3748;
+}
+
+.btn-back-round {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  color: #333;
+  text-decoration: none;
+  border: 1px solid #e0e0e0;
+  transition: all 0.3s;
+}
+
+.btn-back-round:hover {
+  background-color: var(--gray);
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  background-color: #edf2f7;
+  color: #4a5568;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.btn-back:hover {
+  background-color: #e2e8f0;
+}
+
+.btn-back i {
+  margin-right: 0.5rem;
+}
+
+/* Thống kê mua hàng */
+.stats-grid {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: #f7fafc;
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  margin-right: 1rem;
+  color: white;
+}
+
+.orders-icon {
+  background-color: #3182ce;
+}
+
+.spending-icon {
+  background-color: #38a169;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: #718096;
+}
+
+/* Status badges cho lịch sử đơn hàng */
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.status-paid {
+  background-color: #e6fffa;
+  color: #38a169;
+}
+
+.status-unpaid {
+  background-color: #fef5e7;
+  color: #dd6b20;
+}
+
+.status-pending {
+  background-color: #fffaf0;
+  color: #dd6b20;
+}
+
+.status-processing {
+  background-color: #ebf8ff;
+  color: #3182ce;
+}
+
+.status-shipping {
+  background-color: #e6f6ff;
+  color: #2c5282;
+}
+
+.status-completed {
+  background-color: #e6fffa;
+  color: #38a169;
+}
+
+.status-cancelled {
+  background-color: #fff5f5;
+  color: #e53e3e;
+}
+
+.status-returned {
+  background-color: #feebef;
+  color: #d53f8c;
+}
+
+/* CSS cho trang quản lý khách hàng */
+
+/* Khung chính chứa nội dung khách hàng */
+.customer-content {
+  padding: 1.5rem;
+  /* background-color: #f8fafc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem; */
+  /* margin-top: 2px; */
+}
+
+/* Phần header của trang khách hàng */
+.customer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.customer-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #003147;
+  margin-bottom: 1rem;
+  /* border-left: 4px solid #003147; */
+  padding-left: 10px;
+}
+
+/* CSS cho form tìm kiếm */
+.customer-filters {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-input,
+.filter-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s;
+}
+
+.filter-input:focus,
+.filter-select:focus {
+  border-color: #003147;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 49, 71, 0.1);
+}
+
+/* Container cho các nút */
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+.form-buttons-container {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  z-index: 10000;
+}
+
+.filter-button {
+  padding: 0.5rem 1rem;
+  background-color: #003147;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.filter-button:hover {
+  background-color: #004166;
+}
+
+.filter-button i {
+  margin-right: 0.5rem;
+}
+
+/* Export Button */
+.export-button {
+  padding: 0.5rem 1rem;
+  background-color: #2c7a7b;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.export-button:hover {
+  background-color: #285e61;
+}
+
+.export-button i {
+  margin-right: 0.5rem;
+}
+
+/* Reset Button */
+.reset-button {
+  padding: 0.5rem 1rem;
+  background-color: #64748b;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.reset-button:hover {
+  background-color: #475569;
+}
+
+.reset-button i {
+  margin-right: 0.5rem;
+}
+
+.addCustomer-button {
+  padding: 0.5rem 1rem;
+  background-color: #3566a7;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  height: 40px;
+  white-space: nowrap;
+}
+
+.addCustomer-button:hover {
+  background-color: #366199;
+}
+
+.addCustomer-button i {
+  margin-right: 0.5rem;
+}
+
+/* CSS cho các filter đang được áp dụng */
+.active-filters {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.active-filters-title {
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.filter-tag {
+  display: flex;
+  align-items: center;
+  background-color: #e5f6fd;
+  border-radius: 6px;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.filter-name {
+  font-weight: 500;
+  color: #0369a1;
+  margin-right: 0.25rem;
+}
+
+.filter-value {
+  color: #0c4a6e;
+  font-weight: 400;
+}
+
+.filter-remove {
+  margin-left: 0.5rem;
+  color: #0369a1;
+  font-weight: bold;
+  text-decoration: none;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.filter-remove:hover {
+  background-color: #0369a1;
+  color: white;
+}
+
+/* CSS cho bảng */
+.customer-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.customer-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.customer-table th,
+.customer-table td {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.customer-table th {
+  background-color: #003147;
+  font-weight: 600;
+  color: white;
+  position: relative;
+}
+
+.customer-table tbody tr:hover {
+  background-color: #f3f4f6;
+}
+
+.customer-table .checkbox-column {
+  width: 40px;
+  text-align: center;
+}
+
+.customer-id {
+  font-weight: 500;
+  color: #003147;
+}
+
+/* CSS cho nút sort */
+.sort-icon {
+  margin-left: 5px;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+.sort-icon i {
+  color: rgba(255, 255, 255, 0.7);
+  transition: all 0.2s;
+}
+
+.sort-asc i,
+.sort-desc i {
+  color: white;
+}
+
+/* CSS cho nút Xem */
+.view-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.75rem;
+  background-color: #e5f6fd;
+  color: #0369a1;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.view-button:hover {
+  background-color: #bae6fd;
+}
+
+/* CSS cho các nút thao tác trong bảng */
+.action-cell {
+  width: 130px;
+}
+
+.action-buttons-cell {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.view-button,
+.edit-button,
+.delete-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+
+.view-button {
+  background-color: #e5f6fd;
+  color: #0369a1;
+}
+
+.view-button:hover {
+  background-color: #bae6fd;
+}
+
+.edit-button {
+  background-color: #eff6ff;
+  color: #3b82f6;
+}
+
+.edit-button:hover {
+  background-color: #dbeafe;
+  color: #2563eb;
+}
+
+.delete-button {
+  background-color: #fee2e2;
+  color: #ef4444;
+}
+
+.delete-button:hover {
+  background-color: #fecaca;
+  color: #dc2626;
+}
+
+/* Modal xác nhận xóa */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-dialog {
+  margin: 10% auto;
+  width: 90%;
+  max-width: 500px;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0;
+}
+
+.close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 1.5rem;
+  color: #4b5563;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e5e7eb;
+  gap: 0.5rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  border: none;
+}
+
+.btn-secondary {
+  background-color: #e5e7eb;
+  color: #4b5563;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+/* CSS cho trường hợp không có dữ liệu */
+.no-data {
+  text-align: center;
+  padding: 2.5rem;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .filter-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  .action-buttons {
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .btn-search,
+  .btn-refresh,
+  .btn-export,
+  .btn-add {
+    flex: 1;
+    padding: 0.75rem 0.5rem;
+    justify-content: center;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .customer-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-history-card {
+    grid-column: span 1;
+  }
+
+  .order-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .stats-grid {
+    flex-direction: column;
+  }
+
+  .customer-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .customer-header {
+    padding: 1rem 0;
+  }
+
+  .customer-filters {
+    padding: 1rem;
+  }
+
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+
+  .btn-search,
+  .btn-refresh {
+    flex: 1 0 40%;
+  }
+
+  .btn-export,
+  .btn-add {
+    flex: 1 0 40%;
+  }
+}
+
+/* CSS for Customer Details Page */
+.order-content {
+  padding: 1.5rem;
+  background-color: #f9fafb;
+}
+
+.order-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.order-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #003147;
+  margin: 0;
+}
+
+.back-button {
+  margin-right: 1.5rem;
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.65rem 1.25rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none;
+}
+
+.btn-back:hover {
+  background-color: #e2e8f0;
+  color: #334155;
+  transform: translateX(-3px);
+}
+
+.btn-back i {
+  margin-right: 0.5rem;
+}
+
+.customer-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.card {
+  background-color: white;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card-header {
+  background-color: #f8fafc;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.card-header h3 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: #003147;
+  display: flex;
+  align-items: center;
+}
+
+.card-header h3 i {
+  margin-right: 0.75rem;
+  color: #003147;
+  font-size: 1.2rem;
+}
+
+.card-body {
+  padding: 1.75rem;
+}
+
+.info-row {
+  display: flex;
+  /* margin-bottom: 1rem; */
+  padding-bottom: 0.5rem;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.06);
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.info-label {
+  flex: 0 0 40%;
+  font-weight: 500;
+  color: #64748b;
+}
+
+.info-value {
+  flex: 0 0 60%;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+.order-history-card {
+  grid-column: span 2;
+  margin-top: 1rem;
+}
+
+/* Thống kê mua hàng */
+.stats-grid {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.75rem;
+  margin-right: 1.25rem;
+  color: white;
+}
+
+.orders-icon {
+  background-color: #0891b2;
+}
+
+.orders-icon i {
+  font-size: 1.5rem;
+}
+
+.spending-icon {
+  background-color: #059669;
+}
+
+.spending-icon i {
+  font-size: 1.5rem;
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #0f172a;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.95rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+/* Bảng lịch sử đơn hàng */
+.table-container {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-table th {
+  background-color: #f8fafc;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #475569;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.order-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+}
+
+.order-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.order-table .order-id {
+  font-weight: 600;
+  color: #003147;
+}
+
+/* CSS cho nút xem chi tiết đơn hàng */
+.order-table .view-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background-color: #dbeafe;
+  color: #2563eb;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.order-table .view-button:hover {
+  background-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.order-table .view-button i {
+  margin-right: 0.4rem;
+}
+
+/* Status badges cho lịch sử đơn hàng */
+.status-badge {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  font-weight: 500;
+}
+
+.status-paid {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-unpaid {
+  background-color: #ffedd5;
+  color: #9a3412;
+}
+
+.status-pending {
+  background-color: #fff7ed;
+  color: #c2410c;
+}
+
+.status-processing {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.status-shipping {
+  background-color: #e0f2fe;
+  color: #075985;
+}
+
+.status-completed {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-cancelled {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.status-returned {
+  background-color: #fce7f3;
+  color: #9d174d;
+}
+
+/* Responsive for detailed customer page */
+@media (max-width: 992px) {
+  .customer-detail-grid {
+    gap: 1.5rem;
+  }
+
+  .card-body {
+    padding: 1.25rem;
+  }
+
+  .info-row {
+    flex-direction: column;
+  }
+
+  .info-label,
+  .info-value {
+    flex: 0 0 100%;
+  }
+
+  .info-label {
+    margin-bottom: 0.25rem;
+  }
+
+  .stats-grid {
+    flex-direction: column;
+  }
+
+  .stat-item {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .customer-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .order-history-card {
+    grid-column: span 1;
+  }
+
+  .order-table th,
+  .order-table td {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  .order-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .back-button {
+    margin-bottom: 1rem;
+  }
+}

@@ -29,26 +29,32 @@ const getHoaDonByUserIdAndStatus = async (userId, status) => {
       SELECT *
       FROM KhachHang
       JOIN HoaDonXuat ON KhachHang.ID_KH = HoaDonXuat.ID_KH
-      JOIN GiaoHang ON GiaoHang.ID_HDX = HoaDonXuat.IDHoaDonXuat
+      LEFT JOIN GiaoHang ON GiaoHang.ID_HDX = HoaDonXuat.IDHoaDonXuat
       JOIN ChiTietHoaDonXuat ON ChiTietHoaDonXuat.IDHoaDonXuat = HoaDonXuat.IDHoaDonXuat
       JOIN SanPham ON ChiTietHoaDonXuat.IDSanPham = SanPham.SanPhamID
-      JOIN AnhSP ON AnhSP.ID_SP = SanPham.SanPhamID
+      LEFT JOIN (
+          SELECT ID_SP, MIN(STT) AS MIN_STT
+          FROM AnhSP
+          GROUP BY ID_SP
+      ) AS FirstAnhSP ON FirstAnhSP.ID_SP = SanPham.SanPhamID
+      LEFT JOIN AnhSP ON AnhSP.ID_SP = FirstAnhSP.ID_SP AND AnhSP.STT = FirstAnhSP.MIN_STT
       WHERE KhachHang.ID_KH = ?
   `;
 
   const params = [userId];
+  console.log("status ", status);
 
   if (status) {
-    if (status === "Cho xac nhan") {
+    if (status === "Chờ xác nhận") {
       query += ` AND (TinhTrangDon = ? OR TinhTrangDon = ? OR TinhTrangDon = ?)`;
-      params.push("Cho xac nhan", "Cho lay hang", "Dang giao hang");
+      params.push("Chờ xác nhận", "Chờ lấy hàng", "Đang giao hàng");
     } else {
       query += ` AND TinhTrangDon = ?`;
       params.push(status);
     }
   }
+  console.log("query", query);
 
-  // ✅ Luôn thực hiện query
   const [rows] = await database.query(query, params);
   return groupedByHoaDonXuat(rows);
 };

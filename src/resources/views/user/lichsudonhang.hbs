@@ -1,5 +1,5 @@
 
-    <div class="bg-gray-50 p-4">
+    <div class="bg-gray-50 p-4 min-h-screen">
   <!-- Tabs -->
   <div class="max-w-4xl mx-auto mb-4">
     <div class="flex justify-between border-b">
@@ -7,19 +7,19 @@
   Tất cả
 </a>
 
-<a href="/lichsudonhang?status=Cho xac nhan" class="tab-button px-4 py-2 ">
+<a href="/lichsudonhang?status=Chờ xác nhận" class="tab-button px-4 py-2 ">
   Chờ giao hàng
 </a>
 
-<a href="/lichsudonhang?status=Da giao" class="tab-button px-4 py-2 ">
+<a href="/lichsudonhang?status=Đã giao" class="tab-button px-4 py-2 ">
   Hoàn thành
 </a>
 
-<a href="/lichsudonhang?status=Da huy" class="tab-button px-4 py-2 ">
+<a href="/lichsudonhang?status=Đã hủy" class="tab-button px-4 py-2 ">
   Đã huỷ
 </a>
 
-<a href="/lichsudonhang?status=Tra hang" class="tab-button px-4 py-2 ">
+<a href="/lichsudonhang?status=Trả hàng" class="tab-button px-4 py-2 ">
   Trả hàng/Hoàn tiền
 </a>
 
@@ -80,18 +80,17 @@
             <span class="text-xl font-bold text-red-600 k">{{this.ThanhTien}}</span>
           </div>
           <div class="flex gap-2 mt-4">
-            <form method="POST" action="/cart/addToCart" style="display: inline;">
-              <input type="hidden" name="productId" value="{{../IDHoaDonXuat}}">
-              <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium ">
+            <form  style="display: inline;">
+              <button data-product-id="{{../IDHoaDonXuat}}" class="bg-red-500 add-to-cart hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium ">
                 Mua Lại
               </button>
             </form>
 
             {{#unless ../DaHuy}}
-            <form action="/order/huyDonHang" method="POST">
+            <form >
               <input type="hidden"  name="IDHoaDonXuat" value="{{../IDHoaDonXuat}}">
 
-              <button type="submit" class="text-gray-800 border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-100 transition">
+              <button  data-id="{{../IDHoaDonXuat}}" type="submit" class="btn-huy-don text-gray-800 border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-100 transition">
                 Hủy
               </button>
             </form>
@@ -137,5 +136,65 @@
       });
     });
   </script>
+  <script>
+  document.querySelectorAll('.add-to-cart').forEach(button => {
+    button.addEventListener('click', async () => {
+      const productId = button.getAttribute('data-product-id');
+
+      try {
+        const response = await fetch('/cart/addToCart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ productId })
+        });
+
+        const result = await response.json();
+
+        alert(result.message);
+
+        if (result.redirect) {
+          window.location.href = result.redirect;
+        }
+      } catch (error) {
+        alert("Đã xảy ra lỗi khi thêm vào giỏ hàng.");
+        console.error(error);
+      }
+    });
+  });
+</script>
+<script>
+  document.querySelectorAll('.btn-huy-don').forEach(button => {
+    button.addEventListener('click', async () => {
+      const IDHoaDonXuat = button.getAttribute('data-id');
+
+      if (!confirm("Bạn có chắc muốn hủy đơn hàng này không?")) return;
+
+      try {
+        const response = await fetch("/order/huyDonHang", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ IDHoaDonXuat }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          alert("Đã hủy đơn hàng.");
+          location.reload();
+        } else {
+          alert("Hủy đơn hàng thất bại: " + result.message);
+        }
+      } catch (error) {
+        console.error("Lỗi khi gửi yêu cầu hủy:", error);
+        alert("Lỗi khi gửi yêu cầu hủy đơn hàng.");
+      }
+    });
+  });
+</script>
+
     </div>
 
