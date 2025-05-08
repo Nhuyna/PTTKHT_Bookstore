@@ -18,6 +18,7 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
       console.log(action);
       res.render("warehouse/provider", {
@@ -46,6 +47,7 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/provider", {
         provider,
         layout: "admin",
@@ -69,6 +71,7 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/create_provider", {
         layout: "admin",
         permissions,
@@ -154,6 +157,7 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/update_provider", {
         edit_provider,
         layout: "admin",
@@ -207,6 +211,7 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/provider", {
         provider,
         layout: "admin",
@@ -230,6 +235,7 @@ class ProviderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/provider", {
         provider,
         layout: "admin",

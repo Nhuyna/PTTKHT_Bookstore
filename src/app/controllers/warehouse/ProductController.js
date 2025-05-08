@@ -20,6 +20,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       console.log(action);
       res.render("warehouse/product", {
@@ -48,6 +49,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/product", {
         product,
@@ -76,7 +78,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
-
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       console.log("action" + action);
 
@@ -107,6 +109,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/create_product", {
         category,
@@ -226,6 +229,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/update_product", {
         edit_product,
@@ -300,6 +304,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
       res.render("warehouse/product", {
         product,
@@ -325,6 +330,7 @@ class ProductController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/product", {
         product,
         layout: "admin",

@@ -3,7 +3,6 @@ import CustomerController from "../../app/controllers/sales/CustomerController.j
 
 const router = express.Router();
 
-router.get("/", CustomerController.index);
 router.get("/detail/:id", CustomerController.getCustomerDetail);
 router.get("/export", CustomerController.exportToExcel);
 router.post("/delete/:id", CustomerController.deleteCustomer);
@@ -13,4 +12,5 @@ router.get("/create", CustomerController.showCreateForm);
 router.post("/store", CustomerController.createCustomer);
 router.get("/edit/:id", CustomerController.showEditForm);
 router.post("/update/:id", CustomerController.updateCustomer);
+router.get("/", CustomerController.index);
 export default router;

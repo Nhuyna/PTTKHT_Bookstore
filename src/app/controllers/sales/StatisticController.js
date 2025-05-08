@@ -106,6 +106,7 @@ class StatisticController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
       console.log(permissions);
 
       res.render("sales/statistic", {

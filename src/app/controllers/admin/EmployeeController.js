@@ -18,6 +18,7 @@ class EmployeeController{
           ).map((p) => p.ChucNang);
       
           permissions = permissions.concat(allPermissions);
+          permissions.push("admin");
           let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
           console.log(action)
           const employee = await employeeConfig.getAll();
@@ -45,6 +46,7 @@ class EmployeeController{
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("admin");
       let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
       const { id } = req.params;
       res.render("admin/employee", { layout: "admin", permissions, action });
@@ -68,6 +70,7 @@ class EmployeeController{
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("admin");
       let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
       res.render("admin/view_employee", {
         employee,
@@ -93,6 +96,7 @@ class EmployeeController{
         ).map((p) => p.ChucNang);
     
         permissions = permissions.concat(allPermissions);
+        permissions.push("admin");
         let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
         res.render('admin/create_employee', {
             layout: "admin",
@@ -257,6 +261,7 @@ class EmployeeController{
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("admin");
       let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
       res.render("admin/update_employee", {
         employee,

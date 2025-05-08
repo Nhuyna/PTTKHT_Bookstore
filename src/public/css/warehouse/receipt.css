@@ -422,11 +422,13 @@ form {
     font-size: 18px;
     font-weight: 600;
     text-align: center;
+    border: 1px solid #000;
 }
 #product-list tbody tr td{
     font-size: 16px;
     text-align: center;
     padding: 5px;
+    border: 1px solid #000;
 }
 .quantity{
     border: none;

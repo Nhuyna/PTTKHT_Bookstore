@@ -19,6 +19,7 @@ class StatisticController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       const total = statistic.reduce(
         (sum, r) => sum + Number(r.TongTien || 0),
         0
@@ -68,6 +69,7 @@ class StatisticController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       res.render("warehouse/statistic", {
         statistic,
         total,

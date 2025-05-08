@@ -52,6 +52,7 @@
     border-radius: 5px;
     margin-bottom: 1rem;
     font-size: 16px;
+    border: 1px solid #000;
 }
 .search-container{
     display: flex;

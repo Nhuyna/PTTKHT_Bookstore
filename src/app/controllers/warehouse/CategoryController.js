@@ -15,6 +15,7 @@ class CategoryController {
     ).map((p) => p.ChucNang);
 
     permissions = permissions.concat(allPermissions);
+    permissions.push("qlkho");
     let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
     console.log(action);
     try {
@@ -43,6 +44,7 @@ class CategoryController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       const { id } = req.params;
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/category", { layout: "admin" }, permissions),
@@ -73,6 +75,7 @@ class CategoryController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       console.log(permissions);
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/view_category", {
@@ -100,6 +103,7 @@ class CategoryController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       console.log(permissions);
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/create_category", {
@@ -138,6 +142,7 @@ class CategoryController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       console.log(permissions);
       let action = await phanquyen.action(req.session.user.idNQ, "qldanhmuc");
       res.render("warehouse/update_category", {

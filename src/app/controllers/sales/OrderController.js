@@ -141,6 +141,7 @@ class OrderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
       res.render("sales/orders/show", {
         title: "Order",
         orders,
@@ -178,6 +179,7 @@ class OrderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
       res.render("sales/orders/detail", {
         title: "Order Details",
         orderDetails,

@@ -181,6 +181,7 @@ form {
     width: 100px;
     margin: 10px 30px 10px 0;
     font-size: 16px;
+    border: 1px solid #000;
 }
 .add-btn{
     display: inline-block;

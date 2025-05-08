@@ -39,6 +39,7 @@ class DashboardController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
       console.log(permissions);
       console.log("per   " + permissions);
       res.render("sales/dashboard", {

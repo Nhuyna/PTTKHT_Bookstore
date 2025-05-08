@@ -12,6 +12,7 @@ class Permissions {
     ).map((p) => p.ChucNang);
 
     permissions = permissions.concat(allPermissions);
+    permissions.push("admin");
 
     let action = await phanquyen.action(req.session.user.idNQ, "nhomquyen");
     try {
@@ -39,6 +40,7 @@ class Permissions {
     const roles = await perModel.getRolesWithPermissions();
     console.log("ê", roles);
     permissions = permissions.concat(allPermissions);
+    permissions.push("admin");
     let action = await phanquyen.action(req.session.user.idNQ, "nhomquyen");
     try {
       console.log("Vào per nè");
@@ -114,6 +116,7 @@ class Permissions {
       await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
     ).map((p) => p.ChucNang);
     permissions = permissions.concat(allPermissions);
+    permissions.push("admin");
     const role = await perModel.getRoleById(id);
 
     const roles = await perModel.getRolesWithPermissions();
@@ -258,6 +261,7 @@ class Permissions {
       await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
     ).map((p) => p.ChucNang);
     permissions = permissions.concat(allPermissions);
+    permissions.push("admin");
     const role = await perModel.getRoleById(id);
 
     const roles = await perModel.getRolesWithPermissions();

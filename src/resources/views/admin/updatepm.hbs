@@ -25,7 +25,7 @@
       </div>
    
       <label for="role-{{matchedRole.id}}">{{matchedRole.name}}</label>
-        <input type="hidden" name="matchedRoleId" value="{{matchedRole.id}}" />
+      <input type="hidden" name="matchedRoleId" value="{{matchedRole.id}}" />
 
       <div class="permission-panel" id="permission-{{matchedRole.id}}">
         <table class="permission-table">
@@ -44,8 +44,7 @@
                 <td>{{this.name}}</td> <!-- Dùng {{this.name}} để lấy tên permission -->
                 <td><input type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="view"       {{#if
                     (or (includes this.pm "view") (includes this.pm "all"))
-                  }} checked  {{/if}}
-     /></td> 
+                  }} checked  {{/if}}/></td> 
                 <td><input type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="create"   {{#if
                     (or (includes this.pm "create") (includes this.pm "all"))
                   }} checked  {{/if}} /></td>

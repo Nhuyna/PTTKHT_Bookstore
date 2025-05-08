@@ -78,10 +78,7 @@
               <td>
                 <div class="button-container">
                           
-                  {{#if
-                    (or (includes ../action "edit") (includes ../action "all"))
-                  }}
-
+                  {{#if (or (includes ../action "edit") (includes ../action "all"))}}
                   <a href="/admin/warehouse/provider/update/{{this.ID_NCC}}">
                     <button class="icon-btn edit-btn">
                       <i class="fas fa-edit"></i>
@@ -90,10 +87,7 @@
                   </a>
                   {{/if}}
                           
-                  {{#if
-                    (or (includes ../action "delete") (includes ../action "all"))
-                  }}
-
+                  {{#if (or (includes ../action "delete") (includes ../action "all"))}}
                   <button class="icon-btn delete-btn" data-id="{{this.ID_NCC}}">
                     <i class="fas fa-trash-alt"></i>
                     <span class="tooltip">Xóa</span>

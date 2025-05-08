@@ -7,6 +7,7 @@
         <span><h1>BOOK STORE</h1></span>
       </a>
     </li>
+    {{#if (includes permissions "qlbanhang")}}
     <li class="active">
       <a href="/admin/sales">
         <!-- Trang Dashboard -->
@@ -14,10 +15,11 @@
         <span>Tổng Quan</span>
       </a>
     </li>
+    {{/if}}
     {{!-- Khách Hàng --}}
     {{#if (or (includes permissions "khachhang") (includes permissions "qlbanhang"))}}
       <li>
-        <a href="/admin/sales/customer">
+        <a href="/admin/sales/khachhang">
           <span class="icon"><i class="fas fa-users"></i></span>
           <span class="title">Khách Hàng</span>
         </a>

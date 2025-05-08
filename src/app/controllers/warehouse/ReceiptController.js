@@ -34,6 +34,7 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
 
       res.render("warehouse/receipt", {
@@ -62,6 +63,7 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
       console.log(action);
       res.render("warehouse/receipt", {
@@ -91,6 +93,7 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
       console.log(action);
 
@@ -120,6 +123,7 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
       console.log(action);
       res.render("warehouse/create_receipt", {
@@ -205,6 +209,7 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
       console.log(action);
       res.render("warehouse/update_receipt", {
@@ -251,6 +256,7 @@ class ReceiptController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
       let action = await phanquyen.action(req.session.user.idNQ, "qlhdn");
       console.log(action);
       const html = await hbsInstance.render(

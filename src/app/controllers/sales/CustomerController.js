@@ -58,7 +58,9 @@ class CustomerController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
-
+      permissions.push("qlbanhang");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlkhachhang");
+      console.log(action)
       res.render("sales/customers/show", {
         title: "Quản lý Khách hàng",
         customers,
@@ -67,9 +69,10 @@ class CustomerController {
         sortDir,
         activeFilters,
         hasActiveFilters: activeFilters.length > 0,
-        layout: "sales",
+        layout: "admin",
         currentPath: req.path,
         permissions,
+        action
       });
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -103,12 +106,13 @@ class CustomerController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
 
       res.render("sales/customers/detail", {
         title: "Chi tiết Khách hàng",
         customerDetails,
         customerOrders,
-        layout: "sales",
+        layout: "admin",
         permissions,
       });
     } catch (error) {
@@ -257,10 +261,11 @@ class CustomerController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
 
       res.render("sales/customers/create", {
         title: "Thêm Khách Hàng Mới",
-        layout: "sales",
+        layout: "admin",
         currentPath: req.path,
         permissions,
       });
@@ -394,11 +399,12 @@ class CustomerController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      permissions.push("qlbanhang");
 
       res.render("sales/customers/edit", {
         title: `Sửa thông tin khách hàng`,
         customerDetails,
-        layout: "sales",
+        layout: "admin",
         currentPath: req.path,
         permissions,
       });

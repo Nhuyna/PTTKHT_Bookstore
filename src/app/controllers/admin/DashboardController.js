@@ -11,6 +11,7 @@ class DashboardController {
     ).map((p) => p.ChucNang);
     console.log("per admin: ", permissions);
     permissions = permissions.concat(allPermissions);
+    permissions.push("admin");
     try {
       res.render("admin/dashboard", {
         title: "Dashboard",
