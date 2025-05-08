@@ -14,10 +14,10 @@
 <a href="/lichsudonhang?status=Đã giao" class="tab-button px-4 py-2 ">
   Hoàn thành
 </a>
-
+{{!-- 
 <a href="/lichsudonhang?status=Đã hủy" class="tab-button px-4 py-2 ">
   Đã huỷ
-</a>
+</a> --}}
 
 <a href="/lichsudonhang?status=Trả hàng" class="tab-button px-4 py-2 ">
   Trả hàng/Hoàn tiền
@@ -81,20 +81,20 @@
           </div>
           <div class="flex gap-2 mt-4">
             <form  style="display: inline;">
-              <button data-product-id="{{../IDHoaDonXuat}}" class="bg-red-500 add-to-cart hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium ">
+              <button data-product-id="{{IDSanPham}}" class="bg-red-500 add-to-cart hover:bg-red-600 text-white px-4 py-2 rounded-xl font-medium ">
                 Mua Lại
               </button>
             </form>
-
+{{!-- 
             {{#unless ../DaHuy}}
             <form >
               <input type="hidden"  name="IDHoaDonXuat" value="{{../IDHoaDonXuat}}">
 
-              <button  data-id="{{../IDHoaDonXuat}}" type="submit" class="btn-huy-don text-gray-800 border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-100 transition">
+              <button  data-id="{{IDSanPham}}" type="submit" class="btn-huy-don text-gray-800 border border-gray-300 px-6 py-2 rounded-lg hover:bg-gray-100 transition">
                 Hủy
               </button>
             </form>
-            {{/unless}}
+            {{/unless}} --}}
 
 
           </div>
