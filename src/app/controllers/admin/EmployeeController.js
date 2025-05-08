@@ -1,5 +1,6 @@
 // const employeeConfig = require('../db/employee');
 import employeeConfig from '../../model/admin/employee.js';
+import phanquyen from "../../model/admin/phanquyenModel.js";
 import ExcelJS from 'exceljs';
 import moment from 'moment';
 
@@ -7,10 +8,24 @@ class EmployeeController{
     // show all employee
     async index (req, res){
         try {
+            let permissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+            ).map((p) => p.ChucNang);
+        
+            // Thêm quyền "all" vào danh sách permissions
+            const allPermissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+            ).map((p) => p.ChucNang);
+        
+            permissions = permissions.concat(allPermissions);
+            let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
+            console.log(action)
             const employee = await employeeConfig.getAll();
             res.render('admin/employee', {
                 employee,
                 layout: "admin",
+                permissions,
+                action,
             });
         } catch (err) {
             console.log(err);
@@ -30,9 +45,25 @@ class EmployeeController{
     // view detail employee
     async view(req, res){
         try {
+            let permissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+            ).map((p) => p.ChucNang);
+        
+            // Thêm quyền "all" vào danh sách permissions
+            const allPermissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+            ).map((p) => p.ChucNang);
+        
+            permissions = permissions.concat(allPermissions);
+            let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
             const {id} = req.params;
             const employee = (await employeeConfig.search(id))[0];
-            res.render('admin/view_employee', {employee, layout: "admin"});
+            res.render('admin/view_employee', {
+                employee,
+                layout: "admin",
+                permissions,
+                action,
+            });
         } catch (error) {
             console.log(error);
         }
@@ -41,7 +72,22 @@ class EmployeeController{
     // create form
     async create(req, res){
         try {
-            res.render('admin/create_employee', {layout: "admin"});
+            let permissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+            ).map((p) => p.ChucNang);
+        
+            // Thêm quyền "all" vào danh sách permissions
+            const allPermissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+            ).map((p) => p.ChucNang);
+        
+            permissions = permissions.concat(allPermissions);
+            let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
+            res.render('admin/create_employee', {
+                layout: "admin",
+                permissions,
+                action,
+            });
         } catch (error) {
             console.log(error);
         }
@@ -129,6 +175,17 @@ class EmployeeController{
     // update data form
     async update(req, res){
         try {
+            let permissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+            ).map((p) => p.ChucNang);
+        
+            // Thêm quyền "all" vào danh sách permissions
+            const allPermissions = (
+                await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+            ).map((p) => p.ChucNang);
+        
+            permissions = permissions.concat(allPermissions);
+            let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
             const {id} = req.params;
             const employee = (await employeeConfig.search(id))[0];
             // Tách NgaySinh thành từng phần
@@ -140,7 +197,12 @@ class EmployeeController{
             employee.dow_day = dow.getDate();
             employee.dow_month = dow.getMonth() + 1;
             employee.dow_year = dow.getFullYear();
-            res.render('admin/update_employee', {employee, layout: "admin"});
+            res.render('admin/update_employee', {
+                employee, 
+                layout: "admin",
+                permissions,
+                action,
+            });
         } catch (error) {
             console.log(error);
         }

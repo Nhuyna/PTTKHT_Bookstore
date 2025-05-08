@@ -8,14 +8,22 @@
       </a>
     </li>
     <li class="active">
-      <a href="/admin/sales/">
+      <a href="/admin/sales">
         <!-- Trang Dashboard -->
         <span><i class="fas fa-home"></i></span>
         <span>Tổng Quan</span>
       </a>
     </li>
+    {{!-- Khách Hàng --}}
+    {{#if (or (includes permissions "khachhang") (includes permissions "qlbanhang"))}}
+      <li>
+        <a href="/admin/sales/customer">
+          <span class="icon"><i class="fas fa-users"></i></span>
+          <span class="title">Khách Hàng</span>
+        </a>
+      </li>
+    {{/if}}
     <!-- Đơn Hàng -->
-
     {{#if
       (or (includes permissions "qlhdx") (includes permissions "qlbanhang"))
     }}

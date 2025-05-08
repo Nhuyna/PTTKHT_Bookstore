@@ -14,13 +14,13 @@ const router = express.Router();
 router.use(
   "/orders",
   isLoggedIn,
-  checkPermission(["qlhdx", "qlbanhang"]),
+  checkPermission(["qlhdx", "qlbanhang", "qldoanhnghiep"]),
   orderRouter
 );
 router.use(
   "/statistic",
   isLoggedIn,
-  checkPermission(["qlthongkexuat", "qlbanhang"]),
+  checkPermission(["qlthongkexuat", "qlbanhang", "qldoanhnghiep"]),
   statisticRouter
 );
 router.get("/", DashboardController.show);

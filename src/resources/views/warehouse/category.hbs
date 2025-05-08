@@ -12,7 +12,6 @@
     <div class="categoryHeader">
       <h2>Danh Mục</h2>
       {{#if (or (includes action "create") (includes action "all"))}}
-
         <div>
           <a href="/admin/warehouse/category/create"><button
               class="add-category"
@@ -42,10 +41,7 @@
                   </button>
                 </a>
                 
-                  {{#if
-                    (or (includes ../action "edit") (includes ../action "all"))
-                  }}
-    
+                {{#if (or (includes ../action "edit") (includes ../action "all"))}}
                 <a href="/admin/warehouse/category/update/{{this.DanhMucID}}">
                   <button class="icon-btn edit-btn">
                     <i class="fas fa-edit"></i>
@@ -54,11 +50,7 @@
                 </a>
                 {{/if}}
 
-                
-                  {{#if
-                    (or (includes ../action "delete") (includes ../action "all"))
-                  }}
-
+                {{#if (or (includes ../action "delete") (includes ../action "all"))}}
                 <button
                   class="icon-btn delete-btn"
                   data-id="{{this.DanhMucID}}"

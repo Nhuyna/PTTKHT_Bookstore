@@ -14,7 +14,9 @@
             <div>
                 <a href="/admin/employee"><button class="reset-btn">Làm Mới</button></a>
                 <a href="/admin/employee/create_excel"><button class="excel-btn">Xuất Excel</button></a>
+                {{#if (or (includes action "create") (includes action "all"))}}
                 <a href="/admin/employee/create"><button class="add-employee">Thêm Nhân Viên</button></a>
+                {{/if}}
             </div>
         </div>
         <table id="employee_table">
@@ -54,16 +56,22 @@
                                         <span class="tooltip">Chi tiết</span>
                                     </button>
                                 </a>
+                                
+                                {{#if (or (includes ../action "edit") (includes ../action "all"))}}
                                 <a href="/admin/employee/update/{{this.IDNhanVien}}">
                                     <button class="icon-btn edit-btn">
                                         <i class="fas fa-edit"></i>
                                         <span class="tooltip">Chỉnh sửa</span>
                                     </button>
                                 </a>
+                                {{/if}}
+
+                                {{#if (or (includes ../action "delete") (includes ../action "all"))}}
                                 <button class="icon-btn delete-btn" data-id="{{this.IDNhanVien}}">
                                     <i class="fas fa-trash-alt"></i>
                                     <span class="tooltip">Xóa</span>
                                 </button>
+                                {{/if}}
                             </div>
                         </td>
                     </tr>

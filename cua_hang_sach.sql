@@ -187,8 +187,9 @@ CREATE TABLE ChiTietHoaDonNhap (
 );
 
 CREATE TABLE NhomQuyen (
-   ID_NhomQuyen INT AUTO_INCREMENT PRIMARY KEY,
-    TenNhomQuyen VARCHAR(255) NOT NULL
+    ID_NhomQuyen INT AUTO_INCREMENT PRIMARY KEY,
+    TenNhomQuyen VARCHAR(255) NOT NULL,
+    TinhTrang TINYINT DEFAULT 1
 );
 
 CREATE TABLE DanhMucChucNang (
@@ -225,12 +226,19 @@ INSERT INTO DanhMucChucNang (ChucNang, TenQuyen,QuyenCha) VALUES
 ('qlkho', 'Quản lý kho',NULL),
 ('qlbanhang', 'Quản lý bán hàng',NULL),
 ('admin', 'Admin',NULL),
-('qldoanhnghiep', 'Quản lý nhà cung cấp',NULL),
+('qldoanhnghiep', 'Quản lý doanh nghiệp',NULL),
 ('qlsanpham', 'Sản phẩm','qlkho'),
 ('qldanhmuc', 'Danh Mục','qlkho'),
 ('qlncc', 'Nhà cung cấp','qlkho'),
 ('qlhdn', 'Hoá đơn nhập','qlkho'),
-('qlthongke', 'Thống kê','qlkho');
+('khachhang','Khách hàng','qlbanhang'),
+('qlthongkexuat','Thống kê xuất','qlbanhang'),
+('taikhoan','Tài khoản','admin'),
+('nhomquyen','Nhóm quyền','admin'),
+('nhanvien','Nhân viên','admin'),
+('qlhdx','Hoá đơn xuất','qlbanhang'),
+('qlkhachhang','Khách hàng','qlbanhang'),
+('qlthongkenhap', 'Thống kê nhập','qlkho');
 
 INSERT INTO NhomQuyen (ID_NhomQuyen, TenNhomQuyen) VALUES 
 (1, 'Admin'),
@@ -238,16 +246,6 @@ INSERT INTO NhomQuyen (ID_NhomQuyen, TenNhomQuyen) VALUES
 (3, 'Quản lý kho'),
 (4, 'Người quản lý doanh nghiệp'),
 (5,'Nhân viên kho');
-
-INSERT INTO ChiTietQuyen (ID_NhomQuyen, ChucNang, HanhDong) VALUES
--- Admin rights
-(1, 'admin', 'access'),
-(2, 'qlbanhang', 'access'),
-(2, 'qlbanhang', 'all'),
-(3,'qlkho','access'),
-(4,'qldoanhnghiep','access'),
-(5,'qlkho','access');
-
 
 -- Data insertion for remaining tables
 
@@ -686,6 +684,115 @@ INSERT INTO ChiTietHoaDonXuat (IDHoaDonXuat, IDSanPham, SoLuong, ThanhTien) VALU
 (30, 11, 1, 130000.00),  -- 1 * 130,000
 (30, 18, 1, 110000.00);  -- 2 * 100,000
 
+INSERT INTO ChiTietQuyen (ID_NhomQuyen, ChucNang, HanhDong) VALUES
+-- Admin rights
+(1, 'admin', 'access'),
+(1, 'nhanvien', 'create'),
+(1, 'nhanvien', 'delete'),
+(1, 'nhanvien', 'edit'),
+(1, 'nhanvien', 'view'),
+(1, 'nhomquyen', 'create'),
+(1, 'nhomquyen', 'delete'),
+(1, 'nhomquyen', 'edit'),
+(1, 'nhomquyen', 'view'),
+(1, 'taikhoan', 'create'),
+(1, 'taikhoan', 'delete'),
+(1, 'taikhoan', 'edit'),
+(1, 'taikhoan', 'view'),
+(2, 'qlbanhang', 'access'),
+(2, 'khachhang', 'create'),
+(2, 'khachhang', 'delete'),
+(2, 'khachhang', 'edit'),
+(2, 'khachhang', 'view'),
+(2, 'qlhdx', 'create'),
+(2, 'qlhdx', 'delete'),
+(2, 'qlhdx', 'edit'),
+(2, 'qlhdx', 'view'),
+(2, 'qlkhachhang', 'create'),
+(2, 'qlkhachhang', 'delete'),
+(2, 'qlkhachhang', 'edit'),
+(2, 'qlkhachhang', 'view'),
+(2, 'qlthongkexuat', 'create'),
+(2, 'qlthongkexuat', 'delete'),
+(2, 'qlthongkexuat', 'edit'),
+(2, 'qlthongkexuat', 'view'),
+(3, 'qlkho', 'access'),
+(3, 'qldanhmuc', 'create'),
+(3, 'qldanhmuc', 'delete'),
+(3, 'qldanhmuc', 'edit'),
+(3, 'qldanhmuc', 'view'),
+(3, 'qlhdn', 'create'),
+(3, 'qlhdn', 'delete'),
+(3, 'qlhdn', 'edit'),
+(3, 'qlhdn', 'view'),
+(3, 'qlncc', 'create'),
+(3, 'qlncc', 'delete'),
+(3, 'qlncc', 'edit'),
+(3, 'qlncc', 'view'),
+(3, 'qlsanpham', 'create'),
+(3, 'qlsanpham', 'delete'),
+(3, 'qlsanpham', 'edit'),
+(3, 'qlsanpham', 'view'),
+(3, 'qlthongkenhap', 'create'),
+(3, 'qlthongkenhap', 'delete'),
+(3, 'qlthongkenhap', 'edit'),
+(3, 'qlthongkenhap', 'view'),
+(4, 'qldoanhnghiep', 'access'),
+(4, 'khachhang', 'create'),
+(4, 'khachhang', 'delete'),
+(4, 'khachhang', 'edit'),
+(4, 'khachhang', 'view'),
+(4, 'nhanvien', 'create'),
+(4, 'nhanvien', 'delete'),
+(4, 'nhanvien', 'edit'),
+(4, 'nhanvien', 'view'),
+(4, 'nhomquyen', 'create'),
+(4, 'nhomquyen', 'delete'),
+(4, 'nhomquyen', 'edit'),
+(4, 'nhomquyen', 'view'),
+(4, 'qldanhmuc', 'create'),
+(4, 'qldanhmuc', 'delete'),
+(4, 'qldanhmuc', 'edit'),
+(4, 'qldanhmuc', 'view'),
+(4, 'qlhdn', 'create'),
+(4, 'qlhdn', 'delete'),
+(4, 'qlhdn', 'edit'),
+(4, 'qlhdn', 'view'),
+(4, 'qlhdx', 'create'),
+(4, 'qlhdx', 'delete'),
+(4, 'qlhdx', 'edit'),
+(4, 'qlhdx', 'view'),
+(4, 'qlkhachhang', 'create'),
+(4, 'qlkhachhang', 'delete'),
+(4, 'qlkhachhang', 'edit'),
+(4, 'qlkhachhang', 'view'),
+(4, 'qlncc', 'create'),
+(4, 'qlncc', 'delete'),
+(4, 'qlncc', 'edit'),
+(4, 'qlncc', 'view'),
+(4, 'qlsanpham', 'create'),
+(4, 'qlsanpham', 'delete'),
+(4, 'qlsanpham', 'edit'),
+(4, 'qlsanpham', 'view'),
+(4, 'qlthongkenhap', 'create'),
+(4, 'qlthongkenhap', 'delete'),
+(4, 'qlthongkenhap', 'edit'),
+(4, 'qlthongkenhap', 'view'),
+(4, 'qlthongkexuat', 'create'),
+(4, 'qlthongkexuat', 'delete'),
+(4, 'qlthongkexuat', 'edit'),
+(4, 'qlthongkexuat', 'view'),
+(4, 'taikhoan', 'create'),
+(4, 'taikhoan', 'delete'),
+(4, 'taikhoan', 'edit'),
+(4, 'taikhoan', 'view'),
+(5, 'qlkho', 'access'),
+(5, 'qldanhmuc', 'view'),
+(5, 'qlhdn', 'view'),
+(5, 'qlncc', 'view'),
+(5, 'qlsanpham', 'view'),
+(5, 'qlthongkenhap', 'view');
+
 DELIMITER $$
 
 -- khi thêm hóa đơn
@@ -811,12 +918,3 @@ UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.`TinhTrangThanhToan` = "Chưa hoàn tiền"
 WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
-ALTER TABLE NhomQuyen
-ADD TinhTrang TINYINT DEFAULT 1;
-
-INSERT INTO DanhMucChucNang (ChucNang, TenQuyen,QuyenCha) VALUES
-('taikhoan','Tài khoản','admin'),
-('nhomquyen','Nhóm quyền','admin'),
-('nhanvien','Nhân viên','admin'),
-('qlhdx','Hoá đơn xuất','qlbanhang'),
-('qlthongkexuat','Thống kê','qlbanhang');

@@ -9,7 +9,7 @@ import {
 } from "../app/middlewares/admin/auth.js";
 
 import Dashboard from "../app/controllers/admin/DashboardController.js";
-import perRouter from "./admin/permissions.js";
+import adminRouter from "./admin/index.js";
 import employeeRouter from "./admin/employee.js";
 
 // Import các router phụ bằng ES module
@@ -17,7 +17,6 @@ import employeeRouter from "./admin/employee.js";
 import warehouseRouter from "./warehouse/index.js";
 import salesRouter from "./salesRouter.js";
 import dashboardRouter from "./dashboardRouter.js";
-import indexAdminRouter from "./admin/index.js";
 
 // import saleRouter from "./sale.js";
 
@@ -51,8 +50,12 @@ router.use(
   checkRole(["admin", "qldoanhnghiep"]),
   dashboardRouter
 );
-router.use("/permissions", isLoggedIn, perRouter);
-router.use("/employee", isLoggedIn, employeeRouter);
+router.use(
+  "/", 
+  isLoggedIn, 
+  adminRouter,
+  checkRole(["admin", "qldoanhnghiep"]),
+);
 router.get("/", isLoggedIn, Dashboard.show);
 
 export default router;

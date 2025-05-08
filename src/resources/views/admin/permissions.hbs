@@ -2,18 +2,16 @@
   <link rel="stylesheet" href="/css/admin/permission.css" />
 {{/block}}
 
-{{#block "js"}}
-  <script src="/js/warehouse/permission.js"></script>
-{{/block}}
+  {{!-- {{#block "js"}}
+    <script src="/js/admin/permission.js"></script>
+  {{/block}} --}}
 
 
 <div class="permission-table">
   <div class="inside-table">
     <div class="permissionHeader">
       <h2>Quản lý nhóm quyền</h2>
-       <p>Action:{{action}}</p>
       {{#if (or (includes action "create") (includes action "all"))}}
-
         <div>
           <a href="/admin/permissions/create"><button
               class="add-permission"
@@ -36,17 +34,16 @@
             <td>{{this.TenNhomQuyen}}</td>
             <td>
               <div class="button-container">
-                <a href="/admin/warehouse/permission/view/{{this.ID_NhomQuyen}}">
+                <a href="/admin/permission/view/{{this.ID_NhomQuyen}}">
                   <button class="icon-btn view-btn">
                     <i class="fas fa-eye"></i>
                     <span class="tooltip">Chi tiết</span>
                   </button>
                 </a>
                 
-                  {{#if
-                    (or (includes ../action "edit") (includes ../action "all"))
-                  }}
-    
+                {{#if
+                  (or (includes ../action "edit") (includes ../action "all"))
+                }}
                 <a href="/admin/permissions/update/{{this.ID_NhomQuyen}}">
                   <button class="icon-btn edit-btn">
                     <i class="fas fa-edit"></i>
@@ -55,11 +52,9 @@
                 </a>
                 {{/if}}
 
-                
-                  {{#if
-                    (or (includes ../action "delete") (includes ../action "all"))
-                  }}
-
+                {{#if
+                  (or (includes ../action "delete") (includes ../action "all"))
+                }}
                 <button
                   class="icon-btn delete-btn"
                   data-id="{{this.ID_NhomQuyen}}"

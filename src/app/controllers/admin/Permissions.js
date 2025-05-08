@@ -13,8 +13,8 @@ class Permissions {
 
     permissions = permissions.concat(allPermissions);
 
-    let action = await phanquyen.action(req.session.user.idNQ, "admin");
-    console.log("NÈ" + action);
+    let action = await phanquyen.action(req.session.user.idNQ, "nhomquyen");
+    console.log("NÈ", action);
     try {
       console.log("Vào per nè");
       const listper = await perModel.getAll();
@@ -40,7 +40,7 @@ class Permissions {
     const roles = await perModel.getRolesWithPermissions();
     console.log("ê", roles);
     permissions = permissions.concat(allPermissions);
-    let action = await phanquyen.action(req.session.user.idNQ, "admin");
+    let action = await phanquyen.action(req.session.user.idNQ, "nhomquyen");
     try {
       console.log("Vào per nè");
       const listper = await perModel.getAll();
