@@ -2,7 +2,6 @@ import express from "express";
 
 import DashboardController from "../app/controllers/admin/DashboardController.js";
 const router = express.Router();
-// router.use("/", Permissions.index);
 
 router.use("/", DashboardController.show);
 

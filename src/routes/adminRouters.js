@@ -10,15 +10,9 @@ import {
 
 import Dashboard from "../app/controllers/admin/DashboardController.js";
 import adminRouter from "./admin/index.js";
-import employeeRouter from "./admin/employee.js";
-
-// Import các router phụ bằng ES module
-// import warehouseRouter from "./warehouse.js";
 import warehouseRouter from "./warehouse/index.js";
 import salesRouter from "./salesRouter.js";
 import dashboardRouter from "./dashboardRouter.js";
-
-// import saleRouter from "./sale.js";
 
 router.get("/logout", (req, res) => {
   req.session.destroy((err) => {
@@ -53,8 +47,8 @@ router.use(
 router.use(
   "/", 
   isLoggedIn, 
-  adminRouter,
   checkRole(["admin", "qldoanhnghiep"]),
+  adminRouter
 );
 router.get("/", isLoggedIn, Dashboard.show);
 
