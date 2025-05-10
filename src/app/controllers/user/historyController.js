@@ -19,6 +19,7 @@ const renderHistoryPage = async (req, res) => {
     }
     let history = await getHoaDonByUserIdAndStatus(userId, status);
     history.forEach((hd) => {
+      // console.log(JSON.stringify(hd.ChiTietHoaDonXuat, null, 2));
       console.log("hd", hd.TinhTrangDon);
       switch (hd.TinhTrangDon) {
         case "Chờ xác nhận":
