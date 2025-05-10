@@ -20,13 +20,6 @@ import statisticRouter from "./statistic.js";
 const router = express.Router();
 
 router.use(
-  "/",
-  isLoggedIn,
-  checkPermission(['qldanhmuc', 'qlhdn', 'qlncc', 'qlsanpham', 'qlthongkenhap',"qlkho", "qldoanhnghiep"]),
-  dashboardRouter
-);
-
-router.use(
   "/product",
   isLoggedIn,
   checkPermission(["qlsanpham", "qlkho", "qldoanhnghiep"]),

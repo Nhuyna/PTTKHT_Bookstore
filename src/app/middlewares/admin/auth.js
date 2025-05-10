@@ -51,7 +51,7 @@ export function checkPermission(requiredPermission) {
   return async (req, res, next) => {
     try {
       console.log(">> [checkPermission] Session user:", req.session.user); // 👈 thêm dòng này
-
+      const access = req.session.user.accessList[0];
       const idNQ = req.session.user?.idNQ;
       if (!idNQ) {
         console.log(">> Không có idNQ trong session");
@@ -80,6 +80,7 @@ export function checkPermission(requiredPermission) {
         return res.status(403).render("errors/403", {
           message: "Không có quyền truy cập!",
           layout: false,
+          access
         });
       }
 

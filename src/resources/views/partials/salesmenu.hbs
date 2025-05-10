@@ -17,7 +17,7 @@
     </li>
     {{/if}}
     {{!-- Khách Hàng --}}
-    {{#if (or (includes permissions "khachhang") (includes permissions "qlbanhang"))}}
+    {{#if (includes permissions "khachhang")}}
       <li>
         <a href="/admin/sales/khachhang">
           <span class="icon"><i class="fas fa-users"></i></span>
@@ -26,9 +26,7 @@
       </li>
     {{/if}}
     <!-- Đơn Hàng -->
-    {{#if
-      (or (includes permissions "qlhdx") (includes permissions "qlbanhang"))
-    }}
+    {{#if (includes permissions "qlhdx")}}
 
       <li>
         <a href="/admin/sales/orders/show">
@@ -40,11 +38,7 @@
     {{/if}}
 
     <!-- Khách Hàng -->
-    {{#if
-      (or
-        (includes permissions "qlkhachhang") (includes permissions "qlbanhang")
-      )
-    }}
+    {{#if (includes permissions "qlkhachhang")}}
       <li>
         <a href="/admin/sales/khachhang">
           <!-- Liên kết đến customer management -->
@@ -55,12 +49,7 @@
     {{/if}}
 
     <!-- Thống Kê -->
-    {{#if
-      (or
-        (includes permissions "qlthongkexuat")
-        (includes permissions "qlbanhang")
-      )
-    }}
+    {{#if (includes permissions "qlthongkexuat")}}
       <li>
         <a href="/admin/sales/statistic">
           <!-- Liên kết đến statistic -->

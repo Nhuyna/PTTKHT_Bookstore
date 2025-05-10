@@ -25,7 +25,13 @@
       <h2>Không có quyền truy cập</h2>
       <p>Xin lỗi, bạn không được phép truy cập vào trang này.<br />
         Vui lòng kiểm tra quyền hoặc liên hệ quản trị viên.</p>
-      <a href="/admin">Quay lại trang chủ</a>
+      {{#if (eq access "qlkho")}}
+        <a href="/admin/warehouse">Quay lại trang chủ</a>
+      {{else if (eq access "qlbanhang")}}
+        <a href="/admin/sales">Quay lại trang chủ</a>
+      {{else}}
+        <a href="/admin">Quay lại trang chủ</a>
+      {{/if}}
     </div>
   </body>
 </html>
