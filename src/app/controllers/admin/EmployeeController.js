@@ -231,7 +231,7 @@ class EmployeeController{
 
       permissions = permissions.concat(allPermissions);
       let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
-      res.redirect("/admin/employee", { layout: "admin", permissions, action });
+      res.redirect("/admin/employee");
     } catch (error) {
       console.log(error);
     }
@@ -329,7 +329,7 @@ class EmployeeController{
 
       permissions = permissions.concat(allPermissions);
       let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
-      res.redirect("/admin/employee", { layout: "admin", permissions, action });
+      res.redirect("/admin/employee");
     } catch (error) {
       console.log(error);
     }
@@ -350,7 +350,7 @@ class EmployeeController{
 
       permissions = permissions.concat(allPermissions);
       let action = await phanquyen.action(req.session.user.idNQ, "nhanvien");
-      res.redirect("/admin/employee", { layout: "admin", permissions, action });
+      res.redirect("/admin/employee");
     } catch (error) {
       console.log(error);
     }

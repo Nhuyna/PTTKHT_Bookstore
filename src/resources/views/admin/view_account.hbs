@@ -1,0 +1,37 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/admin/account.css">
+{{/block}}
+
+<div class="account-table">
+    <div class="inside-table">
+        <div class="accountHeader">
+            <h2>Chi Tiết Thông Tin Tài Khoản</h2>
+            <a href="/admin/account"><button class="cancel-btn">Quay lại</button></a>
+        </div>
+
+        <div class="info-container">
+            <div class="info-box">
+                <div class="header">
+                    <p>
+                        <i class="fas fa-user-tie"></i>
+                        <span>Thông tin tài khoản nhân viên</span>
+                    </p>
+                </div>
+                <div class="body">
+                    <div>
+                        <p><strong>Mã nhân viên:</strong></p>
+                        <p><strong>Tên nhân viên:</strong></p>
+                        <p><strong>Nhóm quyền:</strong></p>
+                        <p><strong>Mật khẩu:</strong></p>
+                    </div>
+                    <div class="detail">
+                        <p>{{account.ID_NhanVien}}</p>
+                        <p>{{account.TenNhanVien}}</p>
+                        <p>{{account.TenNhomQuyen}}</p>
+                        <p>{{account.MatKhau}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

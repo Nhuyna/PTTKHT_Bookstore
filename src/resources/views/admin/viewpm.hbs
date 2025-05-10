@@ -8,8 +8,6 @@
       <h2>Chi tiết nhóm quyền</h2>
       <a href="/admin/permissions"><button class="cancel-btn">Quay lại</button></a>
     </div>
-
-  
       <div class="form-group">
         <label for="name" class="form-label">Tên nhóm quyền</label>
         <input
@@ -44,8 +42,7 @@
                 <td>{{this.name}}</td> <!-- Dùng {{this.name}} để lấy tên permission -->
                 <td><input onclick="return false;" type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="view"       {{#if
                     (or (includes this.pm "view") (includes this.pm "all"))
-                  }} checked  {{/if}}
- /></td> 
+                  }} checked  {{/if}}/></td> 
                 <td><input onclick="return false;" type="checkbox" name="quyen[{{../id}}][{{this.code}}][]" value="create"   {{#if
                     (or (includes this.pm "create") (includes this.pm "all"))
                   }} checked  {{/if}} /></td>
@@ -60,8 +57,5 @@
           </tbody>
         </table>
       </div>
-    
-
-
   </div>
 </div>

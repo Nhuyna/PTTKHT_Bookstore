@@ -23,10 +23,17 @@ class Employee {
 
     // Thêm một nhân viên mới
     async insert(name, dob, phone, email, street, ward, district, city, position, dow, salary){
+        let IDNhanVien;
+        let [result] = await pool.execute(
+            `INSERT INTO NhanVien (TenNhanVien, NgaySinh, Mail, SDT, ViTri, SoNhaDuong, PhuongXa, QuanHuyen, TinhThanhPho, NgayVaoLam, Luong) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`, 
+            [name, dob, email, phone, position, street, ward, district, city, dow, salary]
+        );
+        IDNhanVien = result.insertId;
         const query = 
-        `INSERT INTO NhanVien (TenNhanVien, NgaySinh, Mail, SDT, ViTri, SoNhaDuong, PhuongXa, QuanHuyen, TinhThanhPho, NgayVaoLam, Luong) 
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        await pool.execute(query, [name, dob, email, phone, position, street, ward, district, city, dow, salary]);
+        `INSERT INTO TaiKhoan (ID_NhanVien, ID_NhomQuyen, MatKhau, tinhTrang)
+        VALUES (?, NULL, NULL, 0)`;
+        await pool.execute(query, [IDNhanVien]);
     }
 
     // sửa nhân viên

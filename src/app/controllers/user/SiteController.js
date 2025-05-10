@@ -15,7 +15,7 @@ class SiteController {
       const popularProducts = await getBooksinPopularCategory();
       // console.log(popularProducts);
 
-      const isLoggedIn = !!req.session.user_id; 
+      const isLoggedIn = !!req.session.user_id;
       // console.log(popularProducts);
 
       res.render("user/home", {

@@ -1,0 +1,85 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/admin/account.css">
+{{/block}}
+
+{{#block "js"}}
+    <script src="/js/admin/account.js"></script>
+{{/block}}
+
+<div class="account-table">
+    <div class="inside-table">
+        <div class="accountHeader">
+            <h2>Cập Nhật Tài Khoản</h2>
+            <a href="/admin/account"><button class="cancel-btn">Quay lại</button></a>
+        </div>
+
+        <form method="post" action="/admin/account/edit" id="update-account-form">
+            <div class="form-group">
+                <label for="employee" class="form-label">Nhân Viên</label>
+                <input type="text" class="form-control" id="employee" name="employee" 
+                value="{{account.employee_info}}"
+                autocomplete="off"
+                placeholder="Nhập id hoặc tên nhân viên ..."
+                required
+                />
+                <div id="suggestions_employee"></div>
+            </div>
+            <div class="form-group">
+                <label for="permission" class="form-label">Nhóm Quyền</label>
+                <input type="text" class="form-control" id="permission" name="permission" 
+                value="{{account.permission_info}}"
+                autocomplete="off"
+                placeholder="Nhập id hoặc tên nhóm quyền ..."
+                required
+                />
+                <div id="suggestions_permission"></div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="form-label">Mật Khẩu</label>
+                <input type="text" class="form-control" value="{{account.MatKhau}}" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password" class="form-label">Xác Nhận Mật Khẩu</label>
+                <input type="text" class="form-control" value="{{account.MatKhau}}" id="confirm_password" name="confirm_password" required>
+            </div>
+            <button class="add-btn" type="submit">Sửa</button>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById("update-account-form");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm_password");
+
+    form.addEventListener("submit", function(e) {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+
+        if (password !== confirmPassword) {
+            e.preventDefault();
+            alert("Mật khẩu và xác nhận mật khẩu không khớp!");
+            passwordInput.style.borderColor = "red";
+            confirmPasswordInput.style.borderColor = "red";
+        } else {
+            passwordInput.style.borderColor = "";
+            confirmPasswordInput.style.borderColor = "";
+        }
+    });
+
+    confirmPasswordInput.addEventListener("input", function() {
+        const password = passwordInput.value;
+        const confirmPassword = this.value;
+
+        if (confirmPassword.length === 0) {
+            this.classList.remove("valid", "invalid");
+        } else if (password === confirmPassword) {
+            this.classList.remove("invalid");
+            this.classList.add("valid");
+        } else {
+            this.classList.remove("valid");
+            this.classList.add("invalid");
+        }
+    });
+</script>
