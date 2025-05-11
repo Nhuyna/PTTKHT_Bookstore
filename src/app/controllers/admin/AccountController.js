@@ -257,49 +257,17 @@ class AccountController{
 
       // Định nghĩa các cột
       worksheet.columns = [
-        { header: "Mã Nhân Viên", key: "IDNhanVien", width: 15 },
-        { header: "Tên Nhân Viên", key: "TenNhanVien", width: 30 },
-        { header: "Ngày Sinh", key: "NgaySinh", width: 20 },
-        { header: "SĐT", key: "SDT", width: 15 },
-        { header: "Email", key: "Mail", width: 30 },
-        { header: "Số Nhà / Đường", key: "SoNhaDuong", width: 25 },
-        { header: "Phường / Xã", key: "PhuongXa", width: 25 },
-        { header: "Quận / Huyện", key: "QuanHuyen", width: 25 },
-        { header: "Tỉnh / Thành Phố", key: "TinhThanhPho", width: 25 },
-        { header: "Vị trí", key: "ViTri", width: 20 },
-        { header: "Ngày Vào Làm", key: "NgayVaoLam", width: 20 },
-        { header: "Lương", key: "Luong", width: 15 },
+        { header: "Mã Nhân Viên", key: "ID_NhanVien", width: 15 },
+        { header: "Tên Nhân Viên", key: "TenNhanVien", width: 25 },
+        { header: "Nhóm Quyền", key: "TenNhomQuyen", width: 20 },
+        { header: "Mật Khẩu Tài Khoản", key: "MatKhau", width: 20 },
       ];
 
       // Thêm dữ liệu
       data.forEach((item, index) => {
         worksheet.addRow({
-          ...item,
-          NgaySinh: new Date(item.NgaySinh),
-          NgayVaoLam: new Date(item.NgayVaoLam),
+          ...item
         });
-      });
-
-      // Format ngày
-      worksheet.getColumn("NgaySinh").eachCell((cell, rowNumber) => {
-        if (rowNumber > 1 && cell.value instanceof Date) {
-          cell.value = moment(cell.value).format("DD/MM/YYYY");
-        }
-      });
-      worksheet.getColumn("NgayVaoLam").eachCell((cell, rowNumber) => {
-        if (rowNumber > 1 && cell.value instanceof Date) {
-          cell.value = moment(cell.value).format("DD/MM/YYYY");
-        }
-      });
-      // Format tiền
-      worksheet.getColumn("Luong").eachCell((cell, rowNumber) => {
-        if (rowNumber > 1) {
-          const value = Number(cell.value);
-          cell.value = new Intl.NumberFormat("vi-VN", {
-            style: "currency",
-            currency: "VND",
-          }).format(value);
-        }
       });
 
       // Xuất file

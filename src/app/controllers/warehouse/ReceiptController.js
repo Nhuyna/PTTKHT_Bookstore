@@ -81,6 +81,7 @@ class ReceiptController {
   async view(req, res) {
     try {
       const { id } = req.params;
+      const from = req.query.from || 'list';
       const receipt_info = (await receiptConfig.view(id))[0];
       const product_detail = await receiptConfig.view_product_in_receipt(id);
       let permissions = (
@@ -99,6 +100,7 @@ class ReceiptController {
 
       res.render("warehouse/view_receipt", {
         id,
+        from,
         receipt_info,
         product_detail,
         layout: "admin",
@@ -320,7 +322,7 @@ class ReceiptController {
       // Format ngày và tiền
       worksheet.getColumn("NgayNhap").eachCell((cell, rowNumber) => {
         if (rowNumber > 1 && cell.value instanceof Date) {
-          cell.value = moment(cell.value).format("DD/MM/YY HH:mm");
+          cell.value = moment(cell.value).format("DD/MM/YYYY HH:mm");
         }
       });
 

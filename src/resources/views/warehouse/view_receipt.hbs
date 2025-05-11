@@ -10,7 +10,12 @@
   <div class="inside-table">
     <div class="receiptHeader">
       <div class="des-receiptHeader">
-        <p style="font-size: x-large;color: black;">Chi Tiết Hóa Đơn #{{id}}</p>
+        <div class="title-with-back">
+          <a href="{{#if (eq from 'statistic')}}/admin/warehouse/statistic{{else}}/admin/warehouse/receipt{{/if}}" class="btn-back-round">
+            <i class="fas fa-arrow-left"></i>
+          </a>
+          <p style="font-size: x-large;color: black;">Chi Tiết Hóa Đơn #{{id}}</p>
+        </div>
         <p>Nhân viên tạo đơn: {{receipt_info.TenNhanVien}}</p>
         <p>Ngày lập đơn:
           {{formatDate receipt_info.NgayNhap "DD/MM/YYYY HH:mm"}}</p>
