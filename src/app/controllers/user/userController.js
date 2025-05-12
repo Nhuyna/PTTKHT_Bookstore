@@ -23,7 +23,7 @@ const renderAccountPage = async (req, res, next) => {
         let rawDate = user.NgaySinh;
 
         if (rawDate instanceof Date) {
-          rawDate = rawDate.toISOString().split("T")[0]; // yyyy-mm-dd
+          rawDate = rawDate.toISOString().split("T")[0]; 
         }
 
         if (rawDate) {
@@ -34,6 +34,12 @@ const renderAccountPage = async (req, res, next) => {
         }
       }
     }
+    console.log(      user_name,
+      user_lastname,
+      dateOfBirth,
+      monthOfBirth,
+      yearOfBirth)
+    console.log(user)
 
     res.render("user/account", {
       user_name,
@@ -59,59 +65,79 @@ const changeUserInfo = async (req, res, next) => {
     user_lastname,
     user_telephone,
   } = req.body;
-  const userfullName = user_lastname.trim() + " " + user_name.trim();
+
+  if (!dateOfBirth || !monthOfBirth || !yearOfBirth || !user_name || !user_lastname) {
+    return res.status(400).json({
+      success: false,
+      message: "Vui lòng nhập đầy đủ thông tin.",
+    });
+  }
+
   const isValidDate = /^(0?[1-9]|[12][0-9]|3[01])$/.test(dateOfBirth);
   const isValidMonth = /^(0?[1-9]|1[0-2])$/.test(monthOfBirth);
   const isValidYear = parseInt(yearOfBirth) < new Date().getFullYear();
-  const isValidPhone = !user_telephone || /^0\d{9}$/.test(user_telephone);
-
-  if (
-    !dateOfBirth ||
-    !monthOfBirth ||
-    !yearOfBirth ||
-    !user_name ||
-    !user_lastname
-  ) {
-    return res.redirect(
-      `/user/errorPage?error=${encodeURIComponent("nhập không đủ thông tin")}`
-    );
-  }
+  const isValidPhone = !user_telephone || /^(0[2-9][0-9]{8,9})$/;
 
   if (!isValidDate || !isValidMonth || !isValidYear) {
-    return res.redirect(
-      `/user/errorPage?error=${encodeURIComponent("nhập sai giá trị")}`
-    );
+    return res.status(400).json({
+      success: false,
+      message: "Ngày/tháng/năm sinh không hợp lệ.",
+    });
   }
+
+  if (user_telephone && !isValidPhone) {
+    return res.status(400).json({
+      success: false,
+      message: "Số điện thoại không hợp lệ.",
+    });
+  }
+  console.log(
+        dateOfBirth,
+    monthOfBirth,
+    yearOfBirth,
+    user_name,
+    user_lastname,
+    user_telephone
+
+  )
 
   try {
-    // console.log(req.session.user_id);
     const user = await UserModel.getUserById(req.session.user_id);
     if (!user) {
-      return res.redirect(
-        "/user/errorPage?error=" + encodeURIComponent("lỗi phiên làm việc")
-      );
+      return res.status(401).json({
+        success: false,
+        message: "Phiên làm việc không hợp lệ.",
+      });
     }
 
-    const birthDateStr = `${yearOfBirth}-${monthOfBirth}-${dateOfBirth}`;
+    const fullName = user_lastname.trim() + " " + user_name.trim();
+    const birthDateStr = `${yearOfBirth}-${monthOfBirth.padStart(2, "0")}-${dateOfBirth.padStart(2, "0")}`;
+
     if (!user_telephone) {
       await UserModel.updateUserInfoNoPhone(user.ID_KH, {
-        TenKH: userfullName,
+        TenKH: fullName,
         NgaySinh: birthDateStr,
       });
-    } else if (isValidPhone) {
-      await UserModel.updateUserInfo(req.session.user_id, {
-        SDT: user_telephone,
-        TenKH: userfullName,
+    } else {
+      await UserModel.updateUserInfo(user.ID_KH, {
+        TenKH: fullName,
         NgaySinh: birthDateStr,
+        SDT: user_telephone,
       });
     }
 
-    res.send("Đã cập nhật thành công");
+    return res.json({ success: true, message: "Cập nhật thành công!" });
+
   } catch (error) {
-    console.error(error);
-    next(error);
+    console.error("Lỗi khi cập nhật:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Đã xảy ra lỗi khi cập nhật thông tin.",
+    });
   }
 };
+
+
 
 const errorPage = async (req, res) => {
   const errorMessage = req.query.error;
@@ -145,43 +171,54 @@ const login = async (req, res, next) => {
 
 
 const changePasswordUser = async (req, res, next) => {
-  const { user_old_password, user_new_password, user_confirm_new_password } =
-    req.body;
+  const { user_old_password, user_new_password, user_confirm_new_password } = req.body;
 
+  // Kiểm tra thiếu thông tin
   if (!user_old_password || !user_new_password || !user_confirm_new_password) {
-    return res.redirect(
-      "/user/account?error=" + encodeURIComponent("Thiếu thông tin")
-    );
+    return res.status(400).json({
+      success: false,
+      message: "Vui lòng nhập đầy đủ thông tin."
+    });
   }
 
+  // Kiểm tra xác nhận mật khẩu
   if (user_new_password !== user_confirm_new_password) {
-    return res.redirect(
-      "/user/account?error=" +
-        encodeURIComponent("Mật khẩu xác nhận không khớp")
-    );
+    return res.status(400).json({
+      success: false,
+      message: "Mật khẩu xác nhận không khớp."
+    });
   }
 
   try {
+    // Kiểm tra mật khẩu cũ đúng không
     const user = await UserModel.findUserByIdAndPassword(
       req.session.user_id,
       user_old_password
     );
 
     if (!user) {
-      return res.redirect(
-        "/user/account?error=" + encodeURIComponent("Mật khẩu cũ không đúng")
-      );
+      return res.status(401).json({
+        success: false,
+        message: "Mật khẩu hiện tại không đúng."
+      });
     }
 
+    // Cập nhật mật khẩu mới
     await UserModel.updatePassword(req.session.user_id, user_new_password);
 
-    res.redirect(
-      "/user/account?success=" + encodeURIComponent("Đổi mật khẩu thành công")
-    );
+    return res.json({
+      success: true,
+      message: "Đổi mật khẩu thành công!"
+    });
   } catch (error) {
-    next(error);
+    console.error("Lỗi đổi mật khẩu:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Đã xảy ra lỗi, vui lòng thử lại sau."
+    });
   }
 };
+
 
 const registerUser = async (req, res, next) => {
   try {

@@ -113,11 +113,9 @@ const afterpayment = async (req, res) => {
     const userId = req.session.user_id;
     console.log("cart : ", cart);
 
-    if (!cart || cart.length === 0) {
-      return res.redirect("/cart");
-    }
 
     const { TenKH, SDT, address, phuong, quan, thanhpho, payment } = req.body;
+    console.log(TenKH, SDT, address, phuong, quan, thanhpho, payment)
 
     const IDDiaChi =await OrderModel.capNhatDiaChi({
       ID_KH: userId,

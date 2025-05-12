@@ -4,19 +4,16 @@
     <div class="max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-md mt-10">
       <h2 class="text-2xl font-bold mb-6 text-gray-800">ĐỊA CHỈ GIAO HÀNG</h2>
 
-      <!-- Họ và tên -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Họ và tên người nhận</label>
         <input name="TenKH" type="text" required placeholder="Nhập họ và tên" class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition" />
       </div>
 
-      <!-- Số điện thoại -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Số điện thoại</label>
         <input id="std" name="SDT" type="tel" required placeholder="Nhập số điện thoại" class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition" />
       </div>
 
-      <!-- Tỉnh/Thành phố -->
       <div class="overflow-visible z-10 relative">
         <label class="block text-sm font-medium text-gray-700 mb-1">Tỉnh/Thành Phố</label>
         <select id="province" name="thanhpho" required class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition">
@@ -24,7 +21,6 @@
         </select>
       </div>
 
-      <!-- Quận/Huyện -->
       <div class="overflow-visible z-10 relative">
         <label class="block text-sm font-medium text-gray-700 mb-1">Quận/Huyện</label>
         <select id="district" name="quan" required class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition">
@@ -32,7 +28,6 @@
         </select>
       </div>
 
-      <!-- Phường/Xã -->
       <div class="overflow-visible z-10 relative">
         <label class="block text-sm font-medium text-gray-700 mb-1">Phường/Xã</label>
         <select id="ward" name="ward" required class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition">
@@ -40,13 +35,11 @@
         </select>
       </div>
 
-      <!-- Địa chỉ nhận hàng -->
       <div>
         <label class="block text-sm font-medium text-gray-700 mb-1">Địa chỉ nhận hàng</label>
         <input name="address" type="text" required placeholder="Nhập địa chỉ cụ thể (số nhà, tên đường...)" class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition" />
       </div>
 
-      <!-- PHƯƠNG THỨC THANH TOÁN -->
       <div class="mt-6">
         <h3 class="text-lg font-semibold border-b pb-2 mb-4 text-gray-800">PHƯƠNG THỨC THANH TOÁN</h3>
         <div class="space-y-4">
@@ -74,7 +67,6 @@
       </div>
     </div>
 
-    <!-- Kiểm tra lại đơn hàng -->
     <div class="mb-10 mt-4 max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg font-sans">
       <h2 class="text-lg font-bold text-gray-800 mb-4 uppercase">Kiểm tra lại đơn hàng</h2>
       {{#each cart}}
@@ -94,7 +86,6 @@
       {{/each}}
     </div>
 
-    <!-- Thanh toán và đồng ý điều khoản -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t shadow-md z-50">
       <div class="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
         <label class="flex items-center space-x-2 text-sm text-gray-600">
@@ -1426,3 +1417,41 @@
   });
 </script>
 
+<script>
+  document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new URLSearchParams(new FormData(form));
+    
+    const phone = document.getElementById("std").value.trim();
+    const phoneRegex = /^(0[2-9][0-9]{8,9})$/;
+
+    if (!phoneRegex.test(phone)) {
+      alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.");
+      return;
+    }
+
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        alert(data.message || "Đặt hàng thành công!");
+        window.location.href = "/cart/confirm"; 
+      } else {
+        alert(data.message || "Đặt hàng thất bại. Vui lòng thử lại.");
+      }
+    } catch (err) {
+      console.error("Lỗi khi gửi đơn hàng:", err);
+      alert("Có lỗi xảy ra, vui lòng thử lại.");
+    }
+  });
+</script>
