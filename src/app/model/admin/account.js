@@ -43,7 +43,7 @@ class Account {
     // Lấy thông tin nhóm quyền
     async get_permission() {
         const query = 
-        `SELECT CONCAT(ID_NhomQuyen, ' - ', TenNhomQuyen) AS permission_info
+        `SELECT ID_NhomQuyen, CONCAT(ID_NhomQuyen, ' - ', TenNhomQuyen) AS permission_info
         FROM NhomQuyen
         WHERE TinhTrang = 1`;
         const [rows] = await pool.execute(query);
@@ -53,7 +53,7 @@ class Account {
     // lấy thông tin nhân viên
     async get_account_info(id) {
         const query = 
-        `SELECT CONCAT(NhanVien.IDNhanVien, ' - ', TenNhanVien) AS employee_info,
+        `SELECT CONCAT(NhanVien.IDNhanVien, ' - ', TenNhanVien) AS employee_info, TaiKhoan.ID_NhomQuyen, 
         CONCAT(NhomQuyen.ID_NhomQuyen, ' - ', TenNhomQuyen) AS permission_info, TaiKhoan.MatKhau
         FROM NhanVien
         JOIN TaiKhoan ON NhanVien.IDNhanVien = TaiKhoan.ID_NhanVien
@@ -67,7 +67,16 @@ class Account {
     }
 
     // sửa nhân viên
-    async update(employee_id, permission_id, password){
+    async update_old_password(employee_id, permission_id, password){
+        const query = 
+        `UPDATE TaiKhoan  
+        SET ID_NhomQuyen = ?,
+            tinhTrang = 1
+        WHERE ID_NhanVien = ?`;
+        await pool.execute(query, [permission_id, password, employee_id]);
+    }
+
+    async update_change_password(employee_id, permission_id, password){
         const query = 
         `UPDATE TaiKhoan  
         SET ID_NhomQuyen = ?, 

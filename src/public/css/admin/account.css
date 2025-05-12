@@ -29,6 +29,7 @@
 }
 .reset-btn{
     display: inline-block;
+    margin: 0 10px;
     padding: 5px 15px;
     font-size: 18px;
     color: white;
@@ -404,4 +405,24 @@ select{
         opacity: 1;
         transform: scale(1);
     }
+}
+.fa-eye{
+    margin: 18px 5px;
+}
+.fa-eye-slash{
+    margin: 18px 5px;
+}
+#password-section {
+    display: none;
+}
+.password-wrapper {
+  position: relative;
+}
+.password-wrapper .toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #aaa;
 }
