@@ -6,43 +6,38 @@ class Dashboard extends BaseModel {
     super("SanPham", "SanPhamID");
   }
 
-  async getTopProductsByDateRange(startDate, endDate) {
+  async getTopProductsByCurrentMonth(limit = 5) {
     try {
-      let sql = `SELECT GROUP_CONCAT(tg.TenTacGia SEPARATOR ', ') as DSTG , sp.*, SUM(cthdx.SoLuong) as DaBan,  SUM(cthdn.SoLuong) AS TongSL, anhsp.Anh
-               FROM sanpham sp
-               INNER JOIN chitiethoadonxuat cthdx ON cthdx.IDSanPham = sp.SanPhamID
-               INNER JOIN hoadonxuat hdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
-               INNER JOIN chitiethoadonnhap cthdn ON cthdn.IDSanPham = sp.SanPhamID
-               INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
-               INNER JOIN anhsp ON anhsp.ID_SP = sp.SanPhamID
-               INNER JOIN sp_tg ON sp_tg.SanPhamID = sp.SanPhamID
-               INNER JOIN tacgia tg ON tg.IDTacGia = sp_tg.IDTacGia
-               WHERE anhsp.STT = 1
-               `;
+      const sql = `
+            SELECT 
+              sp.SanPhamID, 
+              sp.TenSanPham, 
+              dm.TenDanhMuc AS DanhMuc,
+              sp.Gia AS GiaBan, 
+              SUM(cthdx.SoLuong) AS SoLuongBan,
+              SUM(cthdx.ThanhTien) AS DoanhThu
+            FROM chitiethoadonxuat cthdx
+            INNER JOIN hoadonxuat hdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
+            INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
+            INNER JOIN sanpham sp ON sp.SanPhamID = cthdx.IDSanPham
+            INNER JOIN sp_dm ON sp_dm.SanPhamID = sp.SanPhamID
+            INNER JOIN danhmuc dm ON dm.DanhMucID = sp_dm.DanhMucID
+            WHERE gh.TinhTrangDon = 'Đã giao'
+            AND gh.NgayGiaoHang BETWEEN DATE_FORMAT('2025-04-30', '%Y-%m-01') AND '2025-04-30'
+            GROUP BY sp.SanPhamID, sp.TenSanPham, dm.TenDanhMuc, sp.Gia
+            ORDER BY SoLuongBan DESC
+            LIMIT ?
+          `;
 
-      if (startDate && endDate) sql += ` AND gh.NgayGiaoHang BETWEEN ? AND ?`;
-      else sql += ` AND gh.NgayGiaoHang = ?`;
-
-      sql += `
-      AND gh.TinhTrangDon = 'Đã giao'
-      GROUP BY sp.SanPhamID, anhsp.Anh
-      ORDER BY DaBan DESC
-      LIMIT 5
-    `;
-
-      const [product] = await db.query(
-        sql,
-        startDate && endDate ? [startDate, endDate] : [startDate]
-      );
-
-      return product;
+      const [topProducts] = await db.query(sql, [limit]);
+      return topProducts;
     } catch (error) {
-      console.error("Error fetching top products:", error);
+      console.error("Error fetching top selling products:", error);
       throw error;
     }
   }
 
-  async getDashboard(startDate, endDate) {
+  async getDashboard() {
     try {
       let sql = `SELECT SUM(cthdx.SoLuong) as DaBan, SUM(cthdx.ThanhTien) AS TongTien, COUNT(DISTINCT hdx.IDHoaDonXuat) AS SoHDX, 
                         COUNT(DISTINCT hdx.ID_KH) AS SoKH
@@ -51,14 +46,7 @@ class Dashboard extends BaseModel {
                  INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
                  WHERE gh.TinhTrangDon = 'Đã giao'
               `;
-
-      if (startDate && endDate) sql += ` AND gh.NgayGiaoHang BETWEEN ? AND ?`;
-      else sql += ` AND gh.NgayGiaoHang = ?`;
-
-      const [dashboard] = await db.query(
-        sql,
-        startDate && endDate ? [startDate, endDate] : [startDate]
-      );
+      const [dashboard] = await db.query(sql);
 
       return dashboard;
     } catch (error) {
@@ -89,7 +77,7 @@ class Dashboard extends BaseModel {
                     INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
                     INNER JOIN sanpham sp ON sp.SanPhamID = cthdx.IDSanPham
                     WHERE gh.TinhTrangDon = 'Đã giao'
-                    AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(CURRENT_DATE(), '%Y-%m-01') AND CURRENT_DATE()
+                    AND gh.NgayGiaoHang BETWEEN DATE_FORMAT('2025-04-30', '%Y-%m-01') AND '2025-04-30'
                     GROUP BY DATE(gh.NgayGiaoHang)
                     ORDER BY DATE(gh.NgayGiaoHang)`;
 
