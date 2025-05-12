@@ -173,7 +173,6 @@ const login = async (req, res, next) => {
 const changePasswordUser = async (req, res, next) => {
   const { user_old_password, user_new_password, user_confirm_new_password } = req.body;
 
-  // Kiểm tra thiếu thông tin
   if (!user_old_password || !user_new_password || !user_confirm_new_password) {
     return res.status(400).json({
       success: false,
@@ -181,7 +180,6 @@ const changePasswordUser = async (req, res, next) => {
     });
   }
 
-  // Kiểm tra xác nhận mật khẩu
   if (user_new_password !== user_confirm_new_password) {
     return res.status(400).json({
       success: false,
@@ -190,7 +188,6 @@ const changePasswordUser = async (req, res, next) => {
   }
 
   try {
-    // Kiểm tra mật khẩu cũ đúng không
     const user = await UserModel.findUserByIdAndPassword(
       req.session.user_id,
       user_old_password
@@ -203,7 +200,6 @@ const changePasswordUser = async (req, res, next) => {
       });
     }
 
-    // Cập nhật mật khẩu mới
     await UserModel.updatePassword(req.session.user_id, user_new_password);
 
     return res.json({

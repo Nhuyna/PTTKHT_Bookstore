@@ -23,7 +23,7 @@
 
       <div class="overflow-visible z-10 relative">
         <label class="block text-sm font-medium text-gray-700 mb-1">Quận/Huyện</label>
-        <select id="district" name="quan" required class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition">
+        <select id="district" name="district" required class="w-full border border-gray-300 rounded-xl px-4 py-2 focus:ring-2 focus:ring-blue-500 transition">
           <option value="">Chọn quận/huyện</option>
         </select>
       </div>
@@ -1373,49 +1373,7 @@
   });
 
 </script>
-<script>
-  document.getElementById('checkoutForm').addEventListener('submit', async function (e) {
-    e.preventDefault(); 
 
-    const form = e.target;
-    const phoneInput = form.querySelector('input[name="SDT"]');
-    const phoneNumber = phoneInput.value.trim();
-
-    // Kiểm tra số điện thoại Việt Nam
-    const phoneRegex = /^(0[2-9][0-9]{8,9})$/;
-    if (!phoneRegex.test(phoneNumber)) {
-      alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.");
-      phoneInput.focus();
-      return; // Dừng gửi form
-    }
-
-    const formData = new FormData(form);
-    const submitButton = form.querySelector('button[type="submit"]');
-    submitButton.disabled = true;
-    submitButton.textContent = "Đang xử lý...";
-
-    try {
-      const res = await fetch(form.action, {
-        method: 'POST',
-        body: formData,
-      });
-      const text = await res.text();
-      if (res.redirected) {
-        window.location.href = res.url;
-      } else if (res.ok) {
-        document.body.innerHTML = text;
-      } else {
-        alert('Lỗi khi gửi đơn hàng.');
-      }
-    } catch (error) {
-      console.error('Lỗi AJAX:', error);
-      alert('Đã có lỗi xảy ra khi gửi đơn hàng.');
-    } finally {
-      submitButton.disabled = false;
-      submitButton.textContent = "Xác nhận thanh toán";
-    }
-  });
-</script>
 
 <script>
   document.getElementById("checkoutForm").addEventListener("submit", async function (e) {
@@ -1431,6 +1389,7 @@
       alert("Số điện thoại không hợp lệ. Vui lòng nhập đúng định dạng.");
       return;
     }
+    
 
     try {
       const res = await fetch(form.action, {
@@ -1438,7 +1397,8 @@
         headers: {
           "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: formData
+        body: formData,
+        credentials: "include"
       });
 
       const data = await res.json();
