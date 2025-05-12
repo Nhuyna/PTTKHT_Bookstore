@@ -13,7 +13,6 @@
             <h2>Tài khoản</h2>
             <div>
                 <a href="/admin/account"><button class="reset-btn">Làm Mới</button></a>
-                <a href="/admin/account/create_excel"><button class="excel-btn">Xuất Excel</button></a>
                 {{#if (or (includes action "create") (includes action "all"))}}
                 <a href="/admin/account/create"><button class="add-account">Thêm Nhân Viên</button></a>
                 {{/if}}

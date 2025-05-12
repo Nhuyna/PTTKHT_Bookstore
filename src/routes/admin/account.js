@@ -10,8 +10,6 @@ router.get('/view/:id', AccountController.view);
 
 router.get('/create', AccountController.create);
 
-router.get('/create_excel', AccountController.create_excel);
-
 router.post('/store', AccountController.store);
 
 router.get('/update/:id', AccountController.update);

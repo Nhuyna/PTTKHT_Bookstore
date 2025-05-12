@@ -1,27 +1,61 @@
 import moment from "moment";
 
 export default {
+  // Helper to create a new instance of a built-in object
+  new: function (context) {
+    if (context === "Date") {
+      return new Date();
+    }
+    return null;
+  },
+
+  // Convert object to JSON string for Handlebars templates
+  JSON: function (context) {
+    return JSON.stringify(context);
+  },
+
   formatNumber: (number) => {
     const num = Number(number);
     if (isNaN(num)) return "";
     return num.toLocaleString("vi-VN") + "₫";
   },
 
+  formatNumberWithDecimals: (number, decimals = 0) => {
+    const num = Number(number);
+    if (isNaN(num)) return "";
+    return num.toLocaleString("vi-VN", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    });
+  },
   formatCurrency: (value) =>
     new Intl.NumberFormat("vi-VN", {
       style: "currency",
       currency: "VND",
     }).format(value),
 
-  formatDate: (timestamp, fmt) => moment(timestamp).format(fmt),
+  formatDate: (timestamp, fmt = "DD/MM/YYYY") => {
+    if (!timestamp) return "";
+    // Ensure format is a string
+    const formatStr = fmt && typeof fmt === "string" ? fmt : "DD/MM/YYYY";
+    const date = moment(timestamp);
+    return date.isValid() ? date.format(formatStr) : "";
+  },
+
+  formatID: (id) => id.toString().padStart(3, "0"),
 
   inc: (value) => parseInt(value, 10) + 1,
 
   add: (a, b) => Number(a) + Number(b),
 
   subtract: (a, b) => Number(a) - Number(b),
-
   eq: (a, b) => a == b,
+
+  gt: (a, b) => a > b,
+
+  lt: (a, b) => a < b,
+
+  multiply: (a, b) => Number(a) * Number(b),
 
   or: (...args) => {
     const options = args.pop();
@@ -221,5 +255,9 @@ export default {
 
     const newQuery = { ...query };
     return "?" + new URLSearchParams(newQuery).toString();
+  },
+  PhanTram: function (a, b) {
+    if (b === 0) return 0;
+    return ((a - b) / b) * 100;
   },
 };
