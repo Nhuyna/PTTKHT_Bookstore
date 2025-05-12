@@ -198,7 +198,7 @@ const addToCart = async (req, res) => {
         success: false,
         message: "Vui lòng đăng nhập để thêm vào giỏ hàng!",
         redirect: "/user/account", 
-      });
+      }); 
     }
 
     if (!productId) {
@@ -245,7 +245,25 @@ const getcartCount = async (req, res) => {
     });
   }
 };
+const deleteCartItem = async (req, res) => {
+  const { book_id } = req.body;
+  const userId = req.session.user_id;
 
+  if (!userId || !book_id) {
+    return res.json({ success: false, message: 'Thiếu thông tin!' });
+  }
+
+  try {
+    await CartModel.deleteItem(userId, book_id);
+
+    const totalPrice = await CartModel.getTotalPrice(userId);
+
+    res.json({ success: true, totalPrice });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, message: 'Lỗi server!' });
+  }
+};
 export default {
   renderCartPage,
   thanhtoan,
@@ -253,4 +271,5 @@ export default {
   renderThankYouPage,
   addToCart,
   getcartCount,
+  deleteCartItem,
 };

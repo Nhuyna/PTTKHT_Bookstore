@@ -912,3 +912,10 @@ UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.`TinhTrangThanhToan` = "Chưa hoàn tiền"
 WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
+
+
+DELETE FROM Khachhang WHERE ID_KH = 0;
+ALTER TABLE Khachhang AUTO_INCREMENT = 21;
+ALTER TABLE khachhang
+MODIFY COLUMN ID_KH INT NOT NULL AUTO_INCREMENT;
+

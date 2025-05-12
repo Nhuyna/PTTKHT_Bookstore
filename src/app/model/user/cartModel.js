@@ -1,6 +1,6 @@
 import database from "../../../config/db.js";
 
-const getCartByUserId = async (userId) => {  
+const getCartByUserId = async (userId) => {   
   const query = `
 SELECT 
     KhachHang.*, 
@@ -90,6 +90,37 @@ const xoaSanPhamTrongGio = async (ID_KH, ID_SP) => {
     throw error;
   }
 };
+const deleteItem = async (userId, productId) => {
+  try {
+    await database.query(
+      `DELETE FROM GioHang WHERE ID_KH = ? AND ID_SP = ?`,
+      [userId, productId]
+    );
+    return { success: true };
+  } catch (error) {
+    console.error("❌ Lỗi khi xóa sản phẩm khỏi giỏ hàng:", error);
+    throw error;
+  }
+};
+const getTotalPrice = async (userId) => {
+  try {
+    const [rows] = await database.query(
+      `SELECT SanPham.Gia, GioHang.SoLuong 
+       FROM GioHang 
+       JOIN SanPham ON GioHang.ID_SP = SanPham.SanPhamID 
+       WHERE GioHang.ID_KH = ?`,
+      [userId]
+    );
 
+    const totalPrice = rows.reduce((acc, item) => {
+      return acc + item.Gia * item.SoLuong;
+    }, 0);
+
+    return totalPrice;
+  } catch (error) {
+    console.error("❌ Lỗi khi tính tổng giá trị giỏ hàng:", error);
+    throw error;
+  }
+}
 export default { getCartByUserId, themVaoGio, xoaSanPhamTrongGio,
-  taoHoaDon };
+  taoHoaDon,getTotalPrice,deleteItem };

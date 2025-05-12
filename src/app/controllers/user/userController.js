@@ -122,33 +122,27 @@ const login = async (req, res, next) => {
   const { user_telephone, user_password } = req.body;
 
   if (!user_telephone || !user_password) {
-    return res.redirect("/account?error=missing_fields");
+    return res.status(400).json({ success: false, message: "Vui lòng nhập đầy đủ thông tin." });
   }
 
   try {
     const user = await UserModel.findUserByPhone(user_telephone);
     if (!user) {
-      console.log("Không tìm thấy user với số điện thoại:", user_telephone);
-      return res.redirect("/user/account?error=telephone_not_found");
-    }
-
-    // console.log("User tìm được:", user);
-    // console.log("Mật khẩu của user là:", user.MatKhau);
-
-    if (!user) {
-      return res.redirect("/user/account?error=telephone_not_found");
+      return res.status(401).json({ success: false, message: "Số điện thoại không tồn tại." });
     }
 
     if (user.MatKhau !== user_password) {
-      return res.redirect("/user/account?error=incorrect_password");
+      return res.status(401).json({ success: false, message: "Mật khẩu không đúng." });
     }
 
     req.session.user_id = user.ID_KH;
-    res.redirect("/");
+    return res.json({ success: true, message: "Đăng nhập thành công" });
   } catch (err) {
-    next(err);
+    console.error("Lỗi khi đăng nhập:", err);
+    return res.status(500).json({ success: false, message: "Lỗi server, vui lòng thử lại." });
   }
 };
+
 
 const changePasswordUser = async (req, res, next) => {
   const { user_old_password, user_new_password, user_confirm_new_password } =
@@ -198,32 +192,23 @@ const registerUser = async (req, res, next) => {
       user_name,
       user_account_name,
     } = req.body;
+    console.log(user_telephone,      user_password,
+      user_confirm_password,
+      user_name,
+      user_account_name,)
 
-    if (!user_telephone) {
-      return res.redirect(
-        "user/errorPage?error=" + encodeURIComponent("Chưa nhập số điện thoại")
-      );
+    if (!user_password || !user_account_name || !user_name) {
+      return res.status(400).json({ success: false, message: "Chưa nhập đủ thông tin" });
+    }
+
+    if (user_password !== user_confirm_password) {
+      return res.status(400).json({ success: false, message: "Mật khẩu không khớp" });
     }
 
     const existingUser = await UserModel.findUserByPhone(user_telephone);
 
     if (existingUser) {
-      return res.redirect(
-        "user/errorPage?error=" + encodeURIComponent("Số điện thoại đã tồn tại")
-      );
-    }
-
-    if (!user_password || !user_account_name || !user_name) {
-      return res.redirect(
-        "user/errorPage?error=" + encodeURIComponent("Chưa nhập đủ thông tin")
-      );
-    }
-
-    if (user_password !== user_confirm_password) {
-      return res.redirect(
-        "user/errorPage?error=" +
-          encodeURIComponent("Mật khẩu xác nhận không khớp")
-      );
+      return res.status(400).json({ success: false, message: "Số điện thoại đã tồn tại" });
     }
 
     await UserModel.createUser({
@@ -232,15 +217,17 @@ const registerUser = async (req, res, next) => {
       user_telephone,
       user_password,
     });
-    return res.redirect("/");
+
+    return res.json({ success: true, message: "Đăng ký thành công" });
   } catch (error) {
     console.error("Lỗi đăng ký:", error);
-    return res.redirect(
-      "user/errorPage?error=" +
-        encodeURIComponent("Đã xảy ra lỗi, vui lòng thử lại")
-    );
+    return res.status(500).json({
+      success: false,
+      message: "Đã xảy ra lỗi, vui lòng thử lại sau",
+    });
   }
 };
+
 
 const logoutUser = (req, res, next) => {
   req.session.destroy((err) => {

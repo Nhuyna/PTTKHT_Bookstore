@@ -17,16 +17,27 @@
               <!-- Menu Sidebar -->
               <nav class="space-y-2 text-sm">
                 <div>
-                  <p class="text-red-600 font-semibold mb-2 text-[18px]">Thông tin tài khoản</p>
-                  <ul class="space-y-2 pl-2">
-                    <li><a  onclick="showForm('mainForm')" href="#" class="block text-[18px] text-red-500 font-medium hover:text-red-1000 transition">Hồ sơ cá nhân</a></li>
-                    <li><a  onclick="showForm('changePass')" href="#" class="block text-[18px] text-red-500 font-medium hover:text-red-1000 transition">Đổi mật khẩu</a></li>
-                  </ul>
+                  <p class="text-blue-400 font-bold text-lg mb-3">Thông tin tài khoản</p>
+                  <div class="space-y-2">
+                    <div onclick="showForm('mainForm')" class="cursor-pointer bg-red-50 hover:bg-red-100 text-red-600 font-medium px-4 py-2 rounded-lg shadow-sm transition">
+                      Hồ sơ cá nhân
+                    </div>
+                    <div onclick="showForm('changePass')" class="cursor-pointer bg-red-50 hover:bg-red-100 text-red-600 font-medium px-4 py-2 rounded-lg shadow-sm transition">
+                      Đổi mật khẩu
+                    </div>
+                  </div>
                 </div>
                 <div class="pt-3 border-t mt-4">
                   <a href="#" class="flex items-center gap-2 text-gray-700 hover:text-red-500 transition">
-                    <span class="text-[18px]"><a href="/cart">Đơn hàng của tôi</a></span><br>
-                    <span class="text-[18px]"><a href="/lichsudonhang">Lịch sử đơn hàng</a></span>
+                    <span class="text-[18px]">
+                      <a href="/cart" class="text-sm text-pink-500 block bg-gray-50 hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow-sm transition">
+                        Đơn hàng của tôi
+                      </a>
+                    </span>
+                    <br>
+                    <span class="text-[18px]">
+                      <a href="/lichsudonhang" class="text-sm text-pink-500 block bg-gray-50 hover:bg-gray-100 text-gray-800 px-4 py-2 rounded-lg shadow-sm transition">Lịch sử đơn hàng</a>
+                      </span>
                   </a>
                 </div>
               </nav>
