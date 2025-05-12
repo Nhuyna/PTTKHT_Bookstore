@@ -899,14 +899,14 @@ INSERT INTO TaiKhoan (ID_NhanVien, ID_NhomQuyen, MatKhau, tinhTrang) VALUES
 (19, NULL, NULL, 0),
 (20, NULL, NULL, 0);
 
-UPDATE hoadonxuat hdx
-SET hdx.`TinhTrangThanhToan` = "Chưa thanh toán";
+-- UPDATE hoadonxuat hdx
+-- SET hdx.`TinhTrangThanhToan` = "Chưa thanh toán";
 
 UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.TinhTrangThanhToan = 'Đã thanh toán'
 WHERE gh.`TinhTrangDon` = 'Đã giao'
-AND hdx.`PhuongThucThanhToan` = 'Credit card' OR hdx.`PhuongThucThanhToan` = 'Chuyển khoản' ; 
+AND( hdx.`PhuongThucThanhToan` = 'Credit card' OR hdx.`PhuongThucThanhToan` = 'Chuyển khoản') ; 
 
 UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`

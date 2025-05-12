@@ -4,182 +4,181 @@
   <link rel="stylesheet" href="/css/sales/dashboard.css" />
 {{/block}}
 
-{{#block "js"}}{{/block}}
+{{#block "js"}}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/sales/dashboard.js" type="module"></script>
+{{/block}}
 
-  <div class="main-content">
-    <!-- nav bar -->
-    {{!-- <div class="navbar">
-      <div class="navbar-toggle">
-        {{! <i class="fas fa-bars"></i> }}
-      </div>
-      <div class="search-box">
-        <label>
-          <input type="text" placeholder="Tìm Kiếm" />
-          <i class="fas fa-search"></i>
-        </label>
-      </div>
-      <div class="user-profile">
-        <a href="#"><img src="/user.jpg" alt="User Profile" /></a>
-      </div>
-    </div> --}}
+<div class="main-content">
 
-    <!-- Dashboard content -->
-    <div class="dashboard-content">
-      <h2 class="content-title">Tổng Quan Cửa Hàng</h2>
+  <!-- Dashboard content -->
+  <div class="dashboard-content">
+    <h2 class="content-title">Tổng Quan Cửa Hàng</h2>
 
-      <!-- Metrics Overview -->
-      <div class="metrics-container">
-        <div class="metric-card">
-          <div class="metric-icon blue">
-            <i class="fas fa-shopping-cart"></i>
-          </div>
-          <div class="metric-info">
-            <h3>Tổng đơn hàng</h3>
-            <div class="metric-value">{{data.dashboard.SoHDX}}</div>
-            {{! <div class="metric-trend positive">
+    <!-- Metrics Overview -->
+    <div class="metrics-container">
+      <div class="metric-card">
+        <div class="metric-icon blue">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+        <div class="metric-info">
+          <h3>Tổng đơn hàng</h3>
+          <div class="metric-value">{{data.dashboard.SoHDX}}</div>
+          {{! <div class="metric-trend positive">
               <i class="fas fa-arrow-up"></i>
               <span>12.5% so với tháng trước</span>
             </div> }}
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-icon green">
-            <i class="fas fa-money-bill-wave"></i>
-          </div>
-          <div class="metric-info">
-            <h3>Doanh thu</h3>
-            <div class="metric-value">{{formatCurrency
-                data.dashboard.TongTien
-              }}</div>
-            {{! <div class="metric-trend positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>8.2% so với tháng trước</span>
-            </div> }}
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-icon orange">
-            <i class="fas fa-book"></i>
-          </div>
-          <div class="metric-info">
-            <h3>Tổng sản phẩm</h3>
-            <div class="metric-value">{{data.dashboard.DaBan}}</div>
-            {{! <div class="metric-trend positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>3.7% so với tháng trước</span>
-            </div> }}
-          </div>
-        </div>
-
-        <div class="metric-card">
-          <div class="metric-icon purple">
-            <i class="fas fa-users"></i>
-          </div>
-          <div class="metric-info">
-            <h3>Khách hàng</h3>
-            <div class="metric-value">{{data.dashboard.SoKH}}</div>
-            {{! <div class="metric-trend positive">
-              <i class="fas fa-arrow-up"></i>
-              <span>5.3% so với tháng trước</span>
-            </div> }}
-          </div>
         </div>
       </div>
 
-      <!-- Chart Containers -->
-      <div class="chart-container">
-        <div class="chart-card">
-          <h3>Thống kê doanh thu</h3></h3>
-          <canvas id="revenue-chart" height="300"></canvas>
+      <div class="metric-card">
+        <div class="metric-icon green">
+          <i class="fas fa-money-bill-wave"></i>
         </div>
+        <div class="metric-info">
+          <h3>Doanh thu</h3>
+          <div class="metric-value">{{formatCurrency
+              data.dashboard.TongTien
+            }}</div>
+          {{! <div class="metric-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>8.2% so với tháng trước</span>
+            </div> }}
+        </div>
+      </div>
 
-        <div class="chart-card bestsellers-container">
-          <div class="section-header">
-            <h3>Top sản phẩm bán chạy</h3>
-            {{! <select id="bestseller-period" class="period-selector">
+      <div class="metric-card">
+        <div class="metric-icon orange">
+          <i class="fas fa-book"></i>
+        </div>
+        <div class="metric-info">
+          <h3>Tổng sản phẩm</h3>
+          {{#if data.dashboard.DaBan}}
+            <div class="metric-value">{{data.dashboard.DaBan}}</div>
+          {{else}}
+            <div class="metric-value">0</div>
+          {{/if}}
+          {{! <div class="metric-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>3.7% so với tháng trước</span>
+            </div> }}
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-icon purple">
+          <i class="fas fa-users"></i>
+        </div>
+        <div class="metric-info">
+          <h3>Khách hàng</h3>
+          <div class="metric-value">{{data.dashboard.SoKH}}</div>
+          {{! <div class="metric-trend positive">
+              <i class="fas fa-arrow-up"></i>
+              <span>5.3% so với tháng trước</span>
+            </div> }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart Containers -->
+    <div class="chart-container">
+      <div class="chart-card">
+        <div class="chart-header">
+          <h3>Thống kê doanh thu</h3>
+        </div>
+        <div class="chart-body">
+          <canvas id="revenue-chart"></canvas>
+        </div>
+      </div>
+
+      <div class="chart-card bestsellers-container">
+        <div class="section-header">
+          <h3>Top sản phẩm bán chạy</h3>
+          {{! <select id="bestseller-period" class="period-selector">
               <option value="week">Tuần này</option>
               <option value="month" selected>Tháng này</option>
               <option value="year">Năm nay</option>
             </select> }}
-          </div>
-
-          <div class="table-container">
-            <table class="data-table bestsellers-table">
-              <thead>
-                <tr>
-                  <th>Mã sản phẩm</th>
-                  <th>Tên sách</th>
-                  <th>Số lượng bán</th>
-                  <th>Doanh thu</th>
-                </tr>
-              </thead>
-              <tbody>
-                {{#each data.topProducts}}
-                  <tr>
-                    <td>#{{this.SanPhamID}}</td>
-                    <td>{{this.TenSanPham}}</td>
-                    <td><b>{{this.DaBan}}</b></td>
-                    <td>{{formatCurrency (multi this.DaBan this.Gia)}}</td>
-                  </tr>
-                {{/each}}
-
-              </tbody>
-            </table>
-          </div>
         </div>
-      </div>
 
-      <!-- Recent Orders -->
-      <div class="recent-orders">
-        <div class="section-header">
-          <h3>Đơn hàng gần đây</h3>
-          <a href="/admin/sales/orders/show" class="view-all">Xem tất cả</a>
-        </div>
         <div class="table-container">
-          <table class="data-table">
+          <table class="data-table bestsellers-table">
             <thead>
               <tr>
-                <th>Mã đơn hàng</th>
-                <th>Khách hàng</th>
-                <th>Ngày đặt</th>
-                <th>Tổng tiền</th>
-                <th>Trạng thái</th>
-                <th>Thanh toán</th>
+                <th>Mã sản phẩm</th>
+                <th>Tên sách</th>
+                <th>Số lượng bán</th>
+                <th>Doanh thu</th>
               </tr>
             </thead>
             <tbody>
-              {{#each data.currentOrders}}
+              {{#each data.topProducts}}
                 <tr>
-                  <td>#{{this.IDHoaDonXuat}}</td>
-                  <td>{{this.TenNguoiNhan}}</td>
-                  <td>{{formatCurrentDate this.NgayXuat}}</td>
-                  <td>{{formatCurrency this.TongTien}}</td>
-                  <td>
-                    <span
-                      class="status-badge {{statusClass this.TinhTrangDon}}"
-                    >
-                      {{this.TinhTrangDon}}
-                    </span>
-                  </td>
-                  <td>
-                    <span
-                      class="status-badge
-                        {{statusClass this.TinhTrangThanhToan}}"
-                    >
-                      {{this.TinhTrangThanhToan}}
-                    </span>
-                  </td>
+                  <td>#{{this.SanPhamID}}</td>
+                  <td>{{this.TenSanPham}}</td>
+                  <td><b>{{this.SoLuongBan}}</b></td>
+                  <td>{{formatCurrency
+                      (multi this.SoLuongBan this.GiaBan)
+                    }}</td>
                 </tr>
               {{/each}}
+
             </tbody>
           </table>
         </div>
       </div>
     </div>
-  </div>
 
+    <!-- Recent Orders -->
+    <div class="recent-orders">
+      <div class="section-header">
+        <h3>Đơn hàng gần đây</h3>
+        <a href="/admin/sales/orders/show" class="view-all">Xem tất cả</a>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Mã đơn hàng</th>
+              <th>Khách hàng</th>
+              <th>Ngày đặt</th>
+              <th>Tổng tiền</th>
+              <th>Trạng thái</th>
+              <th>Thanh toán</th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each data.currentOrders}}
+              <tr>
+                <td>#{{this.IDHoaDonXuat}}</td>
+                <td>{{this.TenNguoiNhan}}</td>
+                <td>{{formatCurrentDate this.NgayXuat}}</td>
+                <td>{{formatCurrency this.TongTien}}</td>
+                <td>
+                  <span class="status-badge {{statusClass this.TinhTrangDon}}">
+                    {{this.TinhTrangDon}}
+                  </span>
+                </td>
+                <td>
+                  <span
+                    class="status-badge {{statusClass this.TinhTrangThanhToan}}"
+                  >
+                    {{this.TinhTrangThanhToan}}
+                  </span>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Hidden data element to pass revenue data to JavaScript -->
+<script id="revenue-data" type="application/json">
+  {{{JSON data.revenueData}}}
+</script>
 
 <!-- Hidden data element to pass revenue data to JavaScript -->
 <script id="revenue-data" type="application/json">
@@ -187,7 +186,9 @@
 </script>
 
 <!-- Chart.js library -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+<script
+  src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"
+></script>
 
 <!-- Custom dashboard JavaScript -->
 <script src="/js/sales/dashboard.js"></script>

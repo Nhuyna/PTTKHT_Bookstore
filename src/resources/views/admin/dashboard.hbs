@@ -1,4 +1,321 @@
 {{#block "css"}}
-    <link rel="stylesheet" href="/css/admin/dashboard.css">
+  <link rel="stylesheet" href="/css/admin/dashboard.css" />
 {{/block}}
-Từ từ rồi làm
+
+{{#block "js"}}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="/js/admin/dashboard.js" type="module"></script>
+{{/block}}
+
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <h2>Tổng Quan Cửa Hàng Sách</h2>
+    <div class="date-range">
+      <span>Dữ liệu tháng {{formatDate (new "Date") "MM/YYYY"}}</span>
+    </div>
+  </div>
+  <div class="stats-cards">
+    <div class="card sales">
+      <div class="card-content">
+        <div class="card-info">
+          <h3>Doanh Thu</h3>
+          <h2 id="total-sales">{{formatCurrency
+              dashboardStats.current.DoanhThu
+            }}</h2>
+          <p>
+            {{#if (gt dashboardStats.percentChange.DoanhThu 0)}}
+              <span class="trend up"><i class="fas fa-arrow-up"></i>
+                {{formatNumberWithDecimals
+                  dashboardStats.percentChange.DoanhThu
+                  1
+                }}%</span>
+            {{else}}
+              <span class="trend down"><i class="fas fa-arrow-down"></i>
+                {{formatNumberWithDecimals
+                  (multiply dashboardStats.percentChange.DoanhThu -1)
+                  1
+                }}%</span>
+            {{/if}}
+            so với kỳ trước
+          </p>
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+      </div>
+    </div>
+    <div class="card orders">
+      <div class="card-content">
+        <div class="card-info">
+          <h3>Vốn</h3>
+          <h2 id="total-orders">{{formatCurrency
+              dashboardStats.current.Von
+            }}</h2>
+          <p>
+            {{#if (gt dashboardStats.percentChange.Von 0)}}
+              <span class="trend up"><i class="fas fa-arrow-up"></i>
+                {{formatNumberWithDecimals
+                  dashboardStats.percentChange.Von
+                  1
+                }}%</span>
+            {{else}}
+              <span class="trend down"><i class="fas fa-arrow-down"></i>
+                {{formatNumberWithDecimals
+                  (multiply dashboardStats.percentChange.Von -1)
+                  1
+                }}%</span>
+            {{/if}}
+            so với kỳ trước
+          </p>
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-shopping-cart"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="card products">
+      <div class="card-content">
+        <div class="card-info">
+          <h3>Sản Phẩm Bán Ra</h3>
+          <h2 id="total-products">{{formatNumberWithDecimals
+              dashboardStats.current.SoSanPhamBan
+              0
+            }}</h2>
+          <p>
+            {{#if (gt dashboardStats.percentChange.SoSanPhamBan 0)}}
+              <span class="trend up"><i class="fas fa-arrow-up"></i>
+                {{formatNumberWithDecimals
+                  dashboardStats.percentChange.SoSanPhamBan
+                  1
+                }}%</span>
+            {{else}}
+              <span class="trend down"><i class="fas fa-arrow-down"></i>
+                {{formatNumberWithDecimals
+                  (multiply dashboardStats.percentChange.SoSanPhamBan -1)
+                  1
+                }}%</span>
+            {{/if}}
+            so với kỳ trước
+          </p>
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-book"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="card customers">
+      <div class="card-content">
+        <div class="card-info">
+          <h3>Khách Hàng Mới</h3>
+          <h2 id="new-customers">{{formatNumberWithDecimals
+              dashboardStats.current.SoKhachHang
+              0
+            }}</h2>
+          <p>
+            {{#if (gt dashboardStats.percentChange.SoKhachHang 0)}}
+              <span class="trend up"><i class="fas fa-arrow-up"></i>
+                {{formatNumberWithDecimals
+                  dashboardStats.percentChange.SoKhachHang
+                  1
+                }}%</span>
+            {{else}}
+              <span class="trend down"><i class="fas fa-arrow-down"></i>
+                {{formatNumberWithDecimals
+                  (multiply dashboardStats.percentChange.SoKhachHang -1)
+                  1
+                }}%</span>
+            {{/if}}
+            so với kỳ trước
+          </p>
+        </div>
+        <div class="card-icon">
+          <i class="fas fa-users"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="charts-container">
+    <div class="chart-card sales-chart">
+      <div class="chart-header">
+        <h3>Thống kê doanh thu</h3>
+      </div>
+      <div class="chart-body">
+        <canvas id="revenue-chart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card category-chart">
+      <div class="chart-header">
+        <h3>Sản Phẩm Theo Danh Mục</h3>
+      </div>
+      <div class="chart-body">
+        <canvas id="categoryChart"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="data-tables">
+    <div class="table-card recent-providers">
+      <div class="table-header">
+        <h3>Nhà Cung Cấp Gần Đây</h3>
+        <a href="/admin/warehouse/provider" class="view-all">Xem tất cả
+          <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Mã NCC</th>
+              <th>Tên NCC</th>
+              {{! <th>Email</th> }}
+              <th>Số Điện Thoại</th>
+              <th>Trạng Thái</th>
+            </tr>
+          </thead>
+          <tbody id="recent-providers-table">
+            {{#each recentProviders}}
+              <tr>
+                <td>#NCC{{formatID this.ID_NCC}}</td>
+                <td>{{this.TenNCC}}</td>
+                <td>{{this.SDT}}</td>
+                <td>
+                  {{#if (eq this.TinhTrang 1)}}
+                    <span class="status-badge active">Hoạt động</span>
+                  {{else}}
+                    <span class="status-badge inactive">Tạm dừng</span>
+                  {{/if}}
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="table-card top-selling">
+      <div class="table-header">
+        <h3>Sản Phẩm Bán Chạy</h3>
+        <a href="/admin/warehouse/product" class="view-all">Xem tất cả
+          <i class="fas fa-arrow-right"></i></a>
+      </div>
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Sản Phẩm</th>
+              <th>Danh Mục</th>
+              <th>Giá</th>
+              <th>Số Lượng Bán</th>
+              <th>Doanh Thu</th>
+            </tr>
+          </thead>
+          <tbody id="top-products-table">
+            {{#each topProducts}}
+              <tr>
+                <td>{{TenSanPham}}</td>
+                <td>{{DanhMuc}}</td>
+                <td>{{formatCurrency GiaBan}}</td>
+                <td>{{SoLuongBan}}</td>
+                <td>{{formatCurrency DoanhThu}}</td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  {{! <div class="data-tables"> }}
+  <div class="table-card recent-orders">
+    <div class="table-header">
+      <h3>Đơn Hàng Gần Đây</h3>
+      <a href="/admin/sales/orders/show" class="view-all">Xem tất cả
+        <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã Đơn</th>
+            <th>Khách Hàng</th>
+            <th>Ngày Đặt</th>
+            <th>Tổng Tiền</th>
+            <th>Trạng Thái</th>
+            <th>Thanh Toán</th>
+          </tr>
+        </thead>
+        <tbody id="recent-orders-table">
+          {{#each recentOrders}}
+            <tr>
+              <td>#HDX{{formatID IDHoaDonXuat}}</td>
+              <td>{{TenKH}}</td>
+              <td>{{#if NgayXuat}}{{formatDate NgayXuat}}{{else}}--{{/if}}</td>
+              <td>{{formatCurrency TongTien}}</td>
+              <td>
+                {{#if (eq TinhTrangDon "Đã giao")}}
+                  <span class="status-badge completed">Đã giao</span>
+                {{else if (eq TinhTrangDon "Đang giao")}}
+                  <span class="status-badge processing">Đang giao</span>
+                {{else if (eq TinhTrangDon "Chờ xử lý")}}
+                  <span class="status-badge pending">Chờ xử lý</span>
+                {{else}}
+                  <span class="status-badge cancelled">Đã hủy</span>
+                {{/if}}
+              </td>
+              <td>
+                {{#if (eq TinhTrangThanhToan "Đã thanh toán")}}
+                  <span class="status-badge active">Đã thanh toán</span>
+                {{else}}
+                  <span class="status-badge pending">Chưa thanh toán</span>
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="table-card recent-receipts">
+    <div class="table-header">
+      <h3>Hóa Đơn Nhập Gần Đây</h3>
+      <a href="/admin/warehouse/receipt" class="view-all">Xem tất cả
+        <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Mã Hóa Đơn</th>
+            <th>Ngày Nhập</th>
+            <th>Nhà Cung Cấp</th>
+            <th>Nhân Viên</th>
+            <th>Tổng Hóa Đơn</th>
+          </tr>
+        </thead>
+        <tbody id="recent-receipts-table">
+          {{#each recentReceipts}}
+            <tr>
+              <td>#HDN{{formatID IDHoaDonNhap}}</td>
+              <td>{{#if NgayNhap}}{{formatDate NgayNhap}}{{else}}--{{/if}}</td>
+              <td>{{TenNCC}}</td>
+              <td>{{TenNhanVien}}</td>
+              <td>{{formatCurrency TongTien}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  {{! </div> }}
+</div>
+
+<!-- Hidden data element to pass revenue data to JavaScript -->
+<script id="revenue-data" type="application/json">
+  {{{revenueData}}}
+</script>
+
+<!-- Hidden data element to pass category data to JavaScript -->
+<script id="category-data" type="application/json">
+  {{{productCategories}}}
+</script>
