@@ -1,6 +1,6 @@
 import database from "../../../config/db.js";
 
-const getCartByUserId = async (userId) => {   
+const getCartByUserId = async (userId) => {
   const query = `
 SELECT 
     KhachHang.*, 
@@ -24,19 +24,19 @@ WHERE KhachHang.ID_KH = ?;
   return rows;
 };
 
-const taoHoaDon= async (idKH, tongTien,PhuongThucThanhToan) => {
+const taoHoaDon = async (idKH, tongTien, PhuongThucThanhToan) => {
   const [result] = await database.query(
     "INSERT INTO HoaDonXuat (ID_KH, TongTien, PhuongThucThanhToan) VALUES (?, ?, ?)",
     [idKH, tongTien, PhuongThucThanhToan]
   );
   return result.insertId;
-}
+};
 
-// const getCartByUserId = async (userId) => {  
+// const getCartByUserId = async (userId) => {
 //   const query = `
-// SELECT 
-//     KhachHang.*, 
-//     GioHang.*, 
+// SELECT
+//     KhachHang.*,
+//     GioHang.*,
 //     SanPham.*
 
 // FROM KhachHang
@@ -44,32 +44,19 @@ const taoHoaDon= async (idKH, tongTien,PhuongThucThanhToan) => {
 // JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
 // WHERE KhachHang.ID_KH = ?;
 
-//     `; 
+//     `;
 //   const [rows] = await database.query(query, [userId]);
 //   return rows;
 // };
 
-const themVaoGio = async (ID_KH, ID_SP) => {
-  // console.log("ID_KH:", ID_KH);
-  // console.log("ID_SP:", ID_SP);
+const themVaoGio = async (ID_KH, ID_SP, soluong = 1) => {
   try {
-    const [rows] = await database.query(
-      `SELECT * FROM GioHang WHERE ID_KH = ? AND ID_SP = ?`,
-      [ID_KH, ID_SP]
+    await database.query(
+      `INSERT INTO GioHang (ID_KH, ID_SP, SoLuong)
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE SoLuong = SoLuong + VALUES(SoLuong)`,
+      [ID_KH, ID_SP, soluong]
     );
-
-    if (rows.length === 0) {
-      // Chưa có sản phẩm trong giỏ => thêm mới
-      await database.query(
-        `INSERT INTO GioHang (ID_KH, ID_SP, SoLuong) VALUES (?, ?, 1)`,
-        [ID_KH, ID_SP]
-      );
-    } else {
-      await database.query(
-        `UPDATE GioHang SET SoLuong = SoLuong + 1 WHERE ID_KH = ? AND ID_SP = ?`,
-        [ID_KH, ID_SP]
-      );
-    }
 
     return { success: true };
   } catch (err) {
@@ -92,10 +79,10 @@ const xoaSanPhamTrongGio = async (ID_KH, ID_SP) => {
 };
 const deleteItem = async (userId, productId) => {
   try {
-    await database.query(
-      `DELETE FROM GioHang WHERE ID_KH = ? AND ID_SP = ?`,
-      [userId, productId]
-    );
+    await database.query(`DELETE FROM GioHang WHERE ID_KH = ? AND ID_SP = ?`, [
+      userId,
+      productId,
+    ]);
     return { success: true };
   } catch (error) {
     console.error("❌ Lỗi khi xóa sản phẩm khỏi giỏ hàng:", error);
@@ -121,10 +108,10 @@ const getTotalPrice = async (userId) => {
     console.error("❌ Lỗi khi tính tổng giá trị giỏ hàng:", error);
     throw error;
   }
-}
+};
 const getCartItem = async (userId, bookId) => {
   const [rows] = await database.query(
-    'SELECT SoLuong FROM GioHang WHERE ID_KH = ? AND ID_SP = ?',
+    "SELECT SoLuong FROM GioHang WHERE ID_KH = ? AND ID_SP = ?",
     [userId, bookId]
   );
   return rows[0];
@@ -132,7 +119,7 @@ const getCartItem = async (userId, bookId) => {
 
 const updateCartItemQuantity = async (userId, bookId, newQty) => {
   await database.query(
-    'UPDATE GioHang SET SoLuong = ? WHERE ID_KH = ? AND ID_SP = ?',
+    "UPDATE GioHang SET SoLuong = ? WHERE ID_KH = ? AND ID_SP = ?",
     [newQty, userId, bookId]
   );
 };

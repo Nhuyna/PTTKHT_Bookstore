@@ -145,6 +145,21 @@
 .provider-table .inside-table table tbody tr:last-child td{
     border-bottom: none;
 }
+.view-btn{
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    margin: 3px 3px;
+    background: linear-gradient(135deg, #FFC107, #FFD54F);
+    color: #7A4F00;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
 .edit-btn{
     position: relative;
     align-items: center;
@@ -236,6 +251,10 @@ form {
     opacity: 0;
     transition: opacity 0.3s;
 }
+.view-btn:hover .tooltip {
+    visibility: visible;
+    opacity: 1;
+}
 .edit-btn:hover .tooltip {
     visibility: visible;
     opacity: 1;
@@ -243,6 +262,41 @@ form {
 .delete-btn:hover .tooltip {
     visibility: visible;
     opacity: 1;
+}
+.provider-table .inside-table .info-container{
+    display: flex;
+    justify-content: center;
+    margin: 50px 0;
+}
+.provider-table .inside-table .info-container .info-box{
+    width: 60%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px 2px rgba(0, 0, 0, 0.3);
+}
+.provider-table .inside-table .info-container .info-box .header{
+    font-weight: 600;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+}
+.provider-table .inside-table .info-container .info-box .header p i{
+    margin: 0 5px;
+    color: green;
+}
+.provider-table .inside-table .info-container .info-box .body{
+    padding: 15px;
+}
+.provider-table .inside-table .info-container .info-box p{
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+}
+.provider-table .inside-table .info-container .info-box b{
+    margin: 0 10px 0 0;
 }
 /* Delete Popup */
 .delete-popup{

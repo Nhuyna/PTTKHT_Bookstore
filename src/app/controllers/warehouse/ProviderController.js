@@ -58,6 +58,34 @@ class ProviderController {
     }
   }
 
+    // view detail provider
+  async view(req, res) {
+    try {
+      const { id } = req.params;
+      const provider = (await providerConfig.search(id))[0];
+      let permissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+      ).map((p) => p.ChucNang);
+
+      const allPermissions = (
+        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+      ).map((p) => p.ChucNang);
+
+      permissions = permissions.concat(allPermissions);
+      permissions.push("qlkho");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
+      console.log("action" + action);
+      res.render("warehouse/view_provider", {
+        provider,
+        layout: "admin",
+        permissions,
+        action,
+      });
+    } catch (error) {
+      console.error(err);
+    }
+  }
+
   // create new provider form
   async create(req, res) {
     try {
