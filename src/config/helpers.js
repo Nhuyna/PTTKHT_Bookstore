@@ -51,6 +51,8 @@ export default {
   subtract: (a, b) => Number(a) - Number(b),
   eq: (a, b) => a == b,
 
+  ne: (a, b) => a != b,
+
   gt: (a, b) => a > b,
 
   lt: (a, b) => a < b,
@@ -60,6 +62,10 @@ export default {
   or: (...args) => {
     const options = args.pop();
     return args.some(Boolean);
+  },
+
+  some: function (value, arr) {
+    return Array.isArray(arr) && arr.includes(value);
   },
 
   range: (start, end) => {

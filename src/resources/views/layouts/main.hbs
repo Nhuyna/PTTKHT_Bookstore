@@ -69,11 +69,18 @@
 
     const isLoggedIn = {{isLoggedIn}}; 
 
-    if (isLoggedIn) {
-     
-      addToCart(productId);
+   if (isLoggedIn) {
+  let quantity = 1;
+try {
+  const quantityInput = document.getElementById('customQuantity');
+  quantity = parseInt(quantityInput?.value) || 1;
+} catch (error) {
+  console.warn('Không lấy được số lượng, mặc định là 1.', error);
+}
 
-    } else {
+  addToCart(productId, quantity);
+}
+ else {
    
       alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
      

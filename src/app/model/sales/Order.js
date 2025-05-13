@@ -331,7 +331,7 @@ export class Order extends BaseModel {
       const [orderInfo] = await db.query(
         `
           SELECT hdx.*, gh.TinhTrangDon, ngh.TenNhanVien AS TenNguoiGiao, gh.NgayGiaoHang, gh.GiaShip,
-                 dckh.SoDienThoai, dckh.TenNguoiNhan, dckh.SoNhaDuong, dckh.QuanHuyen, dckh.TinhThanhPho,
+                 dckh.SoDienThoai, dckh.TenNguoiNhan, dckh.SoNhaDuong, dckh.PhuongXa, dckh.QuanHuyen, dckh.TinhThanhPho,
                  nv.TenNhanVien
           FROM hoadonxuat hdx
           JOIN giaohang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
@@ -409,24 +409,35 @@ export class Order extends BaseModel {
    */
   async _updateStatus(id, status, request = null) {
     try {
-      const [rows] = await db.query(
-        `
-      UPDATE giaohang gh
-      SET gh.TinhTrangDon = ?
-      WHERE gh.ID_HDX = ?;`,
-        [status, id]
-      );
+      console.log("request", request);
+      let sql = `
+        UPDATE hoadonxuat hdx
+        JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
+        SET gh.TinhTrangDon = ?
+      `;
+      let params = [status];
+      // const [rows] = await db.query(
+      //   `
+      //     UPDATE giaohang gh
+      //     SET gh.TinhTrangDon = ?
+      //     WHERE gh.ID_HDX = ?;`,
+      //       [status, id]
+      // );
+      if (status === "Trả hàng") {
+        sql += `
+          , hdx.TinhTrangThanhToan = IF(hdx.TinhTrangThanhToan = 'Đã thanh toán', 'Chưa hoàn tiền', hdx.TinhTrangThanhToan)`;
+      }
 
       if (request) {
-        const [result] = await db.query(
-          `
-          UPDATE hoadonxuat hdx
-          SET hdx.YeuCau = ?
-          WHERE hdx.IDHoaDonXuat = ?;
-          `,
-          [request, id]
-        );
+        sql += `
+          , hdx.YeuCau = NULL
+        `;
       }
+      sql += `
+        WHERE hdx.IDHoaDonXuat = ?;
+      `;
+      params.push(id);
+      const [rows] = await db.query(sql, params);
       return rows;
     } catch (err) {
       console.error(err);

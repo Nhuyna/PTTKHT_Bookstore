@@ -1,30 +1,16 @@
 {{#block "css"}}
   <link rel="stylesheet" href="/css/sales/style.css" />
   <link rel="stylesheet" href="/css/sales/orderAnother.css" />
+  <link rel="stylesheet" href="/css/sales/notifications.css" />
 {{/block}}
 
 {{#block "js"}}
   <script src="/js/sales/index.js"></script>
-  <script src="/js/sales/orders.js"></script>
+  <script src="/js/sales/order-detail.js"></script>
 {{/block}}
 
 <div class="main-content">
-  <!-- nav bar -->
-  {{!-- <div class="navbar">
-    <div class="navbar-toggle">
-      {{! <i class="fas fa-bars"></i> }}
-    </div>
-    <div class="search-box">
-      <label>
-        <input type="text" placeholder="Tìm Kiếm" />
-        <i class="fas fa-search"></i>
-      </label>
-    </div>
-    <div class="user-profile">
-      <a href="#"><img src="/user.jpg" /></a>
-    </div>
-  </div> --}}
-
+  {{! order title }}
   <div class="order-details-container">
     <div class="order-header">
       <div class="order-title">
@@ -75,12 +61,13 @@
         <div class="card-body">
           <p><strong>Địa chỉ:</strong>
             {{orderDetails.order.SoNhaDuong}},
+            {{orderDetails.order.PhuongXa}},
             {{orderDetails.order.QuanHuyen}},
             {{orderDetails.order.TinhThanhPho}}</p>
           <p><strong>Trạng thái:</strong>
             {{orderDetails.order.TinhTrangDon}}</p>
-          <p><strong>Người giao hàng:
-            </strong>{{orderDetails.order.TenNguoiGiao}}</p>
+          {{!-- <p><strong>Người giao hàng:
+            </strong>{{orderDetails.order.TenNguoiGiao}}</p> --}}
           <p><strong>Ngày giao:</strong>
             {{formatCurrentDate orderDetails.order.NgayGiaoHang}}</p>
         </div>
@@ -144,8 +131,6 @@
           </div>
         </div>
       </div>
-
-      <!-- Order Summary -->
       <div
         style="flex: 1;
           min-width: 250px;
@@ -155,6 +140,51 @@
           top: 20px;"
       >
         <div class="order-summary-card">
+          <!-- Shipping Status Update Card -->
+          {{#if
+            (or
+              (eq orderDetails.order.TinhTrangDon "Chờ lấy hàng")
+              (eq orderDetails.order.TinhTrangDon "Đang giao hàng")
+              (eq orderDetails.order.TinhTrangDon "Đã giao")
+            )
+          }}
+            <div class="shipping-update-card">
+              <div class="card-header">
+                <h3><i class="fas fa-truck"></i>
+                  Cập nhật trạng thái vận chuyển</h3>
+              </div>
+              <div class="card-body">
+                <div class="status-update-form">
+                  <div class="form-group">
+                    <label for="shipping-status">Trạng thái hiện tại:
+                      <strong
+                      >{{orderDetails.order.TinhTrangDon}}</strong></label>
+                    <select id="shipping-status" class="form-control">
+                      <option disabled selected>-- Chọn trạng thái mới --</option>
+                      {{#if
+                        (ne orderDetails.order.TinhTrangDon "Chờ lấy hàng")
+                      }}<option value="Chờ lấy hàng">Chờ lấy hàng</option>{{/if}}
+                      {{#if
+                        (ne orderDetails.order.TinhTrangDon "Đang giao hàng")
+                      }}<option value="Đang giao hàng">Đang giao</option>{{/if}}
+                      {{#if
+                        (ne orderDetails.order.TinhTrangDon "Đã giao")
+                      }}<option value="Đã giao">Đã giao</option>{{/if}}
+                      {{#if
+                        (ne orderDetails.order.TinhTrangDon "Trả hàng")
+                      }}<option value="Trả hàng">Trả hàng</option>{{/if}}
+                    </select>
+                  </div>
+                  <button
+                    id="updateShippingStatusBtn"
+                    class="btn btn-primary update-status-btn"
+                    data-order-id="{{orderDetails.order.IDHoaDonXuat}}"
+                  ><i class="fas fa-sync-alt"></i> Cập nhật</button>
+                </div>
+              </div>
+            </div>
+          {{/if}}
+          <!-- Order Summary -->
           <div class="card-header">
             <h3><i class="fas fa-calculator"></i> Tổng kết đơn hàng</h3>
           </div>
@@ -198,7 +228,6 @@
                   }}</div>
               </div>
             {{/if}}
-
           </div>
         </div>
 
