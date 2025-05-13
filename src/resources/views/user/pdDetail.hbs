@@ -92,9 +92,10 @@
         </div>
 
         <div class="d-flex gap-2 mb-5">
-          <button class="btn btn-danger btn-lg rounded-pill px-4">
-            <i class="bi bi-lightning-charge"></i> Mua ngay
-          </button>
+        <button class="btn btn-danger btn-lg rounded-pill px-4 btn-buy-now" data-id="{{productDetail.SanPhamID}}">
+        <i class="bi bi-lightning-charge"></i> Mua ngay
+      </button>
+
           <button class="btn btn-outline-primary btn-lg rounded-pill px-4 icon-add-cart" data-id="{{productDetail.SanPhamID}}">
             <i class="bi bi-cart-plus" data-id="{{productDetail.SanPhamID}}" ></i> Thêm vào giỏ hàng
           </button>
@@ -324,39 +325,25 @@ function changeQuantity(change) {
 
 
 </script>
-
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const addToCartBtn = document.querySelector('.btn-add-to-cart-detail');
-    const buyNowBtn = document.querySelector('.btn-buy-now');
-    const productId = addToCartBtn?.getAttribute('data-id');
-    const isLoggedIn = {{isLoggedIn}}; // lấy từ server render ra
+document.addEventListener('DOMContentLoaded', () => {
+  const buyNowBtn = document.querySelector('.btn-buy-now');
+  const addToCartBtn = document.querySelector('.btn-add-to-cart'); // Thêm dòng này
+const productId = buyNowBtn.getAttribute('data-id');
 
-    if (addToCartBtn) {
-      addToCartBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isLoggedIn) {
-          addToCart(productId);
-          alert("Sản phẩm đã được thêm vào giỏ hàng!");
-        } else {
-          alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng!");
-          window.location.href = "/user/account";
-        }
-      });
-    }
+  const isLoggedIn = {{#if isLoggedIn}}true{{else}}false{{/if}}; // Handlebars-safe check
 
-    if (buyNowBtn) {
-      buyNowBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (isLoggedIn) {
-          addToCart(productId);
-          window.location.href = "/cart"; // Chuyển tới giỏ hàng luôn
-        } else {
-          alert("Vui lòng đăng nhập để mua hàng!");
-          window.location.href = "/user/account";
-        }
-      });
-    }
-  });
+  if (buyNowBtn) {
+    buyNowBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isLoggedIn) {
+        const quantity = document.getElementById('customQuantity').value || 1;
+        window.location.href = `/cart/thanhtoan?productId=${productId}&quantity=${quantity}`;
+      } else {
+        alert('Vui lòng đăng nhập để tiếp tục mua hàng.');
+        window.location.href = '/login';
+      }
+    });
+  }
+});
 </script>
-
