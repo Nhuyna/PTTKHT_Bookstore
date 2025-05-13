@@ -76,7 +76,7 @@ const changeUserInfo = async (req, res, next) => {
   const isValidDate = /^(0?[1-9]|[12][0-9]|3[01])$/.test(dateOfBirth);
   const isValidMonth = /^(0?[1-9]|1[0-2])$/.test(monthOfBirth);
   const isValidYear = parseInt(yearOfBirth) < new Date().getFullYear();
-  const isValidPhone = !user_telephone || /^(0[2-9][0-9]{8,9})$/;
+  const isValidPhone = !user_telephone || /^(0[2-9][0-9]{8,9})$/.test(user_telephone);
 
   if (!isValidDate || !isValidMonth || !isValidYear) {
     return res.status(400).json({
@@ -91,6 +91,10 @@ const changeUserInfo = async (req, res, next) => {
       message: "Số điện thoại không hợp lệ.",
     });
   }
+  const user = await UserModel.findUserByPhone(user_telephone);
+   if (user) {
+      return res.status(401).json({ success: false, message: "Số điện thoại đã tồn tại." });
+    }
   console.log(
         dateOfBirth,
     monthOfBirth,
