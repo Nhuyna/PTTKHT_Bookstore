@@ -35,6 +35,7 @@ class ProductsController {
 
       const isLoggedIn = !!req.session.user_id;
 
+      console.log("Danh sách danh mục:", productDetail);
       // Truyền dữ liệu vào view
       res.render("user/pdDetail", {
         productDetail,
