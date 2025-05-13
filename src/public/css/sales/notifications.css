@@ -1,0 +1,127 @@
+/* Thêm CSS cho thông báo */
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 12px 20px;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  transform: translateY(-20px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  max-width: 350px;
+}
+
+.notification.show {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.notification.success {
+  border-left: 4px solid var(--success-color);
+}
+
+.notification.error {
+  border-left: 4px solid var(--danger-color);
+}
+
+.notification-icon {
+  margin-right: 12px;
+  font-size: 18px;
+}
+
+.notification.success .notification-icon {
+  color: var(--success-color);
+}
+
+.notification.error .notification-icon {
+  color: var(--danger-color);
+}
+
+.notification-message {
+  font-size: 14px;
+  color: #333;
+}
+
+/* Hiệu ứng khi chọn dropdown */
+#shipping-status {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+#shipping-status:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+/* Hiệu ứng nút cập nhật */
+.update-status-btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.update-status-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.update-status-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Hiệu ứng cho các nút */
+.btn {
+  transition: all 0.3s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* Hiệu ứng cho modal */
+.modal-content {
+  animation: modalFadeIn 0.3s ease;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cải thiện card shipping status */
+.shipping-update-card {
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--primary-color);
+}
+
+.shipping-update-card:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Hiệu ứng trạng thái vận chuyển */
+.status-badge {
+  transition: all 0.3s ease;
+}
+
+.status-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}

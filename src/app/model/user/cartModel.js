@@ -123,13 +123,12 @@ const updateCartItemQuantity = async (userId, bookId, newQty) => {
     [newQty, userId, bookId]
   );
 };
-export default {
-  getCartByUserId,
-  themVaoGio,
-  xoaSanPhamTrongGio,
-  taoHoaDon,
-  getTotalPrice,
-  deleteItem,
-  updateCartItemQuantity,
-  getCartItem,
-};
+const getBookById= async (bookId) => {
+    const [rows] = await database.query(
+      'SELECT * FROM SanPham WHERE SanPhamID = ? LIMIT 1',
+      [bookId]
+    );
+    return rows[0]; 
+}
+export default { getCartByUserId, themVaoGio, xoaSanPhamTrongGio,
+  taoHoaDon,getTotalPrice,deleteItem,updateCartItemQuantity,getCartItem,getBookById };

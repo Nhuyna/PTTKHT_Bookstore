@@ -320,11 +320,24 @@ const updateQuantity = async (req, res) => {
 
   try {
     const item = await CartModel.getCartItem(userId, book_id);
-    if (!item)
-      return res.json({ success: false, message: "Không tìm thấy sản phẩm" });
+    if (!item) {
+      return res.json({ success: false, message: 'Không tìm thấy sản phẩm trong giỏ hàng' });
+    }
+
+    const book = await CartModel.getBookById(book_id);
+    if (!book) {
+      return res.json({ success: false, message: 'Không tìm thấy sách trong kho' });
+    }
 
     let newQty = item.SoLuong + (action === "increase" ? 1 : -1);
     if (newQty <= 0) newQty = 0;
+
+    if (newQty > book.SoLuongTon) {
+      return res.json({
+        success: false,
+        message: `Chỉ còn ${book.SoLuongTon} sản phẩm trong kho`
+      });
+    }
 
     await CartModel.updateCartItemQuantity(userId, book_id, newQty);
 
