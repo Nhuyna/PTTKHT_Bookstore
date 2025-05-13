@@ -188,6 +188,7 @@ div.suggestion-item{
     position: absolute;
     overflow-y: auto;
     font-size: 16px;
+    z-index: 1000;
 }
 #suggestions_permission{
     border: 1px solid #ccc;

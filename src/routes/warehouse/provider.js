@@ -16,6 +16,8 @@ router.get("/create_excel", ProviderController.create_excel);
 
 router.post("/store", ProviderController.store);
 
+router.get("/view/:id", ProviderController.view);
+
 router.get("/update/:id", ProviderController.update);
 
 router.post("/edit", ProviderController.edit);
