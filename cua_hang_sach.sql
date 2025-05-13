@@ -914,8 +914,11 @@ SET hdx.`TinhTrangThanhToan` = "Chưa hoàn tiền"
 WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
 
 
-DELETE FROM Khachhang WHERE ID_KH = 0;
 ALTER TABLE Khachhang AUTO_INCREMENT = 21;
 ALTER TABLE khachhang
 MODIFY COLUMN ID_KH INT NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE GiaoHang AUTO_INCREMENT = 31;
+ALTER TABLE GiaoHang
+MODIFY COLUMN IDGiaoHang INT NOT NULL AUTO_INCREMENT;
 
