@@ -67,4 +67,12 @@ export default {
   includes: function (arr, value) {
     return Array.isArray(arr) && arr.includes(value);
   },
+
+  some: function (value, arr) {
+    return Array.isArray(arr) && arr.includes(value);
+  },
+
+  all: function (value, arr) {
+    return Array.isArray(arr) && arr.every((item) => item === value);
+  },
 };
