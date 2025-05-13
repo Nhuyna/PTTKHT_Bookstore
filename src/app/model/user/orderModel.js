@@ -69,6 +69,7 @@ const capNhatDiaChi = async ({
     throw error;
   }
 };
+
 const themDiaChi = async ({
   ID_KH,
   TenNguoiNhan,
@@ -108,6 +109,7 @@ const themDiaChi = async ({
 };
 
 const cancelOrder = async (ID_HDX) => {
+  console.log("HÓA ĐƠN XUAASTTTTTTT ",ID_HDX)
   const query = `
       UPDATE GiaoHang
       SET TinhTrangDon = 'Đã hủy'
@@ -116,10 +118,26 @@ const cancelOrder = async (ID_HDX) => {
 
   try {
     const [result] = await database.query(query, [ID_HDX]);
-    // console.log("✅ Update result:", result);
+    console.log("✅ Update result:", result);
   } catch (err) {
     console.error("❌ Lỗi trong cancelOrder:", err.message);
     throw err; // để controller bắt lỗi tiếp
+  }
+};
+const TraHang = async (ID_HDX) => {
+  console.log("HÓA ĐƠN XUAASTTTTTTT ",ID_HDX)
+  const query = `
+      UPDATE GiaoHang
+      SET TinhTrangDon = 'Trả hàng'
+      WHERE ID_HDX = ?
+    `;
+
+  try {
+    const [result] = await database.query(query, [ID_HDX]);
+    console.log("✅ Update result:", result);
+  } catch (err) {
+    console.error("❌ Lỗi trong cancelOrder:", err.message);
+    throw err; 
   }
 };
 const createGiaoHang = async (data) => {
@@ -139,4 +157,12 @@ const createGiaoHang = async (data) => {
 
 
 
-export default {themDiaChi, createHoaDonXuat, capNhatDiaChi, cancelOrder ,createChiTietHoaDonXuat,createGiaoHang };
+export default {
+  themDiaChi
+  ,createHoaDonXuat, 
+  capNhatDiaChi, 
+  cancelOrder ,
+  createChiTietHoaDonXuat,
+  createGiaoHang ,
+  TraHang
+};

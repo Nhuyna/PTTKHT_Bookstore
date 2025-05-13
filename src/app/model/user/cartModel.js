@@ -2,22 +2,21 @@ import database from "../../../config/db.js";
 
 const getCartByUserId = async (userId) => {
   const query = `
-SELECT 
-    KhachHang.*, 
-    GioHang.*, 
-    SanPham.*, 
-    AnhSP.*
-
-FROM KhachHang
-JOIN GioHang ON KhachHang.ID_KH = GioHang.ID_KH
-JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
-LEFT JOIN (
-    SELECT ID_SP, MIN(STT) AS MIN_STT
-    FROM AnhSP
-    GROUP BY ID_SP
-) AS FirstAnhSP ON FirstAnhSP.ID_SP = SanPham.SanPhamID
-LEFT JOIN AnhSP ON AnhSP.ID_SP = FirstAnhSP.ID_SP AND AnhSP.STT = FirstAnhSP.MIN_STT
-WHERE KhachHang.ID_KH = ?;
+  SELECT 
+      KhachHang.*, 
+      GioHang.*, 
+      SanPham.*, 
+      AnhSP.*
+  FROM KhachHang
+  JOIN GioHang ON KhachHang.ID_KH = GioHang.ID_KH
+  JOIN SanPham ON SanPham.SanPhamID = GioHang.ID_SP
+  LEFT JOIN (
+      SELECT ID_SP, MIN(STT) AS MIN_STT
+      FROM AnhSP
+      GROUP BY ID_SP
+  ) AS FirstAnhSP ON FirstAnhSP.ID_SP = SanPham.SanPhamID
+  LEFT JOIN AnhSP ON AnhSP.ID_SP = FirstAnhSP.ID_SP AND AnhSP.STT = FirstAnhSP.MIN_STT
+  WHERE KhachHang.ID_KH = ?;
 
     `;
   const [rows] = await database.query(query, [userId]);
@@ -60,7 +59,7 @@ const themVaoGio = async (ID_KH, ID_SP, soluong = 1) => {
 
     return { success: true };
   } catch (err) {
-    console.error("❌ Lỗi khi thêm vào giỏ hàng:", err);
+    console.error("Lỗi khi thêm vào giỏ hàng:", err);
     throw err;
   }
 };
@@ -73,7 +72,7 @@ const xoaSanPhamTrongGio = async (ID_KH, ID_SP) => {
     ]);
     return { success: true };
   } catch (error) {
-    console.error("❌ Lỗi khi xóa sản phẩm khỏi giỏ hàng:", error);
+    console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng:", error);
     throw error;
   }
 };
@@ -85,7 +84,7 @@ const deleteItem = async (userId, productId) => {
     ]);
     return { success: true };
   } catch (error) {
-    console.error("❌ Lỗi khi xóa sản phẩm khỏi giỏ hàng:", error);
+    console.error("Lỗi khi xóa sản phẩm khỏi giỏ hàng:", error);
     throw error;
   }
 };
@@ -105,7 +104,7 @@ const getTotalPrice = async (userId) => {
 
     return totalPrice;
   } catch (error) {
-    console.error("❌ Lỗi khi tính tổng giá trị giỏ hàng:", error);
+    console.error("Lỗi khi tính tổng giá trị giỏ hàng:", error);
     throw error;
   }
 };

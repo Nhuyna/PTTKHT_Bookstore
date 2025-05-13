@@ -5,5 +5,6 @@ const router = express.Router();
 
 router.post("/thanhtoan", orderController.handleCheckout);
 router.post("/huyDonHang", orderController.huyDonHang);
+router.post("/TraHang", orderController.TraHang);
 
 export default router;

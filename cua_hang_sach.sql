@@ -912,3 +912,7 @@ UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.`TinhTrangThanhToan` = "Chưa hoàn tiền"
 WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
+
+
+ALTER TABLE giaohang
+MODIFY NgayGiaoHang TIMESTAMP DEFAULT CURRENT_TIMESTAMP;

@@ -53,9 +53,10 @@ const getHoaDonByUserIdAndStatus = async (userId, status) => {
       params.push(status);
     }
   }
-  console.log("query", query);
+  // console.log("query", query);
 
   const [rows] = await database.query(query, params);
+  console.log(groupedByHoaDonXuat(rows))
   return groupedByHoaDonXuat(rows);
 };
 
