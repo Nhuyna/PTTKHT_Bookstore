@@ -14,8 +14,9 @@ class Dashboard {
   }
 
   async get_receipt_recently() {
-    const query = `SELECT IDHoaDonNhap, TongTien, TinhTrangThanhToan
+    const query = `SELECT IDHoaDonNhap, TongTien, NhanVien.TenNhanVien
         FROM HoaDonNhap
+        JOIN NhanVien ON HoaDonNhap.IDNhanVien = NhanVien.IDNhanVien
         ORDER BY ABS(DATEDIFF(NgayNhap, CURDATE()))
         LIMIT 9`;
     const [rows] = await pool.execute(query);

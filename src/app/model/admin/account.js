@@ -67,13 +67,13 @@ class Account {
     }
 
     // sửa nhân viên
-    async update_old_password(employee_id, permission_id, password){
+    async update_old_password(employee_id, permission_id){
         const query = 
         `UPDATE TaiKhoan  
         SET ID_NhomQuyen = ?,
             tinhTrang = 1
         WHERE ID_NhanVien = ?`;
-        await pool.execute(query, [permission_id, password, employee_id]);
+        await pool.execute(query, [permission_id, employee_id]);
     }
 
     async update_change_password(employee_id, permission_id, password){

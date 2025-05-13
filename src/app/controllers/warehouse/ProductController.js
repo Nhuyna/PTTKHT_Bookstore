@@ -331,10 +331,13 @@ class ProductController {
 
       permissions = permissions.concat(allPermissions);
       permissions.push("qlkho");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlsanpham");
+      console.log(action);
       res.render("warehouse/product", {
         product,
         layout: "admin",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
