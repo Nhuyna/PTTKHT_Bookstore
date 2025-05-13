@@ -16,7 +16,7 @@
                 <div class="divide-y divide-gray-100 space-y-5">
                   {{#each cart}}
                   <div class="flex items-center py-5 first:pt-0 group transition-all duration-300 hover:bg-gray-50 rounded-lg p-2"
-                    data-book-id="" data-cart-id="">
+                    data-book-id="{{this.SanPhamID}}" data-user-id="{{session.user_id}}">
                     
                     <div class="w-24 h-32 flex-shrink-0 mr-4">
                       <img src="{{this.Anh}}"
@@ -72,7 +72,7 @@
                           <button type="button" class="delete-btn ml-2 text-gray-400 hover:text-red-500 transition-colors duration-150 focus:outline-none"
                             onclick="xoaSanPham(this)" aria-label="Xóa sản phẩm"
                             title="Xóa sản phẩm"
-                            data-book-id="{{this.SanPhamID}}" data-user-id="{{session.user_id}}"
+                            
                             >
                             <i class="fas fa-trash"></i>
                           </button>
@@ -142,6 +142,7 @@
 <script>
   function xoaSanPham(button) {
     const productDiv = button.closest('[data-book-id][data-user-id]');
+    console.log("Đã tìm được sản phẩm:", productDiv);
     const bookId = productDiv.dataset.bookId;
     const user_id = productDiv.dataset.userId;
 
@@ -178,7 +179,7 @@
         console.error("Lỗi xoá:", err);
         alert("Có lỗi xảy ra khi xoá sản phẩm.");
     });
-}
+  }
 </script>
 <script>
   function formatCurrency(value) { 
@@ -205,6 +206,12 @@
       formatCurrency(total); 
     }); 
   }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    updateTotal(); 
+  });
+
+  /*
   document.querySelectorAll('.increase').forEach((btn, index) => {
     btn.addEventListener('click', () => { 
       const qtyEls = document.querySelectorAll('.quantity'); 
@@ -229,6 +236,50 @@
     }); 
   }); 
   updateTotal();
+  */
+  
+</script>
+<script>
+  document.querySelectorAll('.increase').forEach((btn) => {
+    btn.addEventListener('click', () => handleQuantityChange(btn, 'increase'));
+  });
+  document.querySelectorAll('.decrease').forEach((btn) => {
+    btn.addEventListener('click', () => handleQuantityChange(btn, 'decrease'));
+  });
+
+  function handleQuantityChange(button, action) {
+    const container = button.closest('.flex.items-center.gap-3');
+    const quantitySpan = container.querySelector('.quantity');
+    const quantityInput = container.querySelector('.quantity-input');
+    const price = parseFloat(container.querySelector('.item-total').dataset.price || 0);
+    const totalEl = container.querySelector('.item-total');
+
+    const bookId = container.querySelector('input[name="idSanPham[]"]').value;
+
+    fetch('/cart/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: `book_id=${bookId}&action=${action}`
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          const newQty = data.newQty;
+          quantitySpan.textContent = newQty;
+          quantityInput.value = newQty;
+          const newTotal = newQty * price;
+          totalEl.textContent = formatCurrency(newTotal);
+          updateTotal(); 
+        } else {
+          alert(data.message || 'Cập nhật số lượng thất bại');
+        }
+      })
+      .catch((err) => {
+        console.error('Lỗi AJAX:', err);
+        alert('Đã xảy ra lỗi khi cập nhật số lượng');
+      });
+  }
+
 </script>
 <script>
   document.getElementById('cartForm').addEventListener('submit', function (e) {
