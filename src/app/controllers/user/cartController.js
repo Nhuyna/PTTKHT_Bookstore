@@ -111,21 +111,21 @@ const afterpayment = async (req, res) => {
     const cart = req.session.cartCheckout;
     const total = parseFloat(req.session.cartTotal);
     const userId = req.session.user_id;
-    console.log("cart : ", cart);
 
     if (!cart || cart.length === 0) {
-      return res.redirect("/cart");
+      return res.status(400).json({ success: false, message: "Giỏ hàng trống." });
     }
 
-    const { TenKH, SDT, address, phuong, quan, thanhpho, payment } = req.body;
+    const { TenKH, SDT, address, ward, district, thanhpho, payment } = req.body;
+    console.log("địa chỉ", address)
 
-    const IDDiaChi =await OrderModel.capNhatDiaChi({
+    const IDDiaChi = await OrderModel.themDiaChi({
       ID_KH: userId,
       TenNguoiNhan: TenKH,
       SoDienThoai: SDT,
-      DiaChiNhanHang: address,
-      PhuongXa: phuong,
-      QuanHuyen: quan,
+      SoNhaDuong: address,
+      PhuongXa: ward,
+      QuanHuyen: district,
       TinhThanhPho: thanhpho,
     });
 
@@ -140,7 +140,6 @@ const afterpayment = async (req, res) => {
       PhuongThucThanhToan: payment,
       TinhTrangThanhToan: tinhtrangthanhtoan
     });
-    console.log("ID_HoaDonXuat : ", ID_HoaDonXuat);
 
     for (const item of cart) {
       await OrderModel.createChiTietHoaDonXuat({
@@ -164,12 +163,13 @@ const afterpayment = async (req, res) => {
     req.session.cartCheckout = null;
     req.session.cartTotal = 0;
 
-    res.redirect("/cart/confirm");
+    res.json({ success: true, message: "Thanh toán thành công!" });
   } catch (error) {
     console.error("Lỗi khi lưu hoá đơn:", error);
-    res.redirect("/user/errorPage?error=" + encodeURIComponent("Lỗi khi lưu hoá đơn"));
+    res.status(500).json({ success: false, message: "Lỗi khi lưu hoá đơn." });
   }
 };
+
 
 const renderThankYouPage = (req, res) => {
   try {
@@ -198,7 +198,7 @@ const addToCart = async (req, res) => {
         success: false,
         message: "Vui lòng đăng nhập để thêm vào giỏ hàng!",
         redirect: "/user/account", 
-      });
+      }); 
     }
 
     if (!productId) {
@@ -245,7 +245,25 @@ const getcartCount = async (req, res) => {
     });
   }
 };
+const deleteCartItem = async (req, res) => {
+  const { book_id } = req.body;
+  const userId = req.session.user_id;
 
+  if (!userId || !book_id) {
+    return res.json({ success: false, message: 'Thiếu thông tin!' });
+  }
+
+  try {
+    await CartModel.deleteItem(userId, book_id);
+
+    const totalPrice = await CartModel.getTotalPrice(userId);
+
+    res.json({ success: true, totalPrice });
+  } catch (err) {
+    console.error(err);
+    res.json({ success: false, message: 'Lỗi server!' });
+  }
+};
 export default {
   renderCartPage,
   thanhtoan,
@@ -253,4 +271,5 @@ export default {
   renderThankYouPage,
   addToCart,
   getcartCount,
+  deleteCartItem,
 };

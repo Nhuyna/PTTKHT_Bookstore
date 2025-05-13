@@ -122,6 +122,7 @@ class AccountController{
   // create form
   async create(req, res){
       try {
+        const result = await accountConfig.get_permission();
         let permissions = (
             await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
         ).map((p) => p.ChucNang);
@@ -138,6 +139,7 @@ class AccountController{
             layout: "admin",
             permissions,
             action,
+            result
         });
       } catch (error) {
           console.log(error);
@@ -149,11 +151,10 @@ class AccountController{
     try {
       const { employee, permission, password, confirm_password } = req.body;
       const [employee_id, employee_name] = employee.split(" - ");
-      const [permission_id, permission_name] = permission.split(" - ");
       if (password !== confirm_password){
         return res.status(400).send("Mật khẩu không khớp");
       }
-      await accountConfig.update(employee_id, permission_id, password);
+      await accountConfig.update_change_password(employee_id, permission, password);
       let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
@@ -176,6 +177,15 @@ class AccountController{
     try {
       const { id } = req.params;
       const account = (await accountConfig.get_account_info(id))[0];
+      const result = await accountConfig.get_permission();
+      // Gắn selected cho nhóm quyền hiện tại
+      const updatedResult = result.map((p) => {
+        return {
+          ...p,
+          selected: p.ID_NhomQuyen === account.ID_NhomQuyen
+        };
+      });
+
       let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
@@ -193,6 +203,7 @@ class AccountController{
         layout: "admin",
         permissions,
         action,
+        result: updatedResult // sử dụng result đã xử lý
       });
     } catch (error) {
       console.log(error);
@@ -202,13 +213,16 @@ class AccountController{
   // get data from update and edit account
   async edit(req, res) {
     try {
-      const { employee, permission, password, confirm_password } = req.body;
+      const { employee, permission, change_option, password, confirm_password } = req.body;
       const [employee_id, employee_name] = employee.split(" - ");
-      const [permission_id, permission_name] = permission.split(" - ");
-      if (password !== confirm_password){
-        return res.status(400).send("Mật khẩu không khớp");
+      if (change_option === "old"){
+        await accountConfig.update_old_password(employee_id, permission);
+      } else {
+        if (password !== confirm_password){
+          return res.status(400).send("Mật khẩu không khớp");
+        }
+        await accountConfig.update_change_password(employee_id, permission, password);
       }
-      await accountConfig.update(employee_id, permission_id, password);
 
       let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
@@ -243,44 +257,6 @@ class AccountController{
       permissions = permissions.concat(allPermissions);
       let action = await phanquyen.action(req.session.user.idNQ, "taikhoan");
       res.redirect("/admin/account");
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  // create excel
-  async create_excel(req, res) {
-    try {
-      const data = await accountConfig.getAll(); // Lấy dữ liệu từ DB
-      const workbook = new ExcelJS.Workbook();
-      const worksheet = workbook.addWorksheet("Danh sách tài khoản");
-
-      // Định nghĩa các cột
-      worksheet.columns = [
-        { header: "Mã Nhân Viên", key: "ID_NhanVien", width: 15 },
-        { header: "Tên Nhân Viên", key: "TenNhanVien", width: 25 },
-        { header: "Nhóm Quyền", key: "TenNhomQuyen", width: 20 },
-        { header: "Mật Khẩu Tài Khoản", key: "MatKhau", width: 20 },
-      ];
-
-      // Thêm dữ liệu
-      data.forEach((item, index) => {
-        worksheet.addRow({
-          ...item
-        });
-      });
-
-      // Xuất file
-      res.setHeader(
-        "Content-Type",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-      );
-      res.setHeader(
-        "Content-Disposition",
-        "attachment; filename=ds_taikhoan.xlsx"
-      );
-      await workbook.xlsx.write(res);
-      res.end();
     } catch (error) {
       console.log(error);
     }

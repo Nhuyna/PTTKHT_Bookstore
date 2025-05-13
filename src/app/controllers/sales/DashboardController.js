@@ -7,16 +7,14 @@ class DashboardController {
       const dashboardModel = new Dashboard();
       const orderModel = new Order();
 
-      const today = new Date();
-      const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
-      startDate.setMonth(startDate.getMonth() - 1);
+      // const today = new Date();
+      // const startDate = new Date(today.getFullYear(), today.getMonth(), 1);
+      // startDate.setMonth(startDate.getMonth() - 1);
 
       const topProducts =
-        (await dashboardModel.getTopProductsByDateRange(startDate, today)) ||
-        [];
+        (await dashboardModel.getTopProductsByCurrentMonth()) || [];
 
-      const dashboard =
-        (await dashboardModel.getDashboard(startDate, today)) || [];
+      const dashboard = (await dashboardModel.getDashboard()) || [];
 
       // Fetch revenue data for current month
       const revenueData = (await dashboardModel.getRevenueCurrentMonth()) || [];
