@@ -8,15 +8,29 @@ const huyDonHang = async (req, res) => {
     console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
     console.log("👉 ID_KH:", ID_KH);
 
-    await OrderModel.cancelOrder(IDHoaDonXuat); // ✅ gọi từ object
-    res.redirect("/lichsudonhang");
+    await OrderModel.cancelOrder(IDHoaDonXuat);
+    res.json({ success: true, message: "Hủy đơn hàng thành công." });
   } catch (error) {
     console.error("Lỗi khi hủy đơn hàng:", error);
-    res.redirect(
-      "/user/errorPage?error=" + encodeURIComponent("Hủy đơn hàng thất bại.")
-    );
+    res.status(500).json({ success: false, message: "Hủy đơn hàng thất bại." });
   }
 };
+const TraHang= async (req, res) => {
+  const { IDHoaDonXuat } = req.body;
+  const ID_KH = req.session.user_id;
+  try {
+    console.log("👉 Đã vào controller TraHang");
+    console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
+    console.log("👉 ID_KH:", ID_KH);
+
+    await OrderModel.TraHang(IDHoaDonXuat);
+    res.json({ success: true, message: "Yêu cầu trả thành công." });
+  } catch (error) {
+    console.error("Lỗi khi hủy đơn hàng:", error);
+    res.status(500).json({ success: false, message: "Yêu cầu trả thất bại." });
+  }
+};
+
 
 const handleCheckout = async (req, res, next) => {
   const { idSanPham, soluong, tongTien } = req.body;
@@ -62,4 +76,4 @@ const handleCheckout = async (req, res, next) => {
   }
 };
 
-export default { handleCheckout, huyDonHang };
+export default { handleCheckout, huyDonHang,TraHang };

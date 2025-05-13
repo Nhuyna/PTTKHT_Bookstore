@@ -9,7 +9,7 @@
             <a href="/admin/employee"><button class="cancel-btn">Quay lại</button></a>
         </div>
 
-        <form method="post" action="/admin/employee/store">
+        <form method="post" action="/admin/employee/store" id="create-employee-form">
             <div class="form-group">
                 <label for="name" class="form-label">Tên Nhân Viên</label>
                 <input type="text" class="form-control" id="name" name="name" required>
@@ -84,6 +84,45 @@
             </div>
             <button class="add-btn" type="submit">Thêm</button>
         </form>
-
     </div>
 </div>
+
+<script>
+    const form = document.getElementById("create-employee-form");
+
+    form.addEventListener("submit", function(e) {
+        const phoneInput = document.getElementById("phone");
+        const emailInput = document.getElementById("email");
+
+        const phone = phoneInput.value.trim();
+        const email = emailInput.value.trim();
+
+        // Regex kiểm tra số điện thoại Việt Nam (bắt đầu bằng 0, có 10 chữ số)
+        const phoneRegex = /^0\d{9}$/;
+
+        // Regex kiểm tra định dạng email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+        let hasError = false;
+
+        if (!phoneRegex.test(phone)) {
+            alert("Số điện thoại không hợp lệ! (Phải bắt đầu bằng 0 và đủ 10 chữ số)");
+            phoneInput.style.borderColor = "red";
+            hasError = true;
+        } else {
+            phoneInput.style.borderColor = "";
+        }
+
+        if (!emailRegex.test(email)) {
+            alert("Email không hợp lệ!");
+            emailInput.style.borderColor = "red";
+            hasError = true;
+        } else {
+            emailInput.style.borderColor = "";
+        }
+
+        if (hasError) {
+            e.preventDefault(); // Ngăn không cho form submit nếu có lỗi
+        }
+    });
+</script>

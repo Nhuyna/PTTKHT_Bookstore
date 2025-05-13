@@ -20,7 +20,7 @@ const renderHistoryPage = async (req, res) => {
     let history = await getHoaDonByUserIdAndStatus(userId, status);
     history.forEach((hd) => {
       // console.log(JSON.stringify(hd.ChiTietHoaDonXuat, null, 2));
-      console.log("hd", hd.TinhTrangDon);
+      // console.log("hd", hd.TinhTrangDon);
       switch (hd.TinhTrangDon) {
         case "Chờ xác nhận":
           hd.TrangThaiText = "🚚 Chờ xác nhận";
@@ -52,7 +52,20 @@ const renderHistoryPage = async (req, res) => {
       }
     });
     history.forEach((hoaDons) => {
-      hoaDons.DaHuy = hoaDons.TinhTrangDon === "Đã hủy";
+      hoaDons.DaHuy =( hoaDons.TinhTrangDon === "Chờ xác nhận" || hoaDons.TinhTrangDon === "Chờ lấy hàng" || hoaDons.TinhTrangDon === "Đang giao hàng");
+      const ngayGiao = new Date(hoaDons.NgayXuat);
+      const ngayHienTai = new Date();
+
+      const ms1Ngay = 24 * 60 * 60 * 1000; 
+      const soNgayTrenLech = (ngayHienTai - ngayGiao) / ms1Ngay;
+
+      const coTheTraHang = (hoaDons.TinhTrangDon === "Đã giao" && soNgayTrenLech <= 3);
+      hoaDons.HienTraHang = hoaDons.TinhTrangDon === "Đã giao";
+      hoaDons.TraHang = coTheTraHang;
+      hoaDons.TraHangClass = coTheTraHang ? "" : "cursor-not-allowed opacity-50";
+
+
+      console.log("trả hanggfffffffffffff",hoaDons.TraHang)
       hoaDons.TongTien = formatCurrencyVND(hoaDons.TongTien);
       hoaDons.ChiTietHoaDonXuat.forEach((hd) => {
         hd.Gia = formatCurrencyVND(hd.Gia);
@@ -62,7 +75,7 @@ const renderHistoryPage = async (req, res) => {
     console.log("history", history);
     res.render("user/lichsudonhang", {
       history,
-      status: req.query.status || null,
+      status: req.query.status,
       session: req.session,
     });
   } catch (error) {
