@@ -216,7 +216,7 @@ class AccountController{
       const { employee, permission, change_option, password, confirm_password } = req.body;
       const [employee_id, employee_name] = employee.split(" - ");
       if (change_option === "old"){
-        await accountConfig.update_old_password(employee_id, permission, password);
+        await accountConfig.update_old_password(employee_id, permission);
       } else {
         if (password !== confirm_password){
           return res.status(400).send("Mật khẩu không khớp");
