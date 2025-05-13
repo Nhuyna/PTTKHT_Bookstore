@@ -77,7 +77,13 @@
               <td>{{this.TinhThanhPho}}</td>
               <td>
                 <div class="button-container">
-                          
+                  <a href="/admin/warehouse/provider/view/{{this.ID_NCC}}">
+                    <button class="icon-btn view-btn">
+                      <i class="fas fa-eye"></i>
+                      <span class="tooltip">Chi tiết</span>
+                    </button>
+                  </a>
+
                   {{#if (or (includes ../action "edit") (includes ../action "all"))}}
                   <a href="/admin/warehouse/provider/update/{{this.ID_NCC}}">
                     <button class="icon-btn edit-btn">
