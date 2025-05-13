@@ -10,7 +10,7 @@ router.post("/changeInforUser", userController.changeUserInfo);
 router.get("/errorPage", userController.errorPage);
 
 router.post("/login", userController.login);
-
+ 
 router.post("/changePasswordUser", userController.changePasswordUser);
 
 router.post("/registration", userController.registerUser);

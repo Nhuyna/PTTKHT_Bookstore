@@ -13,7 +13,7 @@ class AdminController {
 
     if (!user || user.MatKhau !== password) {
       return res.render("admin/login", {
-        layout: "admin",
+        layout: false,
         error: "Sai tài khoản hoặc mật khẩu. Vui lòng thử lại.",
       });
     }

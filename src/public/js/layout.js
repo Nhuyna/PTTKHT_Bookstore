@@ -52,13 +52,13 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-function addToCart(productId) {
+function addToCart(productId, soluong) {
   fetch("/cart/addToCart", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ productId }),
+    body: JSON.stringify({ productId, soluong }),
   })
     .then((res) => res.json())
     .then((data) => {
@@ -69,7 +69,7 @@ function addToCart(productId) {
           showConfirmButton: false,
           timer: 1500,
         });
-        alert("Đã thêm vào giỏ hàng!");
+
         updateCartCount();
       } else {
         Swal.fire({

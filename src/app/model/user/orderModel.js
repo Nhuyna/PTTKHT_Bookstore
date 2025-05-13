@@ -42,7 +42,7 @@ const capNhatDiaChi = async ({
   SoDienThoai,
   SoNhaDuong,
   QuanHuyen,
-  TinhThanhPho,
+  TinhThanhPho
 }) => {
   try {
     const sql = `
@@ -66,6 +66,43 @@ const capNhatDiaChi = async ({
     return result.affectedRows;
   } catch (error) {
     console.error("❌ Lỗi khi cập nhật địa chỉ:", error);
+    throw error;
+  }
+};
+const themDiaChi = async ({
+  ID_KH,
+  TenNguoiNhan,
+  SoDienThoai,
+  SoNhaDuong,
+  QuanHuyen,
+  TinhThanhPho,
+  PhuongXa
+}) => {
+  try {
+    const sql = `
+        insert into DiaChi_KH
+        (TenNguoiNhan ,SoDienThoai ,SoNhaDuong,QuanHuyen,TinhThanhPho,ID_KH,PhuongXa) values
+          (?,
+          ?,
+          ?,
+          ?,
+          ?,
+          ?,
+          ?)
+      `;
+    const values = [
+      TenNguoiNhan,
+      SoDienThoai,
+      SoNhaDuong,
+      QuanHuyen,
+      TinhThanhPho,
+      ID_KH,
+      PhuongXa
+    ];
+    const [result] = await database.query(sql, values);
+    return result.affectedRows;
+  } catch (error) {
+    console.error("❌ Lỗi khi thêm địa chỉ:", error);
     throw error;
   }
 };
@@ -102,4 +139,4 @@ const createGiaoHang = async (data) => {
 
 
 
-export default { createHoaDonXuat, capNhatDiaChi, cancelOrder ,createChiTietHoaDonXuat,createGiaoHang };
+export default {themDiaChi, createHoaDonXuat, capNhatDiaChi, cancelOrder ,createChiTietHoaDonXuat,createGiaoHang };

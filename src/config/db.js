@@ -5,7 +5,7 @@ dotenv.config();
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
-  port: "3306",
+  port: process.env.DB_PORT || "3306",
   password: process.env.DB_PASS || "",
   user: "root",
   database: "cua_hang_sach",

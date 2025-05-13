@@ -26,21 +26,40 @@
             </div>
             <div class="form-group">
                 <label for="permission" class="form-label">Nhóm Quyền</label>
-                <input type="text" class="form-control" id="permission" name="permission" 
-                value="{{account.permission_info}}"
-                autocomplete="off"
-                placeholder="Nhập id hoặc tên nhóm quyền ..."
-                required
-                />
-                <div id="suggestions_permission"></div>
+                <select class="form-control" id="permission" name="permission" required>
+                    {{#each result}}
+                        <option value="{{this.ID_NhomQuyen}}" {{#if this.selected}}selected{{/if}}>
+                            {{this.permission_info}}
+                        </option>
+                    {{/each}}
+                </select>
             </div>
             <div class="form-group">
-                <label for="password" class="form-label">Mật Khẩu</label>
-                <input type="text" class="form-control" value="{{account.MatKhau}}" id="password" name="password" required>
+                <label for="change_option" class="form-label">Mật Khẩu Tài Khoản</label>
+                <select name="change_option" id="change_option" class="form-control" onchange="togglePasswordSection()">
+                    <option value="old">Giữ mật khẩu cũ</option>
+                    <option value="new">Tạo mật khẩu mới</option>
+                </select>
             </div>
-            <div class="form-group">
-                <label for="confirm_password" class="form-label">Xác Nhận Mật Khẩu</label>
-                <input type="text" class="form-control" value="{{account.MatKhau}}" id="confirm_password" name="confirm_password" required>
+            <div id="password-section">
+                <div class="form-group password-wrapper">
+                    <label for="password" class="form-label">Mật Khẩu</label>
+                    <input type="password" class="form-control" 
+                    value=""
+                    id="password" name="password" 
+                    placeholder="Nhập mật khẩu mới có ít nhất 6 kí tự ..."
+                    required>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword(this, 'password')"></i>
+                </div>
+                <div class="form-group password-wrapper">
+                    <label for="confirm_password" class="form-label">Xác Nhận Mật Khẩu</label>
+                    <input type="password" class="form-control" 
+                    value=""
+                    id="confirm_password" name="confirm_password" 
+                    placeholder="Xác nhận mật khẩu mới ..."
+                    required>
+                    <i class="fas fa-eye toggle-password" onclick="togglePassword(this, 'confirm_password')"></i>
+                </div>
             </div>
             <button class="add-btn" type="submit">Sửa</button>
         </form>
@@ -48,7 +67,7 @@
     </div>
 </div>
 
-<script>
+{{!-- <script>
     const form = document.getElementById("update-account-form");
     const passwordInput = document.getElementById("password");
     const confirmPasswordInput = document.getElementById("confirm_password");
@@ -82,4 +101,119 @@
             this.classList.add("invalid");
         }
     });
+    function togglePasswordSection() {
+        const option = document.getElementById("change_option").value;
+
+        if (option === "new") {
+            passwordInput.value = "";
+            confirmPasswordInput.value = "";
+            passwordInput.required = true;
+            confirmPasswordInput.required = true;
+        } else {
+            passwordInput.value = "Matkhau";
+            confirmPasswordInput.value = "Matkhau";
+            passwordInput.required = false;
+            confirmPasswordInput.required = false;
+        }
+    }
+
+    function togglePassword(icon, fieldId) {
+        const input = document.getElementById(fieldId);
+        const isHidden = input.type === "password";
+
+        input.type = isHidden ? "text" : "password";
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+    }
+</script> --}}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.getElementById("update-account-form");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirm_password");
+    const passwordSection = document.getElementById("password-section");
+    const changeOption = document.getElementById("change_option");
+
+    // Hiện/ẩn khu vực mật khẩu dựa vào lựa chọn
+    function togglePasswordSection() {
+        const option = changeOption.value;
+
+        if (option === "new") {
+            passwordSection.style.display = "block";
+            passwordInput.required = true;
+            confirmPasswordInput.required = true;
+            passwordInput.value = "";
+            confirmPasswordInput.value = "";
+        } else {
+            passwordSection.style.display = "none";
+            passwordInput.required = false;
+            confirmPasswordInput.required = false;
+            passwordInput.value = "";
+            confirmPasswordInput.value = "";
+        }
+    }
+
+    // Chuyển đổi hiển thị mật khẩu
+    window.togglePassword = function (icon, fieldId) {
+        const input = document.getElementById(fieldId);
+        const isHidden = input.type === "password";
+        input.type = isHidden ? "text" : "password";
+        icon.classList.toggle("fa-eye");
+        icon.classList.toggle("fa-eye-slash");
+    };
+
+    // Xác minh mật khẩu trùng khớp khi gửi form
+    if (form) {
+        form.addEventListener("submit", function (e) {
+            if (changeOption.value === "new") {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                // Kiểm tra độ dài mật khẩu
+                if (password.length < 6) {
+                    e.preventDefault();
+                    alert("Mật khẩu phải có ít nhất 6 ký tự!");
+                    passwordInput.style.borderColor = "red";
+                    return;
+                }
+
+                // Kiểm tra khớp mật khẩu
+                if (password !== confirmPassword) {
+                    e.preventDefault();
+                    alert("Mật khẩu và xác nhận mật khẩu không khớp!");
+                    passwordInput.style.borderColor = "red";
+                    confirmPasswordInput.style.borderColor = "red";
+                } else {
+                    passwordInput.style.borderColor = "";
+                    confirmPasswordInput.style.borderColor = "";
+                }
+            }
+        });
+    }
+
+    // Phản hồi khi đang gõ xác nhận mật khẩu
+    if (confirmPasswordInput) {
+        confirmPasswordInput.addEventListener("input", function () {
+            const password = passwordInput.value;
+            const confirmPassword = this.value;
+
+            if (confirmPassword.length === 0) {
+                this.classList.remove("valid", "invalid");
+            } else if (password === confirmPassword) {
+                this.classList.remove("invalid");
+                this.classList.add("valid");
+            } else {
+                this.classList.remove("valid");
+                this.classList.add("invalid");
+            }
+        });
+    }
+
+    // Gọi lần đầu để khởi tạo trạng thái đúng
+    if (changeOption) {
+        togglePasswordSection();
+        changeOption.addEventListener("change", togglePasswordSection);
+    }
+});
 </script>

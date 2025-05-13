@@ -1,0 +1,32 @@
+{{#block "css"}}
+    <link rel="stylesheet" href="/css/warehouse/provider.css">
+{{/block}}
+
+<div class="provider-table">
+    <div class="inside-table">
+        <div class="providerHeader">
+            <h2>Chi Tiết Thông Tin Nhà Cung Cấp</h2>
+            <a href="/admin/warehouse/provider"><button class="cancel-btn">Quay lại</button></a>
+        </div>
+
+        <div class="info-container">
+            <div class="info-box">
+                <div class="header">
+                    <p>
+                        <i class="fas fa-user-tie"></i>
+                        <span>Thông tin nhà cung cấp</span>
+                    </p>
+                </div>
+                <div class="body">
+                    <div>
+                        <p><b>Mã nhà cung cấp:</b> {{provider.ID_NCC}}</p>
+                        <p><b>Tên nhà cung cấp:</b> {{provider.TenNCC}}</p>
+                        <p><b>Số điện thoại:</b> {{provider.SDT}}</p>
+                        <p><b>Email:</b> {{provider.Email}}</p>
+                        <p><b>Địa chỉ:</b> {{provider.SoNhaDuong}} {{provider.PhuongXa}} {{provider.QuanHuyen}} {{provider.TinhThanhPho}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
