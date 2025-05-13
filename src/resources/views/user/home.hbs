@@ -1,7 +1,13 @@
-       <link rel="stylesheet" href="/css/category.css">
-              <link rel="stylesheet" href="/css/product.css">
-       
-       
+      {{#block "css"}} <link rel="stylesheet" href="/css/category.css">
+      {{/block}}
+        {{#block "css"}}
+      <link rel="stylesheet" href="/css/product.css">
+          {{/block}}
+
+          
+{{#block "js"}}
+  <script src="/js/home.js"></script>
+{{/block}}
        <style>
         .product-card{
           margin-right: 10px;
