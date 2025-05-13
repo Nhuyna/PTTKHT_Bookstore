@@ -20,12 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
-
   // Xử lý form tìm kiếm
   const filterForm = document.querySelector(".filter-form");
   if (filterForm) {
     filterForm.addEventListener("submit", function (e) {
-      e.prevxentDefault();
+      e.preventDefault();
       const formData = new FormData(filterForm);
       const params = new URLSearchParams();
 

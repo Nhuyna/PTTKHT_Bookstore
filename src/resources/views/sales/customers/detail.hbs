@@ -7,22 +7,6 @@
 {{/block}}
 
 <div class="main-content">
-  <!-- nav bar -->
-  {{!-- <div class="navbar">
-    <div class="navbar-toggle">
-      {{! <i class="fas fa-bars"></i> }}
-    </div>
-    <div class="search-box">
-      <label>
-        <input type="text" placeholder="Tìm Kiếm" />
-        <i class="fas fa-search"></i>
-      </label>
-    </div>
-    <div class="user-profile">
-      <a href="#"><img src="/img/user.jpg" /></a>
-    </div>
-  </div> --}}
-
   <div class="customer-content">
     <div class="customer-header">
       <div class="back-button" style="display: flex;">
@@ -78,8 +62,8 @@
                 <i class="fas fa-shopping-bag"></i>
               </div>
               <div class="stat-info">
-                <div class="stat-value">{{customerDetails.SoDonHang}}</div>
                 <div class="stat-label">Đơn hàng</div>
+                <div class="stat-value">{{customerDetails.SoDonHang}}</div>
               </div>
             </div>
             <div class="stat-item">
@@ -87,10 +71,10 @@
                 <i class="fas fa-coins"></i>
               </div>
               <div class="stat-info">
+                <div class="stat-label">Tổng chi tiêu</div>
                 <div class="stat-value">{{formatCurrency
                     customerDetails.TongChiTieu
                   }}</div>
-                <div class="stat-label">Tổng chi tiêu</div>
               </div>
             </div>
           </div>
@@ -123,7 +107,7 @@
                       <td class="order-id">#{{this.IDHoaDonXuat}}</td>
                       <td>{{formatDateSimple this.NgayXuat}}</td>
                       <td>{{this.PhuongThucThanhToan}}</td>
-                      <td>{{formatCurrency this.TongTien}}đ</td>
+                      <td>{{formatCurrency this.TongTien}}</td>
                       <td>
                         <span
                           class="status-badge

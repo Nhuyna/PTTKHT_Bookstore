@@ -74,23 +74,49 @@ class Customer extends BaseModel {
 
   async getCustomerById(id) {
     try {
+      // const sql = `
+      //   SELECT
+      //     kh.ID_KH,
+      //     kh.TenKH,
+      //     kh.TenTK,
+      //     kh.SDT,
+      //     kh.NgaySinh,
+      //     kh.MatKhau,
+      //     kh.TenTK,
+      //     kh.Active,
+      //     COUNT(DISTINCT hdx.IDHoaDonXuat) as SoDonHang,
+      //     SUM(hdx.TongTien) as TongChiTieu
+      //   FROM KhachHang kh, KhachHang kh2
+      //   LEFT JOIN HoaDonXuat hdx ON kh2.ID_KH = hdx.ID_KH
+      //   LEFT JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
+      //   WHERE kh.ID_KH = ? AND gh.TinhTrangDon = 'Đã giao' AND TinhTrangThanhToan = 'Đã thanh toán'
+      //   GROUP BY kh.ID_KH
+
+      // `;
+
       const sql = `
         SELECT 
-          kh.ID_KH, 
-          kh.TenKH, 
-          kh.TenTK, 
-          kh.SDT, 
-          kh.NgaySinh, 
-          kh.MatKhau,
-          kh.TenTK,
-          kh.Active,
-          COUNT(DISTINCT hdx.IDHoaDonXuat) as SoDonHang,
-          SUM(hdx.TongTien) as TongChiTieu
-        FROM KhachHang kh, KhachHang kh2
-        LEFT JOIN HoaDonXuat hdx ON kh2.ID_KH = hdx.ID_KH
-        LEFT JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
-        WHERE kh.ID_KH = ? AND gh.TinhTrangDon = 'Đã giao' AND TinhTrangThanhToan = 'Đã thanh toán'
-        GROUP BY kh.ID_KH
+            kh.ID_KH, 
+            kh.TenKH, 
+            kh.TenTK, 
+            kh.SDT, 
+            kh.NgaySinh, 
+            kh.MatKhau,
+            kh.Active,
+            (SELECT COUNT(DISTINCT hdx.IDHoaDonXuat)
+            FROM HoaDonXuat hdx
+            LEFT JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
+            WHERE hdx.ID_KH = kh.ID_KH
+            AND gh.TinhTrangDon = 'Đã giao'
+            AND hdx.TinhTrangThanhToan = 'Đã thanh toán') as SoDonHang,     
+            (SELECT SUM(hdx.TongTien)
+            FROM HoaDonXuat hdx
+            LEFT JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
+            WHERE hdx.ID_KH = kh.ID_KH
+            AND gh.TinhTrangDon = 'Đã giao'
+            AND hdx.TinhTrangThanhToan = 'Đã thanh toán') as TongChiTieu
+        FROM KhachHang kh
+        WHERE kh.ID_KH = ?;
 
       `;
 
@@ -178,11 +204,10 @@ class Customer extends BaseModel {
           console.log("Số điện thoại đã tồn tại");
           throw new Error("Số điện thoại đã tồn tại");
         }
-      }
-
-      // Chuẩn bị câu lệnh SQL để tạo khách hàng mới
+      } // Chuẩn bị câu lệnh SQL để tạo khách hàng mới
       const insertSql = `
         INSERT INTO KhachHang (
+          ID_KH,
           TenKH,
           TenTK,
           MatKhau,
@@ -190,7 +215,7 @@ class Customer extends BaseModel {
           NgaySinh,
           Active,
           TinhTrang
-        ) VALUES (?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)
       `;
 
       // Thiết lập giá trị mặc định nếu không được cung cấp

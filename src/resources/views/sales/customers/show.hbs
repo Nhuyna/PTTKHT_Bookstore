@@ -4,6 +4,25 @@
 {{/block}}
 {{#block "js"}}
   <script src="/js/sales/customers.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Kiểm tra URL để xem có thông báo thành công không
+      const urlParams = new URLSearchParams(window.location.search);
+      const successMsg = urlParams.get('success');
+      
+      // Hiển thị thông báo thành công nếu có
+      if (successMsg) {
+        const successElement = document.getElementById('successMessage');
+        successElement.textContent = decodeURIComponent(successMsg);
+        successElement.style.display = 'block';
+        
+        // Tự động ẩn sau 5 giây
+        setTimeout(function() {
+          successElement.style.display = 'none';
+        }, 5000);
+      }
+    });
+  </script>
 {{/block}}
 
 <div class="main-content">
@@ -21,9 +40,10 @@
     <div class="user-profile">
       <a href="#"><img src="/img/user.jpg" /></a>
     </div>
-  </div> --}}
-
-  <div class="customer-content">
+  </div> --}}  <div class="customer-content">
+    <!-- Thông báo thành công sẽ hiển thị ở đây -->
+    <div id="successMessage" class="success-message" style="display: none;"></div>
+    
     <div class="customer-header">
       <h2 class="customer-title">Quản Lý Khách Hàng</h2>
       
@@ -188,6 +208,19 @@
     </div>
   </div>
 </div>
+
+<style>
+  /* CSS cho thông báo thành công */
+  .success-message {
+    background-color: #f0fff4;
+    border-left: 4px solid #48bb78;
+    color: #276749;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+</style>
 
 <!-- Modal xác nhận xóa -->
 <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
