@@ -314,23 +314,24 @@ const updateQuantity = async (req, res) => {
   const { book_id, action } = req.body;
   const userId = req.session.user_id;
 
-  if (!userId || !book_id || !['increase', 'decrease'].includes(action)) {
-    return res.json({ success: false, message: 'Dữ liệu không hợp lệ' });
+  if (!userId || !book_id || !["increase", "decrease"].includes(action)) {
+    return res.json({ success: false, message: "Dữ liệu không hợp lệ" });
   }
 
   try {
     const item = await CartModel.getCartItem(userId, book_id);
-    if (!item) return res.json({ success: false, message: 'Không tìm thấy sản phẩm' });
+    if (!item)
+      return res.json({ success: false, message: "Không tìm thấy sản phẩm" });
 
-    let newQty = item.SoLuong + (action === 'increase' ? 1 : -1);
+    let newQty = item.SoLuong + (action === "increase" ? 1 : -1);
     if (newQty <= 0) newQty = 0;
 
     await CartModel.updateCartItemQuantity(userId, book_id, newQty);
 
     return res.json({ success: true, newQty });
   } catch (err) {
-    console.error('Lỗi cập nhật giỏ hàng:', err);
-    return res.json({ success: false, message: 'Lỗi server' });
+    console.error("Lỗi cập nhật giỏ hàng:", err);
+    return res.json({ success: false, message: "Lỗi server" });
   }
 };
 export default {
@@ -341,5 +342,5 @@ export default {
   addToCart,
   getcartCount,
   deleteCartItem,
-  updateQuantity
+  updateQuantity,
 };

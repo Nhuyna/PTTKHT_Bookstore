@@ -109,6 +109,20 @@ const getTotalPrice = async (userId) => {
     throw error;
   }
 };
+const getCartItem = async (userId, bookId) => {
+  const [rows] = await database.query(
+    "SELECT SoLuong FROM GioHang WHERE ID_KH = ? AND ID_SP = ?",
+    [userId, bookId]
+  );
+  return rows[0];
+};
+
+const updateCartItemQuantity = async (userId, bookId, newQty) => {
+  await database.query(
+    "UPDATE GioHang SET SoLuong = ? WHERE ID_KH = ? AND ID_SP = ?",
+    [newQty, userId, bookId]
+  );
+};
 export default {
   getCartByUserId,
   themVaoGio,
@@ -116,4 +130,6 @@ export default {
   taoHoaDon,
   getTotalPrice,
   deleteItem,
+  updateCartItemQuantity,
+  getCartItem,
 };
