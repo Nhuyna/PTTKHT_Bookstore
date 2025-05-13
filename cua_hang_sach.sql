@@ -69,7 +69,7 @@ CREATE TABLE SP_TG (
 );
 
 CREATE TABLE KhachHang (
-    ID_KH INT PRIMARY KEY,
+    ID_KH INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     TenTK VARCHAR(255) NOT NULL,
     TenKH VARCHAR(255) NOT NULL,
     SDT VARCHAR(15),
@@ -143,7 +143,7 @@ CREATE TABLE HoaDonXuat (
 
 
 CREATE TABLE GiaoHang (
-    IDGiaoHang INT PRIMARY KEY,
+    IDGiaoHang INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     ID_HDX INT,
     IDNhanVien INT,
     IDDiaChi INT,
@@ -912,13 +912,3 @@ UPDATE hoadonxuat hdx
 JOIN giaohang gh ON gh.`ID_HDX` = hdx.`IDHoaDonXuat`
 SET hdx.`TinhTrangThanhToan` = "Chưa hoàn tiền"
 WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
-
-
-ALTER TABLE Khachhang AUTO_INCREMENT = 21;
-ALTER TABLE khachhang
-MODIFY COLUMN ID_KH INT NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE GiaoHang AUTO_INCREMENT = 31;
-ALTER TABLE GiaoHang
-MODIFY COLUMN IDGiaoHang INT NOT NULL AUTO_INCREMENT;
-

@@ -10,7 +10,7 @@
       <div class="numbers">{{sum_product.SLsanpham}}</div>
       <div class="cardName">Sản Phẩm</div>
     </div>
-    <div class="iconBox">
+    <div class="iconBox" style="color: 03a9f4;">
       <i class="fas fa-gifts"></i>
     </div>
   </div>
@@ -19,7 +19,7 @@
       <div class="numbers">{{sum_provider.SLncc}}</div>
       <div class="cardName">Nhà Cung Cấp</div>
     </div>
-    <div class="iconBox">
+    <div class="iconBox" style="color: brown;">
       <i class="fas fa-user"></i>
     </div>
   </div>
@@ -28,7 +28,7 @@
       <div class="numbers">{{sum_receipt.SLhoadon}}</div>
       <div class="cardName">Đơn Nhập Hàng</div>
     </div>
-    <div class="iconBox">
+    <div class="iconBox" style="color: pink;">
       <i class="fas fa-shopping-cart"></i>
     </div>
   </div>
@@ -37,7 +37,7 @@
       <div class="numbers">{{formatCurrency sum_paid_money.TongHoaDon}}</div>
       <div class="cardName">Số Tiền Đã Nhập</div>
     </div>
-    <div class="iconBox">
+    <div class="iconBox" style="color: chartreuse;">
       <i class="fas fa-dollar-sign"></i>
     </div>
   </div>
@@ -62,11 +62,7 @@
           <tr>
             <td>{{this.IDHoaDonNhap}}</td>
             <td>{{formatCurrency this.TongTien}}</td>
-            {{#if this.TinhTrangThanhToan}}
-              <td><span class="status delivered">Đã thanh toán</span></td>
-            {{else}}
-              <td><span class="status pending">Chưa thanh toán</span></td>
-            {{/if}}
+            <td>{{this.TenNhanVien}}</td>
           </tr>
         {{/each}}
       </tbody>

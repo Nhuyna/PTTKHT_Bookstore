@@ -212,10 +212,13 @@ class ProviderController {
 
       permissions = permissions.concat(allPermissions);
       permissions.push("qlkho");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
+      console.log(action);
       res.render("warehouse/provider", {
         provider,
         layout: "admin",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -236,10 +239,13 @@ class ProviderController {
 
       permissions = permissions.concat(allPermissions);
       permissions.push("qlkho");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
+      console.log(action);
       res.render("warehouse/provider", {
         provider,
         layout: "admin",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
