@@ -23,10 +23,35 @@
                         <p><b>Tên nhà cung cấp:</b> {{provider.TenNCC}}</p>
                         <p><b>Số điện thoại:</b> {{provider.SDT}}</p>
                         <p><b>Email:</b> {{provider.Email}}</p>
-                        <p><b>Địa chỉ:</b> {{provider.SoNhaDuong}} {{provider.PhuongXa}} {{provider.QuanHuyen}} {{provider.TinhThanhPho}}</p>
+                        <p><b>Địa chỉ:</b> {{provider.SoNhaDuong}}, {{provider.PhuongXa}}, {{provider.QuanHuyen}}, {{provider.TinhThanhPho}}</p>
                     </div>
                 </div>
             </div>
         </div>
+        <label class="receipt-label">Hóa Đơn Nhập Hàng Của Nhà Cung Cấp</label>
+        <table border="1" id="provider-list">
+            <thead>
+                <tr>
+                <td>ID</td>
+                <td>Ngày nhập</td>
+                <td>Nhân viên lập đơn</td>
+                <td>Tổng hóa đơn</td>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each receipt}}
+                <tr>
+                    <td>#{{this.IDHoaDonNhap}}</td>
+                    <td data-value="{{formatDate this.NgayNhap 'YYYY-MM-DD HH:mm:ss'}}">
+                    {{formatDate this.NgayNhap "DD/MM/YYYY HH:mm"}}
+                    </td>
+                    <td>{{this.TenNhanVien}}</td>
+                    <td data-value="{{this.TongTien}}">{{formatCurrency
+                        this.TongTien
+                    }}</td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
 </div>

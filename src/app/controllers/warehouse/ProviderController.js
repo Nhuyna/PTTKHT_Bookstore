@@ -48,10 +48,13 @@ class ProviderController {
 
       permissions = permissions.concat(allPermissions);
       permissions.push("qlkho");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
+      console.log(action);
       res.render("warehouse/provider", {
         provider,
         layout: "admin",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);
@@ -63,6 +66,7 @@ class ProviderController {
     try {
       const { id } = req.params;
       const provider = (await providerConfig.search(id))[0];
+      const receipt = await providerConfig.get_receipt(id);
       let permissions = (
         await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
       ).map((p) => p.ChucNang);
@@ -77,6 +81,7 @@ class ProviderController {
       console.log("action" + action);
       res.render("warehouse/view_provider", {
         provider,
+        receipt,
         layout: "admin",
         permissions,
         action,
@@ -186,10 +191,13 @@ class ProviderController {
 
       permissions = permissions.concat(allPermissions);
       permissions.push("qlkho");
+      let action = await phanquyen.action(req.session.user.idNQ, "qlncc");
+      console.log(action);
       res.render("warehouse/update_provider", {
         edit_provider,
         layout: "admin",
         permissions,
+        action,
       });
     } catch (error) {
       console.log(error);

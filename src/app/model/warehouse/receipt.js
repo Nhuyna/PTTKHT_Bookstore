@@ -52,21 +52,25 @@ class Receipt {
 
   // lấy thông tin ncc
   async get_provider() {
-    const query = `SELECT CONCAT(ID_NCC, ' - ', TenNCC) AS provider_info FROM NCC`;
+    const query = `SELECT CONCAT(ID_NCC, ' - ', TenNCC) AS provider_info FROM NCC
+    WHERE tinhTrang = 1`;
     const [rows] = await pool.execute(query);
     return rows;
   }
 
   // lấy thông tin nhân viên
   async get_employee() {
-    const query = `SELECT CONCAT(IDNhanVien, ' - ', TenNhanVien) AS employee_info FROM NhanVien`;
+    const query = `SELECT CONCAT(IDNhanVien, ' - ', TenNhanVien) AS employee_info FROM NhanVien
+    WHERE tinhTrang = 1`;
     const [rows] = await pool.execute(query);
     return rows;
   }
 
   // lấy thông tin nhân viên
   async get_product() {
-    const query = `SELECT SanPhamID, TenSanPham, CONCAT(SanPhamID, ' - ', TenSanPham) AS product_info FROM SanPham`;
+    const query = 
+    `SELECT SanPhamID, TenSanPham, CONCAT(SanPhamID, ' - ', TenSanPham) AS product_info FROM SanPham
+    WHERE tinhTrang = 1`;
     const [rows] = await pool.execute(query);
     return rows;
   }
