@@ -26,6 +26,18 @@ class Provider {
     return rows;
   }
 
+  // get receipt of provider
+  async get_receipt(id){
+    const query = 
+    `SELECT HoaDonNhap.IDHoaDonNhap, NCC.TenNCC, NhanVien.TenNhanVien, NgayNhap, TongTien, TinhTrangThanhToan
+    FROM HoaDonNhap 
+    LEFT JOIN NCC ON HoaDonNhap.ID_NCC = NCC.ID_NCC
+    LEFT JOIN NhanVien ON HoaDonNhap.IDNhanVien = NhanVien.IDNhanVien
+    WHERE NCC.ID_NCC = ?`;
+    const [rows] = await pool.execute(query, [id]);
+    return rows;
+  }
+
   // search ncc
   async search_provider(keyword) {
     const input_query = keyword.toLowerCase();
