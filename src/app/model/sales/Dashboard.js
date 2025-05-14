@@ -23,7 +23,7 @@ class Dashboard extends BaseModel {
             INNER JOIN sp_dm ON sp_dm.SanPhamID = sp.SanPhamID
             INNER JOIN danhmuc dm ON dm.DanhMucID = sp_dm.DanhMucID
             WHERE gh.TinhTrangDon = 'Đã giao'
-            AND gh.NgayGiaoHang BETWEEN DATE_FORMAT('2025-04-30', '%Y-%m-01') AND '2025-04-30'
+            AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND CURDATE()
             GROUP BY sp.SanPhamID, sp.TenSanPham, dm.TenDanhMuc, sp.Gia
             ORDER BY SoLuongBan DESC
             LIMIT ?
@@ -45,6 +45,7 @@ class Dashboard extends BaseModel {
                  INNER JOIN hoadonxuat hdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
                  INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
                  WHERE gh.TinhTrangDon = 'Đã giao'
+                 AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND CURDATE()
               `;
       const [dashboard] = await db.query(sql);
 
@@ -77,7 +78,7 @@ class Dashboard extends BaseModel {
                     INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
                     INNER JOIN sanpham sp ON sp.SanPhamID = cthdx.IDSanPham
                     WHERE gh.TinhTrangDon = 'Đã giao'
-                    AND gh.NgayGiaoHang BETWEEN DATE_FORMAT('2025-04-30', '%Y-%m-01') AND '2025-04-30'
+                    AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND CURDATE()
                     GROUP BY DATE(gh.NgayGiaoHang)
                     ORDER BY DATE(gh.NgayGiaoHang)`;
 

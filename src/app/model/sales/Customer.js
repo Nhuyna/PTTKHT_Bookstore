@@ -74,26 +74,6 @@ class Customer extends BaseModel {
 
   async getCustomerById(id) {
     try {
-      // const sql = `
-      //   SELECT
-      //     kh.ID_KH,
-      //     kh.TenKH,
-      //     kh.TenTK,
-      //     kh.SDT,
-      //     kh.NgaySinh,
-      //     kh.MatKhau,
-      //     kh.TenTK,
-      //     kh.Active,
-      //     COUNT(DISTINCT hdx.IDHoaDonXuat) as SoDonHang,
-      //     SUM(hdx.TongTien) as TongChiTieu
-      //   FROM KhachHang kh, KhachHang kh2
-      //   LEFT JOIN HoaDonXuat hdx ON kh2.ID_KH = hdx.ID_KH
-      //   LEFT JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
-      //   WHERE kh.ID_KH = ? AND gh.TinhTrangDon = 'Đã giao' AND TinhTrangThanhToan = 'Đã thanh toán'
-      //   GROUP BY kh.ID_KH
-
-      // `;
-
       const sql = `
         SELECT 
             kh.ID_KH, 
