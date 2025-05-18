@@ -270,9 +270,7 @@
           const newTotal = newQty * price;
           totalEl.textContent = formatCurrency(newTotal);
           updateTotal(); 
-        } else {
-          alert(data.message || 'Cập nhật số lượng thất bại');
-        }
+        } 
       })
       .catch((err) => {
         console.error('Lỗi AJAX:', err);
