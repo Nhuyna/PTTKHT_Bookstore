@@ -60,7 +60,7 @@ class CustomerController {
       permissions = permissions.concat(allPermissions);
       permissions.push("qlbanhang");
       let action = await phanquyen.action(req.session.user.idNQ, "qlkhachhang");
-      console.log(action)
+      console.log(action);
       res.render("sales/customers/show", {
         title: "Quản lý Khách hàng",
         customers,
@@ -72,7 +72,7 @@ class CustomerController {
         layout: "admin",
         currentPath: req.path,
         permissions,
-        action
+        action,
       });
     } catch (error) {
       console.error("Error fetching customers:", error);
@@ -246,7 +246,6 @@ class CustomerController {
       });
     }
   }
-
   // Hiển thị form tạo khách hàng mới
   async showCreateForm(req, res) {
     try {
@@ -263,11 +262,20 @@ class CustomerController {
       permissions = permissions.concat(allPermissions);
       permissions.push("qlbanhang");
 
+      // Lấy lại dữ liệu form nếu có
+      const formData = {
+        TenKH: req.query.TenKH || "",
+        TenTK: req.query.TenTK || "",
+        SDT: req.query.SDT || "",
+        NgaySinh: req.query.NgaySinh || "",
+      };
+
       res.render("sales/customers/create", {
         title: "Thêm Khách Hàng Mới",
         layout: "admin",
         currentPath: req.path,
         permissions,
+        formData: formData,
       });
     } catch (error) {
       console.error("Error showing create form:", error);
@@ -315,9 +323,7 @@ class CustomerController {
         TinhTrang: 1, // Mặc định khách hàng mới có trạng thái hoạt động
       };
 
-      console.log("Dữ liệu khách hàng mới:", customerData);
-
-      // Tạo khách hàng mới
+      console.log("Dữ liệu khách hàng mới:", customerData); // Tạo khách hàng mới
       const result = await customerModel.createCustomer(customerData);
 
       if (!result.success) {
@@ -329,13 +335,22 @@ class CustomerController {
             success: false,
             message: result.message || "Lỗi khi tạo khách hàng",
           });
-        }
+        } // Nếu không phải AJAX, redirect về trang tạo với thông báo lỗi
+        const errorMessage = encodeURIComponent(
+          result.message || "Lỗi khi tạo khách hàng"
+        );
 
-        // Nếu không phải AJAX, redirect về trang tạo
-        if (req.session.flash) {
-          req.flash("error", result.message || "Lỗi khi tạo khách hàng");
-        }
-        return res.redirect("/admin/sales/khachhang/create");
+        // Lưu dữ liệu form vào URL để giữ nguyên giá trị đã nhập
+        const formData = new URLSearchParams();
+        formData.append("error", errorMessage);
+        if (TenKH) formData.append("TenKH", TenKH);
+        if (TenTK) formData.append("TenTK", TenTK);
+        if (SDT) formData.append("SDT", SDT);
+        if (NgaySinh) formData.append("NgaySinh", NgaySinh);
+
+        return res.redirect(
+          `/admin/sales/khachhang/create?${formData.toString()}`
+        );
       }
 
       // Nếu thành công:
@@ -344,19 +359,14 @@ class CustomerController {
       if (req.xhr || req.headers.accept.indexOf("json") > -1) {
         return res.json({
           success: true,
-          message: result.message,
+          message: result.message || "Khách hàng đã được tạo thành công",
           customerId: result.customerId,
         });
-      }
-
-      // Nếu không phải AJAX, thêm flash message và redirect
-      if (req.session.flash) {
-        req.flash(
-          "success",
-          result.message || "Khách hàng đã được tạo thành công"
-        );
-      }
-      return res.redirect("/admin/sales/khachhang");
+      } // Nếu không phải AJAX, redirect với thông báo thành công
+      const successMessage = encodeURIComponent(
+        result.message || "Khách hàng đã được tạo thành công"
+      );
+      return res.redirect(`/admin/sales/khachhang?success=${successMessage}`);
     } catch (error) {
       console.error("Error creating customer:", error);
 
@@ -366,16 +376,24 @@ class CustomerController {
           success: false,
           message: error.message || "Lỗi khi tạo khách hàng",
         });
-      }
+      } // Nếu không phải AJAX, redirect với thông báo lỗi
+      const errorMessage = encodeURIComponent(
+        error.message || "Lỗi khi tạo khách hàng"
+      );
 
-      // Nếu không phải AJAX, thêm flash message và redirect
-      if (req.session.flash) {
-        req.flash("error", error.message || "Lỗi khi tạo khách hàng");
-      }
-      return res.redirect("/admin/sales/khachhang/create");
+      // Lưu dữ liệu form vào URL để giữ nguyên giá trị đã nhập
+      const formData = new URLSearchParams();
+      formData.append("error", errorMessage);
+      if (TenKH) formData.append("TenKH", TenKH);
+      if (TenTK) formData.append("TenTK", TenTK);
+      if (SDT) formData.append("SDT", SDT);
+      if (NgaySinh) formData.append("NgaySinh", NgaySinh);
+
+      return res.redirect(
+        `/admin/sales/khachhang/create?${formData.toString()}`
+      );
     }
   }
-
   async showEditForm(req, res) {
     try {
       const customerId = req.params.id;
@@ -401,9 +419,26 @@ class CustomerController {
       permissions = permissions.concat(allPermissions);
       permissions.push("qlbanhang");
 
+      // Sử dụng dữ liệu từ query string nếu có, nếu không thì dùng dữ liệu từ database
+      const formData = {
+        TenKH: req.query.TenKH || customerDetails.TenKH,
+        TenTK: req.query.TenTK || customerDetails.TenTK,
+        SDT: req.query.SDT || customerDetails.SDT,
+        NgaySinh: req.query.NgaySinh || customerDetails.NgaySinh,
+        Active:
+          req.query.Active !== undefined
+            ? req.query.Active
+            : customerDetails.Active,
+        TinhTrang:
+          req.query.TinhTrang !== undefined
+            ? req.query.TinhTrang
+            : customerDetails.TinhTrang,
+      };
+
       res.render("sales/customers/edit", {
         title: `Sửa thông tin khách hàng`,
         customerDetails,
+        formData,
         layout: "admin",
         currentPath: req.path,
         permissions,
@@ -488,9 +523,7 @@ class CustomerController {
             message: result.message || "Lỗi khi cập nhật thông tin khách hàng",
           });
         }
-      }
-
-      // Xử lý flash message và chuyển hướng nếu không phải AJAX
+      } // Xử lý flash message và chuyển hướng nếu không phải AJAX
       if (!result.success) {
         if (req.session.flash) {
           req.flash(
@@ -498,7 +531,23 @@ class CustomerController {
             result.message || "Lỗi khi cập nhật thông tin khách hàng"
           );
         }
-        return res.redirect(`/admin/sales/khachhang/edit/${customerId}`);
+
+        // Lưu dữ liệu form vào URL để giữ nguyên giá trị đã nhập
+        const formData = new URLSearchParams();
+        formData.append(
+          "error",
+          result.message || "Lỗi khi cập nhật thông tin khách hàng"
+        );
+        if (TenKH) formData.append("TenKH", TenKH);
+        if (TenTK) formData.append("TenTK", TenTK);
+        if (SDT) formData.append("SDT", SDT);
+        if (NgaySinh) formData.append("NgaySinh", NgaySinh);
+        if (Active !== undefined) formData.append("Active", Active);
+        if (TinhTrang !== undefined) formData.append("TinhTrang", TinhTrang);
+
+        return res.redirect(
+          `/admin/sales/khachhang/edit/${customerId}?${formData.toString()}`
+        );
       }
 
       // Thêm flash message thành công nếu có sử dụng
@@ -520,9 +569,7 @@ class CustomerController {
           success: false,
           message: error.message || "Lỗi khi cập nhật thông tin khách hàng",
         });
-      }
-
-      // Thêm flash message nếu có sử dụng
+      } // Thêm flash message nếu có sử dụng
       if (req.session.flash) {
         req.flash(
           "error",
@@ -530,8 +577,23 @@ class CustomerController {
         );
       }
 
+      // Lưu dữ liệu form vào URL để giữ nguyên giá trị đã nhập
+      const formData = new URLSearchParams();
+      formData.append(
+        "error",
+        error.message || "Lỗi khi cập nhật thông tin khách hàng"
+      );
+      if (TenKH) formData.append("TenKH", TenKH);
+      if (TenTK) formData.append("TenTK", TenTK);
+      if (SDT) formData.append("SDT", SDT);
+      if (NgaySinh) formData.append("NgaySinh", NgaySinh);
+      if (Active !== undefined) formData.append("Active", Active);
+      if (TinhTrang !== undefined) formData.append("TinhTrang", TinhTrang);
+
       // Chuyển hướng về form chỉnh sửa
-      return res.redirect(`/admin/sales/khachhang/edit/${req.params.id}`);
+      return res.redirect(
+        `/admin/sales/khachhang/edit/${req.params.id}?${formData.toString()}`
+      );
       ne;
       w;
     }

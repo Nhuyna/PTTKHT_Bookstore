@@ -26,7 +26,7 @@ class DashboardModel {
         INNER JOIN hoadonxuat hdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
         INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
         WHERE gh.TinhTrangDon = 'Đã giao'
-        AND gh.NgayGiaoHang BETWEEN DATE_FORMAT('2025-04-30', '%Y-%m-01') AND '2025-04-30'
+        AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(CURDATE(), '%Y-%m-01') AND CURDATE()
       `;
 
       const [currentStats] = await db.query(sql);
@@ -53,8 +53,8 @@ class DashboardModel {
         INNER JOIN hoadonxuat hdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
         INNER JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
         WHERE gh.TinhTrangDon = 'Đã giao'
-        AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(DATE_SUB('2025-04-30', INTERVAL 1 MONTH), '%Y-%m-01') 
-        AND LAST_DAY(DATE_SUB('2025-04-30', INTERVAL 1 MONTH))
+        AND gh.NgayGiaoHang BETWEEN DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 MONTH), '%Y-%m-01') 
+        AND LAST_DAY(DATE_SUB(CURDATE(), INTERVAL 1 MONTH))
       `;
 
       const [previousStats] = await db.query(previousSql);

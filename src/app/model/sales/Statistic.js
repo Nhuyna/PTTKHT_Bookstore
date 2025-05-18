@@ -4,38 +4,36 @@ export default class Statistic extends BaseModel {
   constructor() {
     super("HoaDonXuat", "IDHoaDonXuat");
   }
-
   async getRevenueByDate(startDate, endDate) {
     try {
       const query = `
         SELECT 
-          SELECT 
-    DATE(gh.NgayGiaoHang) as Ngay,
-    SUM(cthdx.SoLuong * sp.Gia) as DoanhThu,
-    SUM(cthdx.SoLuong * (
-        SELECT cthdn.GiaNhap
-        FROM chitiethoadonnhap cthdn
-        JOIN hoadonnhap hdn ON cthdn.IDHoaDonNhap = hdn.IDHoaDonNhap
-        WHERE cthdn.IDSanPham = cthdx.IDSanPham
-        ORDER BY hdn.NgayNhap DESC
-        LIMIT 1
-    )) as Von,
-    SUM(cthdx.SoLuong * sp.Gia) - SUM(cthdx.SoLuong * (
-        SELECT cthdn.GiaNhap
-        FROM chitiethoadonnhap cthdn
-        JOIN hoadonnhap hdn ON cthdn.IDHoaDonNhap = hdn.IDHoaDonNhap
-        WHERE cthdn.IDSanPham = cthdx.IDSanPham
-        ORDER BY hdn.NgayNhap DESC
-        LIMIT 1
-    )) as LoiNhuan
-FROM HoaDonXuat hdx
-JOIN ChiTietHoaDonXuat cthdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
-JOIN SanPham sp ON cthdx.IDSanPham = sp.SanPhamID
-JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
-WHERE DATE(gh.NgayGiaoHang) BETWEEN ? AND ?
-        AND gh.TinhTrangDon = "Đã giao"
-        GROUP BY DATE(gh.NgayGiaoHang)
-        ORDER BY DATE(gh.NgayGiaoHang) ASC
+        DATE(gh.NgayGiaoHang) as Ngay,
+        SUM(cthdx.SoLuong * sp.Gia) as DoanhThu,
+        SUM(cthdx.SoLuong * (
+            SELECT cthdn.GiaNhap
+            FROM chitiethoadonnhap cthdn
+            JOIN hoadonnhap hdn ON cthdn.IDHoaDonNhap = hdn.IDHoaDonNhap
+            WHERE cthdn.IDSanPham = cthdx.IDSanPham
+            ORDER BY hdn.NgayNhap DESC
+            LIMIT 1
+        )) as Von,
+        SUM(cthdx.SoLuong * sp.Gia) - SUM(cthdx.SoLuong * (
+            SELECT cthdn.GiaNhap
+            FROM chitiethoadonnhap cthdn
+            JOIN hoadonnhap hdn ON cthdn.IDHoaDonNhap = hdn.IDHoaDonNhap
+            WHERE cthdn.IDSanPham = cthdx.IDSanPham
+            ORDER BY hdn.NgayNhap DESC
+            LIMIT 1
+        )) as LoiNhuan
+        FROM HoaDonXuat hdx
+        JOIN ChiTietHoaDonXuat cthdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
+        JOIN SanPham sp ON cthdx.IDSanPham = sp.SanPhamID
+        JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
+        WHERE DATE(gh.NgayGiaoHang) BETWEEN ? AND ?
+                AND gh.TinhTrangDon = "Đã giao"
+                GROUP BY DATE(gh.NgayGiaoHang)
+                ORDER BY DATE(gh.NgayGiaoHang) ASC
       `;
 
       return await this.query(query, [startDate, endDate]);
@@ -145,10 +143,10 @@ WHERE DATE(gh.NgayGiaoHang) BETWEEN ? AND ?
                 LIMIT 1
             )) as LoiNhuan
         FROM HoaDonXuat hdx
-        JOIN ChiTietHoaDonXuat cthdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat
+        JOIN ChiTietHoaDonXuat cthdx ON hdx.IDHoaDonXuat = cthdx.IDHoaDonXuat        
         JOIN SanPham sp ON cthdx.IDSanPham = sp.SanPhamID
         JOIN GiaoHang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
-        WHERE MONTH(gh.NgayGiaoHang) = 4 AND YEAR(gh.NgayGiaoHang) = 2025
+        WHERE MONTH(gh.NgayGiaoHang) = ? AND YEAR(gh.NgayGiaoHang) = ?
                 AND gh.TinhTrangDon = "Đã giao"
                 GROUP BY DATE(gh.NgayGiaoHang)
                 ORDER BY DATE(gh.NgayGiaoHang) ASC
