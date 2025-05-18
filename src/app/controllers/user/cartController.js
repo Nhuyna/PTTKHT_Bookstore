@@ -235,9 +235,10 @@ const renderThankYouPage = (req, res) => {
 const addToCart = async (req, res) => {
   try {
     const productId = parseInt(req.body.productId);
-    const soluong = parseInt(req.body.soluong);
+    let soluong = parseInt(req.body.soluong);
     const userId = req.session.user_id;
-    console.log("body nè", req.body);
+
+    console.log("🛒 body nè:", req.body);
 
     if (!userId) {
       return res.json({
@@ -247,27 +248,33 @@ const addToCart = async (req, res) => {
       });
     }
 
-    if (!productId) {
+    if (!productId || isNaN(productId)) {
       return res.status(400).json({
         success: false,
-        message: "Thiếu ID sản phẩm!",
+        message: "Thiếu hoặc sai ID sản phẩm!",
       });
     }
 
+    if (isNaN(soluong) || soluong < 1) {
+      soluong = 1;
+    }
+
     await CartModel.themVaoGio(userId, productId, soluong);
-    console.log("Số lượng: " + soluong);
+    console.log("✅ Đã thêm vào giỏ - Số lượng:", soluong);
+
     return res.json({
       success: true,
       message: "Đã thêm vào giỏ hàng!",
     });
   } catch (error) {
-    console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+    console.error("❌ Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
     return res.status(500).json({
       success: false,
       message: "Lỗi server khi thêm vào giỏ hàng!",
     });
   }
 };
+
 
 const getcartCount = async (req, res) => {
   try {

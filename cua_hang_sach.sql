@@ -916,3 +916,8 @@ WHERE gh.`TinhTrangDon` = 'Trả hàng' OR gh.`TinhTrangDon` = 'Đã hủy';
 
 ALTER TABLE giaohang
 MODIFY NgayGiaoHang TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+ALTER TABLE HoaDonXuat
+ADD COLUMN LyDoHuy TEXT NULL,
+ADD COLUMN LyDoTraHang TEXT NULL;
+

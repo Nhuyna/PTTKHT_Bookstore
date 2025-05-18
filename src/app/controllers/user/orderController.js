@@ -1,14 +1,14 @@
 import OrderModel from "../../model/user/orderModel.js";
 
 const huyDonHang = async (req, res) => {
-  const { IDHoaDonXuat } = req.body;
+  const { IDHoaDonXuat, cancel_reason } = req.body;
   const ID_KH = req.session.user_id;
   try {
-    console.log("👉 Đã vào controller huyDonHang");
-    console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
-    console.log("👉 ID_KH:", ID_KH);
+    // console.log("👉 Đã vào controller huyDonHang");
+    // console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
+    // console.log("👉 ID_KH:", ID_KH);
 
-    await OrderModel.cancelOrder(IDHoaDonXuat);
+    await OrderModel.cancelOrder(IDHoaDonXuat, cancel_reason);
     res.json({ success: true, message: "Hủy đơn hàng thành công." });
   } catch (error) {
     console.error("Lỗi khi hủy đơn hàng:", error);
@@ -16,14 +16,14 @@ const huyDonHang = async (req, res) => {
   }
 };
 const TraHang= async (req, res) => {
-  const { IDHoaDonXuat } = req.body;
+  const { IDHoaDonXuat, reason } = req.body;
   const ID_KH = req.session.user_id;
   try {
     console.log("👉 Đã vào controller TraHang");
     console.log("👉 IDHoaDonXuat:", IDHoaDonXuat);
     console.log("👉 ID_KH:", ID_KH);
 
-    await OrderModel.TraHang(IDHoaDonXuat);
+    await OrderModel.TraHang(IDHoaDonXuat, reason);
     res.json({ success: true, message: "Yêu cầu trả thành công." });
   } catch (error) {
     console.error("Lỗi khi hủy đơn hàng:", error);

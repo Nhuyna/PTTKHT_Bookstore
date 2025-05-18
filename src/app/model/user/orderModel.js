@@ -108,38 +108,62 @@ const themDiaChi = async ({
   }
 };
 
-const cancelOrder = async (ID_HDX) => {
-  console.log("HÓA ĐƠN XUAASTTTTTTT ",ID_HDX)
-  const query = `
-      UPDATE GiaoHang
-      SET TinhTrangDon = 'Đã hủy'
-      WHERE ID_HDX = ?
-    `;
+const cancelOrder = async (ID_HDX, reason) => {
+  console.log("👉 HỦY HÓA ĐƠN XUẤT:", ID_HDX);
+  console.log("👉 Lý do hủy:", reason);
+
+  const query1 = `
+    UPDATE GiaoHang
+    SET TinhTrangDon = 'Đã hủy'
+    WHERE ID_HDX = ?
+  `;
+
+  const query2 = `
+    UPDATE HoaDonXuat
+    SET YeuCau = 'Hủy', LyDoHuy = ?
+    WHERE IDHoaDonXuat = ?
+  `;
 
   try {
-    const [result] = await database.query(query, [ID_HDX]);
-    console.log("✅ Update result:", result);
+    const [result1] = await database.query(query1, [ID_HDX]);
+    const [result2] = await database.query(query2, [reason, ID_HDX]);
+
+    console.log("✅ Cập nhật GiaoHang:", result1);
+    console.log("✅ Cập nhật HoaDonXuat:", result2);
   } catch (err) {
     console.error("❌ Lỗi trong cancelOrder:", err.message);
-    throw err; // để controller bắt lỗi tiếp
+    throw err;
   }
 };
-const TraHang = async (ID_HDX) => {
-  console.log("HÓA ĐƠN XUAASTTTTTTT ",ID_HDX)
-  const query = `
-      UPDATE GiaoHang
-      SET TinhTrangDon = 'Trả hàng'
-      WHERE ID_HDX = ?
-    `;
+
+const TraHang = async (ID_HDX, reason) => {
+  console.log("👉 HÓA ĐƠN XUẤT:", ID_HDX);
+  console.log("👉 Lý do trả hàng:", reason);
+
+  const query1 = `
+    UPDATE GiaoHang
+    SET TinhTrangDon = 'Trả hàng'
+    WHERE ID_HDX = ?
+  `;
+
+  const query2 = `
+    UPDATE HoaDonXuat
+    SET YeuCau = 'Trả', LyDoTraHang = ?
+    WHERE IDHoaDonXuat = ?
+  `;
 
   try {
-    const [result] = await database.query(query, [ID_HDX]);
-    console.log("✅ Update result:", result);
+    const [result1] = await database.query(query1, [ID_HDX]);
+    const [result2] = await database.query(query2, [reason, ID_HDX]);
+
+    console.log("✅ Cập nhật GiaoHang:", result1);
+    console.log("✅ Cập nhật HoaDonXuat:", result2);
   } catch (err) {
-    console.error("❌ Lỗi trong cancelOrder:", err.message);
-    throw err; 
+    console.error("❌ Lỗi trong TraHang:", err.message);
+    throw err;
   }
 };
+
 const createGiaoHang = async (data) => {
   const query = `
     INSERT INTO GiaoHang (ID_HDX, IDNhanVien, IDDiaChi, NgayGiaoHang, TinhTrangDon)
