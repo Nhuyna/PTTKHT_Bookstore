@@ -66,6 +66,11 @@ const createUser = async ({
     user_password,
   ]);
 };
+const getUserByPhoneExceptId = async (phone, currentId) => {
+  const query = `SELECT * FROM KhachHang WHERE SDT = ? AND ID_KH != ?`;
+  const [rows] = await database.query(query, [phone, currentId]);
+  return rows.length > 0 ? rows[0] : null;
+};
 
 export default {
   getInforUser,
@@ -77,4 +82,5 @@ export default {
   updatePassword,
   findUserByIdAndPassword,
   createUser,
+  getUserByPhoneExceptId
 };

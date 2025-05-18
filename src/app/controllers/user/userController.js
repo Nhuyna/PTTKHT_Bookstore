@@ -91,19 +91,6 @@ const changeUserInfo = async (req, res, next) => {
       message: "Số điện thoại không hợp lệ.",
     });
   }
-  const user = await UserModel.findUserByPhone(user_telephone);
-   if (user) {
-      return res.status(401).json({ success: false, message: "Số điện thoại đã tồn tại." });
-    }
-  console.log(
-        dateOfBirth,
-    monthOfBirth,
-    yearOfBirth,
-    user_name,
-    user_lastname,
-    user_telephone
-
-  )
 
   try {
     const user = await UserModel.getUserById(req.session.user_id);
@@ -112,6 +99,16 @@ const changeUserInfo = async (req, res, next) => {
         success: false,
         message: "Phiên làm việc không hợp lệ.",
       });
+    }
+
+    if (user_telephone) {
+      const existed = await UserModel.getUserByPhoneExceptId(user_telephone, user.ID_KH);
+      if (existed) {
+        return res.status(409).json({
+          success: false,
+          message: "Số điện thoại đã được sử dụng bởi tài khoản khác.",
+        });
+      }
     }
 
     const fullName = user_lastname.trim() + " " + user_name.trim();
@@ -133,13 +130,14 @@ const changeUserInfo = async (req, res, next) => {
     return res.json({ success: true, message: "Cập nhật thành công!" });
 
   } catch (error) {
-    console.error("Lỗi khi cập nhật:", error);
+    console.error("❌ Lỗi khi cập nhật:", error);
     return res.status(500).json({
       success: false,
       message: "Đã xảy ra lỗi khi cập nhật thông tin.",
     });
   }
 };
+
 
 
 
