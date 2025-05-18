@@ -66,8 +66,6 @@
             {{orderDetails.order.TinhThanhPho}}</p>
           <p><strong>Trạng thái:</strong>
             {{orderDetails.order.TinhTrangDon}}</p>
-          {{!-- <p><strong>Người giao hàng:
-            </strong>{{orderDetails.order.TenNguoiGiao}}</p> --}}
           <p><strong>Ngày giao:</strong>
             {{formatCurrentDate orderDetails.order.NgayGiaoHang}}</p>
         </div>
@@ -345,6 +343,7 @@
     </div>
     <div class="modal-body">
       <p id="modalMessage">Bạn có chắc chắn muốn thực hiện thao tác này?</p>
+      <p id="reasonMessage"></p>
     </div>
     <div class="modal-footer">
       <button id="modalCancelBtn" class="btn btn-secondary">Hủy bỏ</button>
@@ -352,3 +351,11 @@
     </div>
   </div>
 </div>
+
+<script id="cancel-reason" type="application/json">
+  {{{JSON orderDetails.order.LyDoHuy}}}
+</script>
+
+<script id="return-reason" type="application/json">
+  {{{JSON orderDetails.order.LyDoTraHang}}}
+</script>

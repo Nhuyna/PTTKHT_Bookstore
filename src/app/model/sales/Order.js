@@ -413,19 +413,25 @@ export class Order extends BaseModel {
       let sql = `
         UPDATE hoadonxuat hdx
         JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
+        JOIN chitiethoadonxuat cthdx ON cthdx.IDHoaDonXuat = hdx.IDHoaDonXuat
+        JOIN sanpham sp ON cthdx.IDSanPham = sp.SanPhamID
         SET gh.TinhTrangDon = ?
       `;
       let params = [status];
-      // const [rows] = await db.query(
-      //   `
-      //     UPDATE giaohang gh
-      //     SET gh.TinhTrangDon = ?
-      //     WHERE gh.ID_HDX = ?;`,
-      //       [status, id]
-      // );
+
       if (status === "Trả hàng") {
         sql += `
-          , hdx.TinhTrangThanhToan = IF(hdx.TinhTrangThanhToan = 'Đã thanh toán', 'Chưa hoàn tiền', hdx.TinhTrangThanhToan)`;
+          , hdx.TinhTrangThanhToan = IF(hdx.TinhTrangThanhToan = 'Đã thanh toán', 'Chưa hoàn tiền', hdx.TinhTrangThanhToan)
+          , sp.SoLuongTon = sp.SoLuongTon + cthdx.SoLuong`;
+      }
+
+      if (status === "Chờ lấy hàng") {
+        sql += `, sp.SoLuongTon = sp.SoLuongTon - cthdx.SoLuong`;
+      }
+
+      if (status === "Đã hủy") {
+        sql += `
+          , sp.SoLuongTon = IF(gh.TinhTrangDon = 'Chờ xác nhận', sp.SoLuongTon, sp.SoLuongTon + cthdx.SoLuong)`;
       }
 
       if (request) {

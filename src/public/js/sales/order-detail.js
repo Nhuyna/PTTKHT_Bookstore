@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("confirmationModal");
   const modalTitle = document.getElementById("modalTitle");
   const modalMessage = document.getElementById("modalMessage");
+  const reasonMessage = document.getElementById("reasonMessage");
   const modalConfirmBtn = document.getElementById("modalConfirmBtn");
   const modalCancelBtn = document.getElementById("modalCancelBtn");
   const closeModalBtn = document.querySelector(".close-modal");
@@ -98,7 +99,8 @@ document.addEventListener("DOMContentLoaded", () => {
       !modalMessage ||
       !modalConfirmBtn ||
       !modalCancelBtn ||
-      !closeModalBtn
+      !closeModalBtn ||
+      !reasonMessage
     ) {
       console.error("Confirmation modal elements not found!");
       return;
@@ -106,6 +108,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById(buttonId);
     if (button) {
       button.addEventListener("click", () => {
+        const cancelReasonElement = document.getElementById("cancel-reason");
+        const returnReasonElement = document.getElementById("return-reason");
+        const cancelReason = JSON.parse(cancelReasonElement.textContent || "");
+        const returnReason = JSON.parse(returnReasonElement.textContent || "");
+        let reason = "";
+        if (cancelReason && cancelReason.length > 0) {
+          reason = `Đơn hàng bị hủy với lý do: ${cancelReason}`;
+        } else if (returnReason && returnReason.length > 0) {
+          reason = `Đơn hàng được trả lại với lý do: ${returnReason}`;
+        }
+        reasonMessage.textContent = reason;
+
         const orderId = button.getAttribute("data-order-id");
 
         modalTitle.textContent = modalTitleText;
