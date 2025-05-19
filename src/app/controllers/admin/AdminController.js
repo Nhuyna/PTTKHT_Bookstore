@@ -22,12 +22,12 @@ class AdminController {
       user.ID_NhomQuyen,
       "access"
     );
-    console.log("hi" + accessPermissions);
-    req.session.user = {
+    console.log("hi" + accessPermissions);    req.session.user = {
       id: user.ID_TK,
       idNQ: user.ID_NhomQuyen,
       TenNhomQuyen: user.TenNhomQuyen.toLowerCase(),
       accessList: accessPermissions.map((item) => item.ChucNang),
+      idNhanVien: user.ID_NhanVien // Thêm ID nhân viên vào session
     };
 
     console.log("Session user:", req.session.user);

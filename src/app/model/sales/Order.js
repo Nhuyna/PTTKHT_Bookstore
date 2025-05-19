@@ -327,39 +327,42 @@ export class Order extends BaseModel {
    * @returns {Promise<{order: Object, items: QueryResult, summary: {subtotal: number, discount: number, shipping: number, total: number}}>}
    */
   async _findById(id) {
-    try {
-      const [orderInfo] = await db.query(
+    try {      const [orderInfo] = await db.query(
         `
           SELECT hdx.*, gh.TinhTrangDon, ngh.TenNhanVien AS TenNguoiGiao, gh.NgayGiaoHang, gh.GiaShip,
                  dckh.SoDienThoai, dckh.TenNguoiNhan, dckh.SoNhaDuong, dckh.PhuongXa, dckh.QuanHuyen, dckh.TinhThanhPho,
                  nv.TenNhanVien
           FROM hoadonxuat hdx
-          JOIN giaohang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
-          JOIN nhanvien nv ON hdx.IDNhanVien = nv.IDNhanVien
-          JOIN diachi_kh dckh ON gh.IDDiaChi = dckh.ID_DCKH
-          JOIN nhanvien ngh ON gh.IDNhanVien = ngh.IDNhanVien
+          LEFT JOIN giaohang gh ON hdx.IDHoaDonXuat = gh.ID_HDX
+          LEFT JOIN nhanvien nv ON hdx.IDNhanVien = nv.IDNhanVien
+          LEFT JOIN diachi_kh dckh ON gh.IDDiaChi = dckh.ID_DCKH
+          LEFT JOIN nhanvien ngh ON gh.IDNhanVien = ngh.IDNhanVien
           WHERE hdx.IDHoaDonXuat = ?`,
         [id]
-      );
-
-      const [orderItems] = await db.query(
+      );      const [orderItems] = await db.query(
         `
           SELECT cthdx.*, sp.TenSanPham, sp.Gia, tg.TenTacGia, anhsp.Anh
           FROM chitiethoadonxuat cthdx 
-          JOIN sanpham sp ON cthdx.IDSanPham = sp.SanPhamID 
-          JOIN sp_tg ON sp.SanPhamID = sp_tg.SanPhamID 
-          JOIN tacgia tg ON sp_tg.IDTacGia = tg.IDTacGia 
-          JOIN anhsp ON sp.SanPhamID = anhsp.ID_SP
+          LEFT JOIN sanpham sp ON cthdx.IDSanPham = sp.SanPhamID 
+          LEFT JOIN sp_tg ON sp.SanPhamID = sp_tg.SanPhamID 
+          LEFT JOIN tacgia tg ON sp_tg.IDTacGia = tg.IDTacGia
+          LEFT JOIN anhsp ON sp.SanPhamID = anhsp.ID_SP
           WHERE cthdx.IDHoaDonXuat = ?
-          AND anhsp.STT = 1;`,
+          AND (anhsp.STT = 1 OR anhsp.STT IS NULL);`,
         [id]
-      );
-
-      // orderInfo = orderInfo[0]
+      );// orderInfo = orderInfo[0]
       let subtotal = 0;
       let discount = 0;
-      let shipping = +orderInfo[0].GiaShip;
-      console.log(shipping);
+      let shipping = 0;
+      
+      // Check if orderInfo is valid and not empty
+      if (orderInfo && orderInfo.length > 0) {
+        shipping = +orderInfo[0].GiaShip || 0;
+        console.log(shipping);
+      } else {
+        throw new Error("Order not found");
+      }
+      
       // lấy thông tin giảm giá
       let discountInfo = null;
       if (orderInfo[0].ID_GiamGia) {
@@ -371,23 +374,23 @@ export class Order extends BaseModel {
           discountInfo = discountData[0];
           discount = Object(discountInfo).GiaTri || 0;
         }
-      }
-
-      // tính tổng tiền
+      }      // tính tổng tiền
       if (Array.isArray(orderItems)) {
         orderItems.forEach((item) => {
-          subtotal += item.SoLuong * item.Gia;
+          subtotal += (item.SoLuong || 0) * (item.Gia || 0);
         });
       }
 
       discount = (subtotal * discount) / 100;
       const total = subtotal + shipping - discount;
       // console.log(total);
-      orderInfo[0].TongTien = total;
+      if (orderInfo && orderInfo.length > 0) {
+        orderInfo[0].TongTien = total;
+      }
 
       return {
-        order: orderInfo[0],
-        items: orderItems,
+        order: orderInfo && orderInfo.length > 0 ? orderInfo[0] : null,
+        items: orderItems || [],
         summary: {
           subtotal,
           discount,
@@ -400,16 +403,17 @@ export class Order extends BaseModel {
       throw new Error(err);
     }
   }
-
   /**
    *
    * @param {number} id
    * @param {string} status
    * @param {Request | null} request
+   * @param {number | null} idNhanVien
    */
-  async _updateStatus(id, status, request = null) {
+  async _updateStatus(id, status, request = null, idNhanVien = null) {
     try {
       console.log("request", request);
+      console.log("idNhanVien", idNhanVien);
       let sql = `
         UPDATE hoadonxuat hdx
         JOIN giaohang gh ON gh.ID_HDX = hdx.IDHoaDonXuat
@@ -423,18 +427,17 @@ export class Order extends BaseModel {
         sql += `
           , hdx.TinhTrangThanhToan = IF(hdx.TinhTrangThanhToan = 'Đã thanh toán', 'Chưa hoàn tiền', hdx.TinhTrangThanhToan)
           , sp.SoLuongTon = sp.SoLuongTon + cthdx.SoLuong`;
-      }
-
-      if (status === "Chờ lấy hàng") {
-        sql += `, sp.SoLuongTon = sp.SoLuongTon - cthdx.SoLuong`;
+      }      if (status === "Chờ lấy hàng") {
+        sql += `
+          , sp.SoLuongTon = sp.SoLuongTon - cthdx.SoLuong
+          , hdx.IDNhanVien = ?`;
+        params.push(idNhanVien);
       }
 
       if (status === "Đã hủy") {
         sql += `
           , sp.SoLuongTon = IF(gh.TinhTrangDon = 'Chờ xác nhận', sp.SoLuongTon, sp.SoLuongTon + cthdx.SoLuong)`;
-      }
-
-      if (request) {
+      }      if (request) {
         sql += `
           , hdx.YeuCau = NULL
         `;
