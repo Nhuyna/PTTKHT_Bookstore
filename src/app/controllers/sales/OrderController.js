@@ -13,7 +13,6 @@ const __dirname = dirname(__filename);
 
 class OrderController {
   async show(req, res) {
-    console.log("Vào được show chưa");
     try {
       const query = req.query;
       const tab = req.query.tab || "all";
@@ -179,8 +178,10 @@ class OrderController {
       ).map((p) => p.ChucNang);
 
       permissions = permissions.concat(allPermissions);
+      console.log("user bên bán : ", req.session.user);
       permissions.push("qlbanhang");
       res.render("sales/orders/detail", {
+        user: req.session.user,
         title: "Order Details",
         orderDetails,
         layout: "admin",
