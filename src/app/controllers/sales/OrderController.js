@@ -163,41 +163,54 @@ class OrderController {
       res.status(500).send("Server error");
     }
   }
-
   async showById(req, res, next) {
     try {
       const orderModel = new Order();
       const orderId = req.params.id;
-      const orderDetails = await orderModel._findById(orderId);
-      let permissions = (
-        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
-      ).map((p) => p.ChucNang);
+      
+      try {
+        const orderDetails = await orderModel._findById(orderId);
+        let permissions = (
+          await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "view")
+        ).map((p) => p.ChucNang);
 
-      // Thêm quyền "all" vào danh sách permissions
-      const allPermissions = (
-        await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
-      ).map((p) => p.ChucNang);
+        // Thêm quyền "all" vào danh sách permissions
+        const allPermissions = (
+          await phanquyen.findPAccessIdNhomQuyen(req.session.user.idNQ, "all")
+        ).map((p) => p.ChucNang);
 
-      permissions = permissions.concat(allPermissions);
-      permissions.push("qlbanhang");
-      res.render("sales/orders/detail", {
-        title: "Order Details",
-        orderDetails,
-        layout: "admin",
-        permissions,
-      });
+        permissions = permissions.concat(allPermissions);
+        permissions.push("qlbanhang");
+        res.render("sales/orders/detail", {
+          title: "Order Details",
+          orderDetails,
+          layout: "admin",
+          permissions,
+        });
+      } catch (orderError) {
+        // Handle the case where the order is not found
+        console.error("Order not found or data issue:", orderError);
+        res.status(404).render("error/404", {
+          title: "Order Not Found",
+          message: "The requested order could not be found or has incomplete data.",
+          layout: "admin"
+        });
+      }
     } catch (error) {
       console.error(error);
       next(error);
     }
   }
-
   updateStatus(req, res, next) {
     try {
       const orderId = req.params.id;
       const status = req.body.status || req.query.status;
-      const request = req.body.request || req.query.request;
-      // console.log("status", status);
+      const request = req.body.request || req.query.request;      // Lấy ID nhân viên từ session
+      const idNhanVien = req.session.user ? req.session.user.idNhanVien : null;
+      
+      console.log("status", status);
+      console.log("ID nhân viên từ session:", idNhanVien);
+      
       if (!status) {
         return res.status(400).json({
           success: false,
@@ -207,7 +220,7 @@ class OrderController {
 
       const orderModel = new Order();
       orderModel
-        ._updateStatus(orderId, status, request)
+        ._updateStatus(orderId, status, request, idNhanVien)
         .then((result) => {
           // console.log(result);
           res.json({
