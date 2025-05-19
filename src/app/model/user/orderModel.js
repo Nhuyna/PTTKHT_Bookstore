@@ -84,16 +84,10 @@ const themDiaChi = async ({
 }) => {
   try {
     const sql = `
-        insert into DiaChi_KH
-        (TenNguoiNhan ,SoDienThoai ,SoNhaDuong,QuanHuyen,TinhThanhPho,ID_KH,PhuongXa) values
-          (?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?,
-          ?)
-      `;
+      INSERT INTO DiaChi_KH
+      (TenNguoiNhan, SoDienThoai, SoNhaDuong, QuanHuyen, TinhThanhPho, ID_KH, PhuongXa)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `;
     const values = [
       TenNguoiNhan,
       SoDienThoai,
@@ -104,7 +98,9 @@ const themDiaChi = async ({
       PhuongXa,
     ];
     const [result] = await database.query(sql, values);
-    return result.affectedRows;
+
+    // ✅ Trả về ID_DCKH vừa tạo
+    return result.insertId;
   } catch (error) {
     console.error("❌ Lỗi khi thêm địa chỉ:", error);
     throw error;
